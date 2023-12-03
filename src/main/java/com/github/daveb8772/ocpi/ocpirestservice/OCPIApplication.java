@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OcpiRestServiceApplication {
+public class OCPIApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OcpiRestServiceApplication.class, args);
+		SpringApplication.run(OCPIApplication.class, args);
 	}
 
 }
