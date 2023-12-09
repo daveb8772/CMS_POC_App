@@ -1,18 +1,56 @@
 package com.github.daveb8772.ocpi.ocpirestservice.service;
 
+import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class OCPIEndpointService {
 
-    // Method to retrieve supported OCPI versions
-    public List<String> getSupportedVersions() {
-        // Logic to retrieve supported OCPI versions from database or configuration
-        return Arrays.asList("2.2", "2.1", "2.0");
+    @Autowired private DataAccessService dataAccessService;
+
+    public Mono<List<ChargingSessionDataResponse>> getChargingSessions() {
+        return Mono.fromCallable(() -> dataAccessService.getChargingSessions());
     }
 
-    // Other methods to handle OCPI functionalities...
+    public Mono<ChargingSessionDataResponse> getChargingSession(String sessionId) {
+        return Mono.fromCallable(() -> dataAccessService.getChargingSession(sessionId));
+    }
+
+    public Mono<UserInfoResponse> getUserInfo() {
+        return Mono.fromCallable(() -> dataAccessService.getUserInfo());
+    }
+
+    public Mono<AuthorizationResponse> authorizeUser() {
+        return Mono.fromCallable(() -> dataAccessService.authorizeUser());
+    }
+
+    public Mono<List<ChargingPointDataResponse>> getChargingPoints() {
+        return Mono.fromCallable(() -> dataAccessService.getChargingPoints());
+    }
+
+    public Mono<ChargingPointDataResponse> getChargingPoint(String cpId) {
+        long parsedCpId = Long.parseLong(cpId); // Handle NumberFormatException if necessary
+        return Mono.fromCallable(() -> dataAccessService.getChargingPoint(String.valueOf(parsedCpId)));
+    }
+// In OCPIEndpointService
+
+    public Mono<LocationInfo> getLocationInfo() {
+        return Mono.fromCallable(() -> dataAccessService.getLocationInfo());
+    }
+
+    // In OCPIEndpointService
+
+
+    public SupportedVersionsResponse getSupportedVersions() {
+        // This should return the supported versions, possibly by constructing a SupportedVersionsResponse
+        // For example:
+        return new SupportedVersionsResponse(List.of("2.1.1", "2.2", "2.2.1")); // Example version strings
+    }
+
+
 }
