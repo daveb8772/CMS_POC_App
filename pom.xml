@@ -38,7 +38,7 @@
 			<groupId>com.azure.spring</groupId>
 			<artifactId>spring-cloud-azure-starter-jdbc-postgresql</artifactId>
 		</dependency>
-
+		<!-- For PostgreSQL -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -59,7 +59,6 @@
 			<artifactId>javafaker</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

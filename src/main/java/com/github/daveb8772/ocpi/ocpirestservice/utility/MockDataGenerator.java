@@ -42,20 +42,27 @@ public class MockDataGenerator {
         chargingPoint.setChargingPointId(faker.idNumber().valid());
         chargingPoint.setRfId(faker.idNumber().valid());
         chargingPoint.setStatus(faker.options().option("Available", "Occupied", "OutOfService"));
-        chargingPoint.setLocation(generateLocationInfo()); // Assuming a method to generate Location
-        chargingPoint.setDispensers(generateDispensers()); // Assuming a method to generate Set<Dispenser>
+        chargingPoint.setLocation(generateLocationInfo());
+        chargingPoint.setDispensers(generateDispensers());
         chargingPoint.setConnectorType(faker.options().option("Type1", "Type2", "CCS", "CHAdeMO"));
         chargingPoint.setConnectorStatus(faker.options().option("Connected", "Available", "Faulted"));
         chargingPoint.setConnectorPower(faker.number().randomDouble(2, 7, 22)); // Random value between 7 and 22 kW
         chargingPoint.setAvailabilityStatus(faker.options().option("InService", "OutOfService", "Scheduled"));
         chargingPoint.setCurrentUtilization(faker.number().randomDouble(2, 0, 1)); // Random value between 0 and 1
         chargingPoint.setLastUpdate(ZonedDateTime.now().minusMinutes(faker.number().numberBetween(0, 60)));
-        chargingPoint.setChargingProfiles(generateChargingProfiles()); // Assuming a method to generate List<ChargingProfile>
-        chargingPoint.setTariffs(generateTariffs()); // Assuming a method to generate Map<String, Tariff>
+        chargingPoint.setChargingProfiles(generateChargingProfiles());
+        List<String> tariffIds = generateTariffIds(3); // Generate 3 tariff IDs for each charging point
+        chargingPoint.setTariffIds(generateTariffIds(3)); // Set the list of tariff IDs
+
         chargingPoint.setMaxChargingPower(faker.number().randomDouble(2, 10, 50)); // Random value between 10 and 50 kW
-        chargingPoint.setConnectorCapabilities(generateConnectorCapabilities()); // Assuming a method to generate ConnectorCapabilities
+        chargingPoint.setConnectorCapabilities(generateConnectorCapabilities());
 
         return chargingPoint;
+    }
+    private static List<String> generateTariffIds(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(i -> faker.idNumber().valid())
+                .collect(Collectors.toList());
     }
 
     public static String generateTransactionId() {
@@ -153,20 +160,29 @@ public class MockDataGenerator {
                 .collect(Collectors.toList());
     }
 
-    private static Map<String, Tariff> generateTariffs() {
-        return IntStream.range(0, faker.number().numberBetween(1, 5))
-                .boxed()
-                .collect(Collectors.toMap(
-                        i -> "tariff" + i,
-                        i -> {
-                            Tariff tariff = new Tariff();
-                            // Assuming Tariff has methods setId, setPrice, etc.
-                            tariff.setTariffId(UUID.randomUUID().toString());
-                            tariff.setPrice(faker.number().randomDouble(2, 1, 15));
-                            return tariff;
-                        }
-                ));
+    public static List<TariffDataResponse> generateTariffs(int count) {
+        return IntStream.range(0, count).mapToObj(i -> {
+            TariffDataResponse tariffDataResponse = new TariffDataResponse();
+
+            // Creating a list of Tariff objects with mock data
+            List<Tariff> tariffs = IntStream.range(0, 3) // Let's assume each response has 3 tariffs
+                    .mapToObj(j -> new Tariff(
+                            faker.idNumber().valid(),   // tariffId
+                            faker.commerce().productName(), // tariffName
+                            faker.number().randomDouble(2, 1, 3))) // price
+                    .collect(Collectors.toList());
+
+            // Setting the list of Tariff objects in TariffDataResponse
+            tariffDataResponse.setTariffs(tariffs);
+
+            // Set a mock status
+            Status status = new Status(200, "Active Tariff");
+            tariffDataResponse.setStatus(status);
+
+            return tariffDataResponse;
+        }).collect(Collectors.toList());
     }
+
 
     public static ConnectorCapabilities generateConnectorCapabilities() {
         ConnectorCapabilities capabilities = new ConnectorCapabilities();

@@ -1,9 +1,17 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
+import jakarta.persistence.*;
+
 public class Tariff {
 
+    @Id
+    @Column(name = "tariff_id") // Define the column name for the ID
     private String tariffId; // Unique identifier for the tariff
+
+    @Column(name = "tariff_name") // Define the column name for the tariff name
     private String tariffName; // Name of the tariff
+
+    @Column(name = "price") // Define the column name for the price
     private double price; // Price per kWh for the tariff
 
     public Tariff() {}

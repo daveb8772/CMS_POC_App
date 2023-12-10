@@ -2,27 +2,69 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
 import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo;
+import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 
+@Entity
+@Table(name = "charging_points")
 public class ChargingPoint {
 
+    @Id
+    @Column(name = "charging_point_id")
     private String chargingPointId;
+
+    @Column(name = "rf_id")
     private String rfId;
+
+    @Column(name = "status")
     private String status;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_info_id")
     private LocationInfo location;
-    private Set<Dispenser> dispensers; // Represents the outlets associated with the charging point
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingPoint")
+    private Set<Dispenser> dispensers;
+
+    @Column(name = "connector_type")
     private String connectorType;
+
+    @Column(name = "connector_status")
     private String connectorStatus;
-    private double connectorPower; // Maximum charging power supported by the connector
+
+    @Column(name = "connector_power")
+    private double connectorPower;
+
+    @Column(name = "availability_status")
     private String availabilityStatus;
-    private double currentUtilization; // Current power consumption of the charging point
-    private ZonedDateTime lastUpdate; // Represents the last time the charging point information was updated
+
+    @Column(name = "current_utilization")
+    private double currentUtilization;
+
+    @Column(name = "last_update")
+    private ZonedDateTime lastUpdate;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingPoint")
     private List<ChargingProfile> chargingProfiles;
-    private Map<String, Tariff> tariffs; // Map of tariff IDs to corresponding `Tariff` objects
-    private double maxChargingPower; // Added property for maximum charging power
-    private ConnectorCapabilities connectorCapabilities; // Added property for connector capabilities
+
+
+    // JPA does not support Map field types directly.
+    //private Map<String, Tariff> tariffs; // Map of tariff IDs to corresponding `Tariff` objects
+    // So extracted the Tariff info and left the ID - Tariff IDs are stored as strings
+    @ElementCollection
+    @CollectionTable(name = "charging_point_tariffs",
+            joinColumns = @JoinColumn(name = "charging_point_id"))
+    @Column(name = "tariff_id")
+    private List<String> tariffIds;
+
+    @Column(name = "max_charging_power")
+    private double maxChargingPower;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "connector_capabilities_id", referencedColumnName = "id")
+    private ConnectorCapabilities connectorCapabilities;
 
     public ChargingPoint() {
     }
@@ -74,13 +116,12 @@ public class ChargingPoint {
     public void setChargingProfiles(List<ChargingProfile> chargingProfiles) {
         this.chargingProfiles = chargingProfiles;
     }
-
-    public Map<String, Tariff> getTariffs() {
-        return tariffs;
+    public List<String> getTariffIds() {
+        return tariffIds;
     }
 
-    public void setTariffs(Map<String, Tariff> tariffs) {
-        this.tariffs = tariffs;
+    public void setTariffIds(List<String> tariffIds) {
+        this.tariffIds = tariffIds;
     }
 
     public void addChargingProfile(ChargingProfile chargingProfile) {
@@ -88,13 +129,6 @@ public class ChargingPoint {
             this.chargingProfiles = new ArrayList<>();
         }
         this.chargingProfiles.add(chargingProfile);
-    }
-
-    public void addTariff(String tariffId, Tariff tariff) {
-        if (this.tariffs == null) {
-            this.tariffs = new HashMap<>();
-        }
-        this.tariffs.put(tariffId, tariff);
     }
 
     public double getMaxChargingPower() {

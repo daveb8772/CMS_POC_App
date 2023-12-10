@@ -37,13 +37,10 @@ public class OCPIEndpointService {
         long parsedCpId = Long.parseLong(cpId); // Handle NumberFormatException if necessary
         return Mono.fromCallable(() -> dataAccessService.getChargingPoint(String.valueOf(parsedCpId)));
     }
-// In OCPIEndpointService
 
     public Mono<LocationInfo> getLocationInfo() {
         return Mono.fromCallable(() -> dataAccessService.getLocationInfo());
     }
-
-    // In OCPIEndpointService
 
 
     public SupportedVersionsResponse getSupportedVersions() {
@@ -52,5 +49,15 @@ public class OCPIEndpointService {
         return new SupportedVersionsResponse(List.of("2.1.1", "2.2", "2.2.1")); // Example version strings
     }
 
+
+    public Mono<List<TariffDataResponse>> getTariffs() {
+        // Assuming DataAccessService has a method getTariffs()
+        return Mono.fromCallable(() -> dataAccessService.getTariffs());
+    }
+
+    public Mono<TariffDataResponse> getTariff(String tariffId) {
+        // Assuming DataAccessService has a method getTariff(String tariffId)
+        return Mono.fromCallable(() -> dataAccessService.getTariff(tariffId));
+    }
 
 }

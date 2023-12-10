@@ -1,22 +1,41 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
-import java.util.Set;
+import jakarta.persistence.*;
 
+import java.util.Set;
+@Entity
+@Table(name = "connector_capabilities")
 public class ConnectorCapabilities {
 
+    @Id
+    @Column(name = "connector_id")
+    private String id;
+
+    @Column(name = "bidirectional_charging")
     private boolean bidirectionalCharging;
+
+    @Column(name = "dynamic_power_sharing")
     private boolean dynamicPowerSharing;
 
+    @Column(name = "maximum_power")
     private double maximumPower;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "plug_type")
+    private ConnectorType plugType;
 
-    private ConnectorType plugType; // Use the PlugType enum
+    @Enumerated(EnumType.STRING)
+    @Column(name = "charge_mode")
+    private ChargingModeValue chargeMode;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "communication_protocol")
+    private CommunicationProtocolValue communicationProtocol;
 
-    private ChargingModeValue chargeMode; // Use the ChargingMode enum
-    private CommunicationProtocolValue communicationProtocol; // Use the CommunicationProtocol enum
-
-    private Set<String> additionalFeatures; // Additional capabilities not covered by other fields
+    @ElementCollection
+    @CollectionTable(name = "connector_additional_features", joinColumns = @JoinColumn(name = "connector_id"))
+    @Column(name = "feature")
+    private Set<String> additionalFeatures;
 
     public enum ChargingModeValue {
         AC,

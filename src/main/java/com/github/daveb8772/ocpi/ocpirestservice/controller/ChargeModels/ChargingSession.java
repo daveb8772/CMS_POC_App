@@ -5,26 +5,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.daveb8772.ocpi.ocpirestservice.utility.MockDataGenerator;
+import jakarta.persistence.*;
 
+
+@Entity
+@Table(name = "charging_sessions")
 public class ChargingSession {
 
-    private String cpId; // Charging point identifier
-    private String sessionId; // Unique identifier for the charging session
-    private String status; // Current status of the charging session
-    private String connectorId; // Identifier of the connector connected to the vehicle
-    private LocalDateTime startDate; // Start date and time of the charging session
-    private LocalDateTime endDate; // End date and time of the charging session
-    private String transactionId; // Identifier of the financial transaction associated with the charging session
-    private double currentPower; // Current charging power in kW
-    private double energyDelivered; // Total energy delivered to the vehicle in kWh
-    private List<Error> errors; // List of any errors encountered during the charging session
-    private Tariff currentTariff; // Current tariff being applied to the charging session
-    private List<TariffChange> tariffChanges; // List of tariff changes that have occurred during the charging session
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private List<MeterRecord> meterRecords; // List of meter changes that have occurred during the charging session
+    @Column(name = "cp_id")
+    private String cpId;
 
+    @Column(name = "session_id")
+    private String sessionId;
 
+    @Column(name = "status")
+    private String status;
 
+    @Column(name = "connector_id")
+    private String connectorId;
+
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
+
+    @Column(name = "current_power")
+    private double currentPower;
+
+    @Column(name = "energy_delivered")
+    private double energyDelivered;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
+    private List<Error> errors;
+
+    @ManyToOne
+    @JoinColumn(name = "current_tariff_id")
+    private Tariff currentTariff;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
+    private List<TariffChange> tariffChanges;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
+    private List<MeterRecord> meterRecords;
 
 
     public ChargingSession(String cpId, String sessionId, String status, String connectorId, LocalDateTime startDate, LocalDateTime endDate) {
@@ -167,11 +197,11 @@ public class ChargingSession {
         double endValue = 0.0;
 
         for (MeterRecord record : meterRecords) {
-            if (!record.getRecordTimestamp().isAfter(startTimestamp)) {
-                startValue = record.getEnergyDelivered();
+            if (!record.recordTimestamp().isAfter(startTimestamp)) {
+                startValue = record.energyDelivered();
             }
-            if (!record.getRecordTimestamp().isAfter(endTimestamp)) {
-                endValue = record.getEnergyDelivered();
+            if (!record.recordTimestamp().isAfter(endTimestamp)) {
+                endValue = record.energyDelivered();
             }
         }
 
@@ -180,8 +210,8 @@ public class ChargingSession {
     public double getLastMeterValueAtTimestamp(LocalDateTime targetTimestamp) {
         for (int i = meterRecords.size() - 1; i >= 0; i--) {
             MeterRecord record = meterRecords.get(i);
-            if (!record.getRecordTimestamp().isAfter(targetTimestamp)) {
-                return record.getEnergyDelivered();
+            if (!record.recordTimestamp().isAfter(targetTimestamp)) {
+                return record.energyDelivered();
             }
         }
         // Handle the case where there is no record before the target timestamp
@@ -214,23 +244,15 @@ public class ChargingSession {
             return currentChange.getChangeTimestamp();
         }
     }
-    public static class MeterRecord {
 
-        private final LocalDateTime recordTimestamp; // Timestamp indicating when the tariff change occurred
-        private final double energyDelivered; // at this time the energy delivered to the vehicle in kWh
-        public MeterRecord(LocalDateTime recordTimestamp, double energyDelivered) {
-            this.recordTimestamp = recordTimestamp;
-            this.energyDelivered = energyDelivered;
-        }
+    /**
+     * @param recordTimestamp Timestamp indicating when the tariff change occurred
+     * @param energyDelivered at this time the energy delivered to the vehicle in kWh
+     */
+    public record MeterRecord(LocalDateTime recordTimestamp, double energyDelivered) {
 
-        public double getEnergyDelivered() {
-            return energyDelivered;
-        }
-
-        public LocalDateTime getRecordTimestamp() {
-            return recordTimestamp;
-        }
     }
+
     public static class TariffChange {
 
         private LocalDateTime changeTimestamp; // Timestamp indicating when the tariff change occurred

@@ -4,7 +4,15 @@ import org.springframework.http.HttpStatus;
 
 public class Status {
 
+
+    private String description;
+    private int statusCode;
+
+
+
     public Status(int statusCode, String description) {
+        this.statusCode = statusCode;
+        this.description = description;
     }
 
     public static Status createStatus(HttpStatus httpStatus) {
@@ -19,4 +27,20 @@ public class Status {
         }
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+    // Getters and setters for statusCode and description
 }

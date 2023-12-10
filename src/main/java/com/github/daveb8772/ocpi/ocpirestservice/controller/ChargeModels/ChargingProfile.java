@@ -1,12 +1,28 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "charging_profiles")
 public class ChargingProfile {
 
-    private String id; // Unique identifier for the charging profile
-    private String name; // Human-readable name for the charging profile
-    private double chargingPower; // Maximum charging power supported by the profile
-    private ConnectorType.ConnectorTypeValue connectorType; // Specifies the type of connector supported by the profile
-    private ConnectorCapabilities.ChargingModeValue chargingMode; // Indicates the type of charging mode
+    @Id
+    @Column(name = "profile_id")
+    private String id;
+
+    @Column(name = "profile_name")
+    private String name;
+
+    @Column(name = "charging_power")
+    private double chargingPower;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "connector_type")
+    private ConnectorType.ConnectorTypeValue connectorType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "charging_mode")
+    private ConnectorCapabilities.ChargingModeValue chargingMode;
 
 
     public ChargingProfile() {

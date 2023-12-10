@@ -2,6 +2,8 @@ package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
 public class ConnectorType {
 
+
+    private final ConnectorTypeValue connectorTypeValue;
     public enum ConnectorTypeValue {
         TYPE1,
         TYPE2,
@@ -10,7 +12,6 @@ public class ConnectorType {
         TESLA
     }
 
-    private final ConnectorTypeValue connectorTypeValue;
 
     public ConnectorType(ConnectorTypeValue connectorTypeValue) {
         this.connectorTypeValue = connectorTypeValue;
