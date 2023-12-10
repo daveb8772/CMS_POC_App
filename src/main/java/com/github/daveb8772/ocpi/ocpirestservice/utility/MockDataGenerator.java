@@ -37,28 +37,6 @@ public class MockDataGenerator {
 
 
 
-    private static ChargingPoint generateChargingPoint() {
-        ChargingPoint chargingPoint = new ChargingPoint();
-        chargingPoint.setChargingPointId(faker.idNumber().valid());
-        chargingPoint.setRfId(faker.idNumber().valid());
-        chargingPoint.setStatus(faker.options().option("Available", "Occupied", "OutOfService"));
-        chargingPoint.setLocation(generateLocationInfo());
-        chargingPoint.setDispensers(generateDispensers());
-        chargingPoint.setConnectorType(faker.options().option("Type1", "Type2", "CCS", "CHAdeMO"));
-        chargingPoint.setConnectorStatus(faker.options().option("Connected", "Available", "Faulted"));
-        chargingPoint.setConnectorPower(faker.number().randomDouble(2, 7, 22)); // Random value between 7 and 22 kW
-        chargingPoint.setAvailabilityStatus(faker.options().option("InService", "OutOfService", "Scheduled"));
-        chargingPoint.setCurrentUtilization(faker.number().randomDouble(2, 0, 1)); // Random value between 0 and 1
-        chargingPoint.setLastUpdate(ZonedDateTime.now().minusMinutes(faker.number().numberBetween(0, 60)));
-        chargingPoint.setChargingProfiles(generateChargingProfiles());
-        List<String> tariffIds = generateTariffIds(3); // Generate 3 tariff IDs for each charging point
-        chargingPoint.setTariffIds(generateTariffIds(3)); // Set the list of tariff IDs
-
-        chargingPoint.setMaxChargingPower(faker.number().randomDouble(2, 10, 50)); // Random value between 10 and 50 kW
-        chargingPoint.setConnectorCapabilities(generateConnectorCapabilities());
-
-        return chargingPoint;
-    }
     private static List<String> generateTariffIds(int count) {
         return IntStream.range(0, count)
                 .mapToObj(i -> faker.idNumber().valid())
@@ -77,29 +55,35 @@ public class MockDataGenerator {
         return faker.number().randomDouble(2, 1, 100); // Random value between 1 and 100 kWh
     }
 
-    public static List<Error> generateErrors() {
-        // Return an empty list or create mock errors
-        return new ArrayList<>();
+    public static List<SessionError> generateErrors() {
+        return IntStream.range(0, faker.number().numberBetween(0, 3)) // Generate 0 to 3 errors
+                .mapToObj(i -> {
+                    SessionError error = new SessionError();
+                    error.setErrorCode("E" + faker.number().numberBetween(100, 999)); // Error code like E101, E202, etc.
+                    error.setErrorMessage(faker.lorem().sentence()); // Random error message
+                    // Don't set chargingSession here as it will be set when linking to a ChargingSession
+                    return error;
+                })
+                .collect(Collectors.toList());
     }
-
     public static Tariff generateTariff() {
         return new Tariff(UUID.randomUUID().toString(),
                 "Tariff" + UUID.randomUUID(),
                 faker.number().randomDouble(2, 1, 100));
     }
 
-    public static List<ChargingSession.TariffChange> generateTariffChanges() {
+    public static List<TariffChange> generateTariffChanges() {
         // Return an empty list or create mock TariffChange objects
         return new ArrayList<>();
     }
 
-    public static List<ChargingSession.MeterRecord> generateMeterRecords() {
+    public static List<MeterRecord> generateMeterRecords() {
         // Return an empty list or create mock MeterRecord objects
         return new ArrayList<>();
     }
     public static LocationInfo generateLocationInfo() {
         LocationInfo locationInfo = new LocationInfo();
-        locationInfo.setId(UUID.randomUUID().toString());
+        locationInfo.setLocation_id(UUID.randomUUID().toString());
 
 
         Address address = new Address();
@@ -135,18 +119,65 @@ public class MockDataGenerator {
         return locationInfo;
     }
 
-    private static Set<Dispenser> generateDispensers() {
+    private static Set<Dispenser> generateDispensers(ChargingPoint chargingPoint) {
         return IntStream.range(0, faker.number().numberBetween(1, 4))
                 .mapToObj(i -> {
                     Dispenser dispenser = new Dispenser();
-                    // Assuming Dispenser has a method setId, setType, etc.
                     dispenser.setId(UUID.randomUUID().toString());
-                    dispenser.setConnectorType(ConnectorCapabilities.ConnectorType.TYPE1);
+
+                    dispenser.setConnectorType(ConnectorCapabilities.ConnectorType.valueOf(faker.options().option("TYPE1", "TYPE2", "CCS_COMBO_2", "CHAdeMO", "TESLA")));
+                    dispenser.setChargingMode(ConnectorCapabilities.ChargingModeValue.valueOf(faker.options().option("AC", "DC", "FAST_AC", "FAST_DC")));
                     dispenser.setStatus(faker.options().option("Available", "InUse", "OutOfOrder"));
+                    dispenser.setPower(faker.number().randomDouble(2, 7, 22)); // Random value
+                    dispenser.setOccupied(faker.bool().bool());
+                    dispenser.setCurrentChargingSessionId(null); // No active session initially
+                    dispenser.setChargingPoint(chargingPoint); // Link back to the charging point
                     return dispenser;
                 })
                 .collect(Collectors.toSet());
     }
+
+    private static ChargingPoint generateChargingPoint() {
+        ChargingPoint chargingPoint = new ChargingPoint();
+        chargingPoint.setChargingPointId(faker.idNumber().valid());
+        chargingPoint.setRfId(faker.idNumber().valid());
+        chargingPoint.setStatus(faker.options().option("Available", "Occupied", "OutOfService"));
+        chargingPoint.setLocation(generateLocationInfo());
+
+        chargingPoint.setConnectorType(faker.options().option("Type1", "Type2", "CCS", "CHAdeMO"));
+        chargingPoint.setConnectorStatus(faker.options().option("Connected", "Available", "Faulted"));
+        chargingPoint.setConnectorPower(faker.number().randomDouble(2, 7, 22)); // Random value between 7 and 22 kW
+        chargingPoint.setAvailabilityStatus(faker.options().option("InService", "OutOfService", "Scheduled"));
+        chargingPoint.setCurrentUtilization(faker.number().randomDouble(2, 0, 1)); // Random value between 0 and 1
+        chargingPoint.setLastUpdate(ZonedDateTime.now().minusMinutes(faker.number().numberBetween(0, 60)));
+        chargingPoint.setChargingProfiles(generateChargingProfiles());
+        List<String> tariffIds = generateTariffIds(3); // Generate 3 tariff IDs for each charging point
+        chargingPoint.setTariffIds(generateTariffIds(3)); // Set the list of tariff IDs
+
+        chargingPoint.setMaxChargingPower(faker.number().randomDouble(2, 10, 50)); // Random value between 10 and 50 kW
+        chargingPoint.setConnectorCapabilities(generateConnectorCapabilities());
+
+        Set<Dispenser> dispensers = generateDispensers(chargingPoint);
+        chargingPoint.setDispensers(dispensers);
+
+        return chargingPoint;
+    }
+
+    public static List<ChargingPointDataResponse> generateChargingPoints(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(i -> {
+                    List<ChargingPoint> chargingPoints = IntStream.range(0, 5) // Assuming 5 ChargingPoints per response
+                            .mapToObj(j -> generateChargingPoint())
+                            .collect(Collectors.toList());
+
+                    ChargingPointDataResponse chargingPointDataResponse = new ChargingPointDataResponse();
+                    chargingPointDataResponse.setChargingPoints(chargingPoints);
+                    chargingPointDataResponse.setStatus(new Status(HttpStatus.OK.value(), "All systems functional")); // Example status
+                    return chargingPointDataResponse;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     private static List<ChargingProfile> generateChargingProfiles() {
         return IntStream.range(0, faker.number().numberBetween(1, 3))
@@ -209,20 +240,6 @@ public class MockDataGenerator {
         return capabilities;
     }
 
-    public static List<ChargingPointDataResponse> generateChargingPoints(int count) {
-        return IntStream.range(0, count)
-                .mapToObj(i -> {
-                    List<ChargingPoint> chargingPoints = IntStream.range(0, 5) // Assuming 5 ChargingPoints per response
-                            .mapToObj(j -> generateChargingPoint())
-                            .collect(Collectors.toList());
-
-                    ChargingPointDataResponse chargingPointDataResponse = new ChargingPointDataResponse();
-                    chargingPointDataResponse.setChargingPoints(chargingPoints);
-                    chargingPointDataResponse.setStatus(new Status(HttpStatus.OK.value(), "All systems functional")); // Example status
-                    return chargingPointDataResponse;
-                })
-                .collect(Collectors.toList());
-    }
 
     public static UserInfoResponse generateUserInfo(String userId) {
         Faker faker = new Faker();

@@ -44,7 +44,7 @@ public class ChargingSession {
     private double energyDelivered;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
-    private List<Error> errors;
+    private List<SessionError> errors;
 
     @ManyToOne
     @JoinColumn(name = "current_tariff_id")
@@ -54,7 +54,7 @@ public class ChargingSession {
     private List<TariffChange> tariffChanges;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
-    private List<MeterRecord> meterRecords;
+    public List<MeterRecord> meterRecords;
 
 
     public ChargingSession(String cpId, String sessionId, String status, String connectorId, LocalDateTime startDate, LocalDateTime endDate) {
@@ -151,11 +151,11 @@ public class ChargingSession {
         this.energyDelivered = energyDelivered;
     }
 
-    public List<Error> getErrors() {
+    public List<SessionError> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<Error> errors) {
+    public void setErrors(List<SessionError> errors) {
         this.errors = errors;
     }
 
@@ -197,11 +197,11 @@ public class ChargingSession {
         double endValue = 0.0;
 
         for (MeterRecord record : meterRecords) {
-            if (!record.recordTimestamp().isAfter(startTimestamp)) {
-                startValue = record.energyDelivered();
+            if (!record.recordTimestamp.isAfter(startTimestamp)) {
+                startValue = record.energyDelivered;
             }
-            if (!record.recordTimestamp().isAfter(endTimestamp)) {
-                endValue = record.energyDelivered();
+            if (!record.recordTimestamp.isAfter(endTimestamp)) {
+                endValue = record.energyDelivered;
             }
         }
 
@@ -210,8 +210,8 @@ public class ChargingSession {
     public double getLastMeterValueAtTimestamp(LocalDateTime targetTimestamp) {
         for (int i = meterRecords.size() - 1; i >= 0; i--) {
             MeterRecord record = meterRecords.get(i);
-            if (!record.recordTimestamp().isAfter(targetTimestamp)) {
-                return record.energyDelivered();
+            if (!record.recordTimestamp.isAfter(targetTimestamp)) {
+                return record.energyDelivered;
             }
         }
         // Handle the case where there is no record before the target timestamp
@@ -242,49 +242,6 @@ public class ChargingSession {
         } else {
             // Handle the case where there is no next tariff change
             return currentChange.getChangeTimestamp();
-        }
-    }
-
-    /**
-     * @param recordTimestamp Timestamp indicating when the tariff change occurred
-     * @param energyDelivered at this time the energy delivered to the vehicle in kWh
-     */
-    public record MeterRecord(LocalDateTime recordTimestamp, double energyDelivered) {
-
-    }
-
-    public static class TariffChange {
-
-        private LocalDateTime changeTimestamp; // Timestamp indicating when the tariff change occurred
-        private Tariff oldTariff; // Tariff that was in effect before the change
-        private Tariff newTariff; // Tariff that became effective after the change
-
-        public TariffChange(LocalDateTime changeTimestamp) {
-            this.changeTimestamp = changeTimestamp;
-        }
-
-        public TariffChange(LocalDateTime changeTimestamp, Tariff oldTariff, Tariff newTariff) {
-            this.changeTimestamp = changeTimestamp;
-            this.oldTariff = oldTariff;
-            this.newTariff = newTariff;
-        }
-
-        public Tariff getNewTariff() {
-
-            return newTariff;
-        }
-        public Tariff getOldTariff() {
-
-            return oldTariff;
-        }
-
-
-        public LocalDateTime getChangeTimestamp() {
-            return changeTimestamp;
-        }
-
-        public void setChangeTimestamp(LocalDateTime changeTimestamp) {
-            this.changeTimestamp = changeTimestamp;
         }
     }
 

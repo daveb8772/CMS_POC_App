@@ -2,6 +2,8 @@ package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
 import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Tariff")
 public class Tariff {
 
     @Id

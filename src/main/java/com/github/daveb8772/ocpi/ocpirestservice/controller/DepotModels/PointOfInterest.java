@@ -1,21 +1,34 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "point_of_interest")
 public class PointOfInterest {
 
-    private String id; // Unique identifier for the point of interest
-    private String type; // Type of point of interest (e.g., restaurant, hotel)
-    private String name; // Human-readable name for the point of interest
-    private String description; // Detailed description of the point of interest
-    private String address; // Structured representation of the point of interest's address
-    private String location; // Geographic coordinates of the point of interest
-    private String imageUrl; // URL of a representative image for the point of interest
+    @Id
+    @Column(name = "poi_id")
+    private String poi_id; // Unique identifier for the point of interest
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "poi_address")
+    private String poi_address;
+
 
     public String getId() {
-        return id;
+        return poi_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String poi_id) {
+        this.poi_id = poi_id;
     }
 
     public String getType() {

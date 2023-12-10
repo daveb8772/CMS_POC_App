@@ -46,8 +46,9 @@ public class ChargingPoint {
     @Column(name = "last_update")
     private ZonedDateTime lastUpdate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingPoint")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChargingProfile> chargingProfiles;
+
 
 
     // JPA does not support Map field types directly.
@@ -63,7 +64,7 @@ public class ChargingPoint {
     private double maxChargingPower;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "connector_capabilities_id", referencedColumnName = "id")
+    @JoinColumn(name = "connector_capabilities_id", referencedColumnName = "connector_id")
     private ConnectorCapabilities connectorCapabilities;
 
     public ChargingPoint() {

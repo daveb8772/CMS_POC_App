@@ -1,82 +1,101 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
+@Table(name = "location_info")
 public class LocationInfo {
 
+    @Id
+    @Column(name = "location_id")
+    private String location_id; // Unique identifier for the point of interest
 
-        private String id;
-        private Address address;
-        private String name;
-        private String description;
-        private String openingHours;
-        private ContactDetails contactInformation;
-        private Accessibility accessibilityInformation;
-        private List<PointOfInterest> pointsOfInterest;
+    @Column(name = "location_address")
+    private Address location_address;
 
-        public String getId() {
-            return id;
-        }
+    @Column(name = "name")
+    private String name;
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    @Column(name = "description")
+    private String description;
 
-        public Address getAddress() {
-            return address;
-        }
+    @Column(name = "opening_hours")
+    private String openingHours;
 
-        public void setAddress(Address address) {
-            this.address = address;
-        }
+    @Embedded
+    private ContactDetails contactInformation;
 
-        public String getName() {
-            return name;
-        }
+    @Embedded
+    private Accessibility accessibilityInformation;
 
-        public void setName(String name) {
-            this.name = name;
-        }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poi_id")
+    private List<PointOfInterest> pointsOfInterest;
 
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getOpeningHours() {
-            return openingHours;
-        }
-
-        public void setOpeningHours(String openingHours) {
-            this.openingHours = openingHours;
-        }
-
-        public ContactDetails getContactInformation() {
-            return contactInformation;
-        }
-
-        public void setContactInformation(ContactDetails contactInformation) {
-            this.contactInformation = contactInformation;
-        }
-
-        public Accessibility getAccessibilityInformation() {
-            return accessibilityInformation;
-        }
-
-        public void setAccessibilityInformation(Accessibility accessibilityInformation) {
-            this.accessibilityInformation = accessibilityInformation;
-        }
-
-        public List<PointOfInterest> getPointsOfInterest() {
-            return pointsOfInterest;
-        }
-
-        public void setPointsOfInterest(List<PointOfInterest> pointsOfInterest) {
-            this.pointsOfInterest = pointsOfInterest;
-        }
+    public String getLocation_id() {
+        return location_id;
     }
+
+    public void setLocation_id(String location_id) {
+        this.location_id = location_id;
+    }
+
+    public Address getAddress() {
+        return location_address;
+    }
+
+    public void setAddress(Address location_address) {
+        this.location_address = location_address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(String openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public ContactDetails getContactInformation() {
+        return contactInformation;
+    }
+
+    public void setContactInformation(ContactDetails contactInformation) {
+        this.contactInformation = contactInformation;
+    }
+
+    public Accessibility getAccessibilityInformation() {
+        return accessibilityInformation;
+    }
+
+    public void setAccessibilityInformation(Accessibility accessibilityInformation) {
+        this.accessibilityInformation = accessibilityInformation;
+    }
+
+    public List<PointOfInterest> getPointsOfInterest() {
+        return pointsOfInterest;
+    }
+
+    public void setPointsOfInterest(List<PointOfInterest> pointsOfInterest) {
+        this.pointsOfInterest = pointsOfInterest;
+    }
+}
 

@@ -30,6 +30,17 @@ public class Dispenser {
     @Column(name = "current_charging_session_id")
     private String currentChargingSessionId;
 
+    public ChargingPoint getChargingPoint() {
+        return chargingPoint;
+    }
+
+    public void setChargingPoint(ChargingPoint chargingPoint) {
+        this.chargingPoint = chargingPoint;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "charging_point_id") // Adjust the column name as per your schema
+    private ChargingPoint chargingPoint;
     public Dispenser() {
     }
 

@@ -32,9 +32,8 @@ public class ConnectorCapabilities {
     @Column(name = "communication_protocol")
     private CommunicationProtocolValue communicationProtocol;
 
-    @ElementCollection
-    @CollectionTable(name = "connector_additional_features", joinColumns = @JoinColumn(name = "connector_id"))
-    @Column(name = "feature")
+    @Lob
+    @Column(name = "additional_features", columnDefinition = "TEXT")
     private Set<String> additionalFeatures;
 
     public enum ChargingModeValue {
