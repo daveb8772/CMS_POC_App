@@ -18,7 +18,7 @@ public class ChargingProfile {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "connector_type")
-    private ConnectorType.ConnectorTypeValue connectorType;
+    private ConnectorCapabilities.ConnectorType connectorType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "charging_mode")
@@ -52,11 +52,11 @@ public class ChargingProfile {
         this.chargingPower = chargingPower;
     }
 
-    public ConnectorType.ConnectorTypeValue getConnectorType() {
+    public ConnectorCapabilities.ConnectorType getConnectorType() {
         return connectorType;
     }
 
-    public void setConnectorType(ConnectorType.ConnectorTypeValue connectorType) {
+    public void setConnectorType(ConnectorCapabilities.ConnectorType connectorType) {
         this.connectorType = connectorType;
     }
 

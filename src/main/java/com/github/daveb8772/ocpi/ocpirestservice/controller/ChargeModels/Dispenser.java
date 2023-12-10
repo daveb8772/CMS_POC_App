@@ -12,7 +12,7 @@ public class Dispenser {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "connector_type")
-    private ConnectorType connectorType;
+    private ConnectorCapabilities.ConnectorType connectorType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "charging_mode")
@@ -41,11 +41,11 @@ public class Dispenser {
         this.dispenserId = dispenserId;
     }
 
-    public ConnectorType getConnectorType() {
+    public ConnectorCapabilities.ConnectorType getConnectorType() {
         return connectorType;
     }
 
-    public void setConnectorType(ConnectorType connectorType) {
+    public void setConnectorType(ConnectorCapabilities.ConnectorType connectorType) {
         this.connectorType = connectorType;
     }
 

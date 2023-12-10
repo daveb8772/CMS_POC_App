@@ -49,6 +49,16 @@ public class ConnectorCapabilities {
         NONE
         // Add any additional communication protocols as needed.
     }
+
+    public enum ConnectorType {
+        TYPE1,
+        TYPE2,
+        CCS_COMBO_2,
+        CHAdeMO,
+        TESLA
+    }
+
+
     public ConnectorCapabilities() {
     }
 

@@ -141,7 +141,7 @@ public class MockDataGenerator {
                     Dispenser dispenser = new Dispenser();
                     // Assuming Dispenser has a method setId, setType, etc.
                     dispenser.setId(UUID.randomUUID().toString());
-                    dispenser.setConnectorType(new ConnectorType(ConnectorType.ConnectorTypeValue.TYPE1));
+                    dispenser.setConnectorType(ConnectorCapabilities.ConnectorType.TYPE1);
                     dispenser.setStatus(faker.options().option("Available", "InUse", "OutOfOrder"));
                     return dispenser;
                 })
