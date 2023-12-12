@@ -11,14 +11,14 @@ public class DataInitialization {
        /* TODO
     private final ChargingSessionRepository chargingSessionRepository;
     private final ChargingPointRepository chargingPointRepository;
-    private final UserRepository userRepository;
+    private final CommandRepository userRepository;
     private final AuthorizationRepository authorizationRepository;
     private final TariffRepository tariffRepository;
     private final LocationInfoRepository locationInfoRepository;
 
     public DataInitialization(ChargingSessionRepository chargingSessionRepository,
                               ChargingPointRepository chargingPointRepository,
-                              UserRepository userRepository,
+                              CommandRepository userRepository,
                               AuthorizationRepository authorizationRepository,
                               TariffRepository tariffRepository,
                               LocationInfoRepository locationInfoRepository) {
@@ -37,12 +37,19 @@ public class DataInitialization {
         return args -> {
             // Generate mock data using MockDataGenerator and save it using the repositories
             chargingSessionRepository.saveAll(MockDataGenerator.generateChargingSessions(10));
-            chargingPointRepository.saveAll(MockDataGenerator.generateChargingPoints(5));
+
             userRepository.save(MockDataGenerator.generateUserInfo("user1"));
             authorizationRepository.save(MockDataGenerator.generateAuthorizationResponse(true));
             tariffRepository.saveAll(MockDataGenerator.generateTariffs(5));
             locationInfoRepository.save(MockDataGenerator.generateLocationInfo());
-        };
+               // Generate and save ChargingPoint entities with commands
+                 List<ChargingPoint> chargingPoints = MockDataGenerator.generateChargingPoints(5);
+                chargingPoints.forEach(chargingPoint -> {
+                List<CommandRequest> commandRequests = MockDataGenerator.generateCommandRequests(3, chargingPoint);
+                chargingPoint.setCommandRequests(commandRequests);
+            });
+            chargingPointRepository.saveAll(chargingPoints);
+            };
 
 
         return null;

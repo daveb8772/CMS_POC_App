@@ -67,6 +67,11 @@ public class ChargingPoint {
     @JoinColumn(name = "connector_capabilities_id", referencedColumnName = "connector_id")
     private ConnectorCapabilities connectorCapabilities;
 
+    @OneToMany(mappedBy = "chargingPoint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CommandRequest> commandRequests;
+
+
+
     public ChargingPoint() {
     }
 
@@ -146,6 +151,15 @@ public class ChargingPoint {
 
     public void setConnectorCapabilities(ConnectorCapabilities connectorCapabilities) {
         this.connectorCapabilities = connectorCapabilities;
+    }
+
+
+    public List<CommandRequest> getCommandRequests() {
+        return commandRequests;
+    }
+
+    public void setCommandRequests(List<CommandRequest> commandRequests) {
+        this.commandRequests = commandRequests;
     }
 
     public String getConnectorType() {

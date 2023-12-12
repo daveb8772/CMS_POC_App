@@ -240,17 +240,28 @@ public class MockDataGenerator {
         return capabilities;
     }
 
+    public static List<CommandRequest> generateCommandRequests(int count, ChargingPoint chargingPoint) {
+        return IntStream.range(0, count)
+                .mapToObj(i -> {
+                    CommandRequest commandRequest = new CommandRequest();
+                    commandRequest.setCommandType(CommandRequest.CommandType.values()[new Random().nextInt(CommandRequest.CommandType.values().length)]);
+                    commandRequest.setCommandParameter("Parameter " + i);
+                    commandRequest.setTimestamp(LocalDateTime.now().minusHours(i));
+                    return commandRequest;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 
     public static AuthorizationResponse generateAuthorizationResponse(boolean authorized) {
         Faker faker = new Faker();
-        return new AuthorizationResponse(
-                authorized,
-                faker.internet().password(), // Assuming this is an accessToken
-                ZonedDateTime.now().plusDays(30), // Assuming a token expiry of 30 days
-                faker.lorem().characters(), // Assuming this as a refreshToken
-                null // Errors could be added based on the scenario
-        );
-    }
+        Authorization authorization = new Authorization();
+        authorization.setIsAuthorized(authorized);
+        authorization.setAccessToken(faker.internet().password()); // Assuming this is an accessToken
+        authorization.setExpiresAt(ZonedDateTime.now().plusDays(30)); // Token expiry of 30 days
+        authorization.setRefreshToken(faker.lorem().characters()); // Assuming this as a refreshToken
 
+        return new AuthorizationResponse(authorization);
+    }
 }

@@ -25,7 +25,7 @@ public class AuthorizationController {
     public Mono<ResponseEntity<AuthorizationResponse>> authorizeUser() {
         return ocpiEndpointService.authorizeUser()
                 .flatMap(authorizationResponse -> {
-                    if (authorizationResponse.getAuthorized() == null || !authorizationResponse.getAuthorized()) {
+                    if (authorizationResponse == null || !authorizationResponse.getAuthorization().getIsAuthorized()) {
                         return Mono.just(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
                     } else {
                         return authorizationResponseHandler.handleResponse(Mono.just(authorizationResponse), HttpStatus.OK);

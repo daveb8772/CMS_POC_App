@@ -5,21 +5,30 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
-@Embeddable
+@Entity
+@Table(name = "command_requests")
 public class CommandRequest {
 
-    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "command_type")
+    @Column(name = "command_type", nullable = false)
     private CommandType commandType; // Enum representing the type of OCPI command
 
     @NotBlank
-    @Column(name = "command_parameter")
+    @Column(name = "command_parameter", nullable = false)
     private String commandParameter; // Specific parameter for the command
 
-    @Column(name = "timestamp")
+    @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp; // Timestamp for the command request
 
+    @ManyToOne
+    @JoinColumn(name = "charging_point_id")
+    private ChargingPoint chargingPoint;
     // Constructors, getters, and setters
 
     public CommandType getCommandType() {
