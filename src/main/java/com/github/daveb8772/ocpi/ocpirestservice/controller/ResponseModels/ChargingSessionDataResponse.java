@@ -7,7 +7,7 @@ import java.util.List;
 public class ChargingSessionDataResponse implements StatusAwareResponse {
 
     private List<ChargingSession> chargingSessions;
-    private Status status;
+    private ResponseStatus responseStatus;
 
     public ChargingSessionDataResponse(List<ChargingSession> chargingSessions) {
         this.chargingSessions = chargingSessions;
@@ -21,13 +21,13 @@ public class ChargingSessionDataResponse implements StatusAwareResponse {
         this.chargingSessions = chargingSessions;
     }
 
-    public Status getStatus() {
-        return status;
+    public ResponseStatus getStatus() {
+        return responseStatus;
     }
 
     @Override
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
     }
 
     public boolean isEmpty() {

@@ -7,7 +7,7 @@ import java.util.List;
 public class TariffDataResponse implements StatusAwareResponse {
 
     private List<Tariff> tariffs;
-    private Status status;
+    private ResponseStatus responseStatus;
 
     public TariffDataResponse() {
     }
@@ -20,12 +20,12 @@ public class TariffDataResponse implements StatusAwareResponse {
         this.tariffs = tariffs;
     }
 
-    public Status getStatus() {
-        return status;
+    public ResponseStatus getStatus() {
+        return responseStatus;
     }
 
     @Override
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
     }
 }

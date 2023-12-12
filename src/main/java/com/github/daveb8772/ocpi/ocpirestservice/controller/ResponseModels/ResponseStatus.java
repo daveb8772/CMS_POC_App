@@ -2,28 +2,32 @@ package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
 
 import org.springframework.http.HttpStatus;
 
-public class Status {
+public class ResponseStatus {
 
 
     private String description;
     private int statusCode;
 
+    // Default constructor
+    public ResponseStatus() {
+        // Default values can be set here if needed
+    }
 
 
-    public Status(int statusCode, String description) {
+    public ResponseStatus(int statusCode, String description) {
         this.statusCode = statusCode;
         this.description = description;
     }
 
-    public static Status createStatus(HttpStatus httpStatus) {
+    public static ResponseStatus createStatus(HttpStatus httpStatus) {
         if (httpStatus == HttpStatus.OK) {
-            return new Status(httpStatus.value(), "Success");
+            return new ResponseStatus(httpStatus.value(), "Success");
         } else if (httpStatus == HttpStatus.BAD_REQUEST) {
-            return new Status(httpStatus.value(), "Invalid request");
+            return new ResponseStatus(httpStatus.value(), "Invalid request");
         } else if (httpStatus == HttpStatus.NOT_FOUND) {
-            return new Status(httpStatus.value(), "Charging point not found");
+            return new ResponseStatus(httpStatus.value(), "Charging point not found");
         } else {
-            return new Status(httpStatus.value(), "Unexpected error");
+            return new ResponseStatus(httpStatus.value(), "Unexpected error");
         }
     }
 
@@ -31,15 +35,15 @@ public class Status {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setMessage(String description) {
         this.description = description;
     }
 
-    public int getStatusCode() {
+    public int getStatus() {
         return statusCode;
     }
 
-    public void setStatusCode(int statusCode) {
+    public void setCode(int statusCode) {
         this.statusCode = statusCode;
     }
     // Getters and setters for statusCode and description

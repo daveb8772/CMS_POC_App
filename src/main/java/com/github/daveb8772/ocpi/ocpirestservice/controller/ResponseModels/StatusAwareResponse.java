@@ -1,5 +1,5 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
 
 public interface StatusAwareResponse {
-    void setStatus(Status status);
+    void setStatus(ResponseStatus responseStatus);
 }

@@ -93,7 +93,7 @@ public class MockDataGenerator {
 
         locationInfo.setAddress(address);
         locationInfo.setName(faker.company().name());
-        locationInfo.setDescription(faker.lorem().paragraph());
+        locationInfo.setDetails(faker.lorem().paragraph());
         locationInfo.setOpeningHours("24/7"); // or however you format opening hours
 
         ContactDetails contactDetails = new ContactDetails();
@@ -172,7 +172,7 @@ public class MockDataGenerator {
 
                     ChargingPointDataResponse chargingPointDataResponse = new ChargingPointDataResponse();
                     chargingPointDataResponse.setChargingPoints(chargingPoints);
-                    chargingPointDataResponse.setStatus(new Status(HttpStatus.OK.value(), "All systems functional")); // Example status
+                    chargingPointDataResponse.setStatus(new ResponseStatus(HttpStatus.OK.value(), "All systems functional")); // Example status
                     return chargingPointDataResponse;
                 })
                 .collect(Collectors.toList());
@@ -206,9 +206,9 @@ public class MockDataGenerator {
             // Setting the list of Tariff objects in TariffDataResponse
             tariffDataResponse.setTariffs(tariffs);
 
-            // Set a mock status
-            Status status = new Status(200, "Active Tariff");
-            tariffDataResponse.setStatus(status);
+            // Set a mock responseStatus
+            ResponseStatus responseStatus = new ResponseStatus(200, "Active Tariff");
+            tariffDataResponse.setStatus(responseStatus);
 
             return tariffDataResponse;
         }).collect(Collectors.toList());
@@ -241,16 +241,6 @@ public class MockDataGenerator {
     }
 
 
-    public static UserInfoResponse generateUserInfo(String userId) {
-        Faker faker = new Faker();
-        return new UserInfoResponse(
-                userId,
-                faker.name().fullName(),
-                faker.internet().emailAddress(),
-                faker.phoneNumber().phoneNumber(),
-                faker.options().option("en", "es", "de")
-        );
-    }
 
     public static AuthorizationResponse generateAuthorizationResponse(boolean authorized) {
         Faker faker = new Faker();

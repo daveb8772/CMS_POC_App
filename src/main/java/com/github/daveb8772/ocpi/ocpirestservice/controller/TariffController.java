@@ -24,12 +24,9 @@ public class TariffController {
     public Mono<ResponseEntity<List<TariffDataResponse>>> getTariffs() {
         return ocpiEndpointService.getTariffs()
                 .flatMapMany(Flux::fromIterable)
-                .flatMap(tariff -> {
-                    DataAccessResponseHandler<TariffDataResponse> responseHandler =
-                            new DataAccessResponseHandler<>(Mono.just(tariff));
-                    return responseHandler.handleResponse(HttpStatus.OK)
-                            .map(ResponseEntity::getBody);
-                })
+                .flatMap(tariff -> new DataAccessResponseHandler<TariffDataResponse>()
+                        .handleResponse(Mono.just(tariff), HttpStatus.OK)
+                        .map(ResponseEntity::getBody))
                 .collectList()
                 .flatMap(list -> list.isEmpty()
                         ? Mono.just(ResponseEntity.notFound().build())
@@ -43,13 +40,12 @@ public class TariffController {
                     if (tariff == null) {
                         return Mono.just(ResponseEntity.notFound().build());
                     } else {
-                        DataAccessResponseHandler<TariffDataResponse> responseHandler =
-                                new DataAccessResponseHandler<>(Mono.just(tariff));
-                        return responseHandler.handleResponse(HttpStatus.OK)
-                                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                        return new DataAccessResponseHandler<TariffDataResponse>()
+                                .handleResponse(Mono.just(tariff), HttpStatus.OK);
                     }
                 });
     }
+
 
     // You can add more endpoints here for creating, updating, and deleting tariffs.
 }

@@ -21,7 +21,7 @@ public class AuthorizationResponse  implements StatusAwareResponse{
         // status will be set using setStatus method
     }
     @Override
-    public void setStatus(Status status) {
+    public void setStatus(ResponseStatus responseStatus) {
     }
 
     public Boolean getAuthorized() {

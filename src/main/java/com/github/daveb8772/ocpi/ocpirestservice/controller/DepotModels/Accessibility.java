@@ -2,17 +2,17 @@ package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
 public class Accessibility {
 
-    private String id; // Unique identifier for the accessibility information
+    private String accessibilityId; // Unique identifier for the accessibility information
     private boolean isAccessible; // Indicates whether the location is accessible
     private String description; // Detailed description of accessibility features
     private String additionalInformation; // Additional accessibility information
 
-    public String getId() {
-        return id;
+    public String getAccessibilityId() {
+        return accessibilityId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAccessibilityId(String accessibilityId) {
+        this.accessibilityId = accessibilityId;
     }
 
     public boolean isAccessible() {

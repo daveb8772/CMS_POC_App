@@ -25,17 +25,15 @@ public class ChargingPointController {
     public Mono<ResponseEntity<List<ChargingPointDataResponse>>> getChargingPoints() {
         return ocpiEndpointService.getChargingPoints()
                 .flatMapMany(Flux::fromIterable)
-                .flatMap(chargingPoint -> {
-                    DataAccessResponseHandler<ChargingPointDataResponse> responseHandler =
-                            new DataAccessResponseHandler<>(Mono.just(chargingPoint));
-                    return responseHandler.handleResponse(HttpStatus.OK)
-                            .map(ResponseEntity::getBody);
-                })
+                .flatMap(chargingPoint -> new DataAccessResponseHandler<ChargingPointDataResponse>()
+                        .handleResponse(Mono.just(chargingPoint), HttpStatus.OK)
+                        .map(ResponseEntity::getBody))
                 .collectList()
                 .flatMap(list -> list.isEmpty()
                         ? Mono.just(ResponseEntity.notFound().build())
                         : Mono.just(ResponseEntity.ok(list)));
     }
+
 
 
     @GetMapping("/getChargingPoint/{cpId}")
@@ -45,14 +43,11 @@ public class ChargingPointController {
                     if (chargingPoint == null) {
                         return Mono.just(ResponseEntity.notFound().build());
                     } else {
-                        DataAccessResponseHandler<ChargingPointDataResponse> responseHandler =
-                                new DataAccessResponseHandler<>(Mono.just(chargingPoint));
-                        return responseHandler.handleResponse(HttpStatus.OK)
-                                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                        return new DataAccessResponseHandler<ChargingPointDataResponse>()
+                                .handleResponse(Mono.just(chargingPoint), HttpStatus.OK);
                     }
                 });
     }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
 import jakarta.persistence.*;
 

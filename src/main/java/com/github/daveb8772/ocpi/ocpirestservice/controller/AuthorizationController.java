@@ -21,24 +21,15 @@ public class AuthorizationController {
     @Autowired
     private DataAccessResponseHandler<AuthorizationResponse> authorizationResponseHandler;
 
-
     @GetMapping("/authorizeUser")
     public Mono<ResponseEntity<AuthorizationResponse>> authorizeUser() {
         return ocpiEndpointService.authorizeUser()
                 .flatMap(authorizationResponse -> {
                     if (authorizationResponse.getAuthorized() == null || !authorizationResponse.getAuthorized()) {
-                        // Assuming an unauthorized response should be treated as an error
                         return Mono.just(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
                     } else {
-                        DataAccessResponseHandler<AuthorizationResponse> responseHandler =
-                                new DataAccessResponseHandler<>(Mono.just(authorizationResponse));
-                        return responseHandler.handleResponse(HttpStatus.OK);
+                        return authorizationResponseHandler.handleResponse(Mono.just(authorizationResponse), HttpStatus.OK);
                     }
                 });
     }
-
-
-
-    // Other relevant OCPI endpoints and mappings...
 }
-

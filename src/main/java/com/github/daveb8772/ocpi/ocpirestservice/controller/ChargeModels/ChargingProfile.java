@@ -1,5 +1,6 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
 
+import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.ConnectorCapabilities;
 import jakarta.persistence.*;
 
 @Entity

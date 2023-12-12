@@ -8,7 +8,7 @@ public class SupportedVersionsResponse implements StatusAwareResponse{
 
 
     @Override
-    public void setStatus(Status status) {
+    public void setStatus(ResponseStatus responseStatus) {
     }
     public SupportedVersionsResponse(List<String> versions) {
         this.supportedVersions = versions;

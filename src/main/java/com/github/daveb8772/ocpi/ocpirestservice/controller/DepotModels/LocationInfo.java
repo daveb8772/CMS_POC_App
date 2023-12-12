@@ -11,16 +11,16 @@ public class LocationInfo {
 
     @Id
     @Column(name = "location_id")
-    private String location_id; // Unique identifier for the point of interest
+    private String locationId;
 
-    @Column(name = "location_address")
-    private Address location_address;
+    @Embedded
+    private Address locationAddress;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "details")
+    private String details;
 
     @Column(name = "opening_hours")
     private String openingHours;
@@ -35,19 +35,19 @@ public class LocationInfo {
     private List<PointOfInterest> pointsOfInterest;
 
     public String getLocation_id() {
-        return location_id;
+        return locationId;
     }
 
     public void setLocation_id(String location_id) {
-        this.location_id = location_id;
+        this.locationId = location_id;
     }
 
     public Address getAddress() {
-        return location_address;
+        return locationAddress;
     }
 
     public void setAddress(Address location_address) {
-        this.location_address = location_address;
+        this.locationAddress = location_address;
     }
 
     public String getName() {
@@ -58,12 +58,12 @@ public class LocationInfo {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetails() {
+        return details;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public String getOpeningHours() {

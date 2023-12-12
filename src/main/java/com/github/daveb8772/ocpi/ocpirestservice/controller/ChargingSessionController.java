@@ -24,26 +24,19 @@ public class ChargingSessionController {
     @Autowired
     private OCPIEndpointService ocpiEndpointService;
 
+
     @GetMapping("/getChargingSessions")
     public Mono<ResponseEntity<List<ChargingSessionDataResponse>>> getChargingSessions() {
         return ocpiEndpointService.getChargingSessions()
                 .flatMapMany(Flux::fromIterable)
                 .filter(chargingSession -> !chargingSession.isEmpty())
-                .flatMap(chargingSession -> {
-                    DataAccessResponseHandler<ChargingSessionDataResponse> responseHandler =
-                            new DataAccessResponseHandler<>(Mono.just(chargingSession));
-                    return responseHandler.handleResponse(HttpStatus.OK)
-                            .map(ResponseEntity::getBody);
-                })
+                .flatMap(chargingSession -> new DataAccessResponseHandler<ChargingSessionDataResponse>()
+                        .handleResponse(Mono.just(chargingSession), HttpStatus.OK)
+                        .map(ResponseEntity::getBody)) // Extract the body from ResponseEntity
                 .collectList()
                 .flatMap(list -> list.isEmpty()
                         ? Mono.just(new ResponseEntity<>(HttpStatus.NO_CONTENT))
                         : Mono.just(ResponseEntity.ok(list)));
     }
 
-
-
-
 }
-
-

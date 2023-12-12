@@ -1,13 +1,13 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.ChargingPoint;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.ChargingPoint;
 
 import java.util.List;
 
 public class ChargingPointDataResponse implements StatusAwareResponse{
 
     private List<ChargingPoint> chargingPoints;
-    private Status status;
+    private ResponseStatus responseStatus;
 
     public ChargingPointDataResponse() {
     }
@@ -20,12 +20,12 @@ public class ChargingPointDataResponse implements StatusAwareResponse{
         this.chargingPoints = chargingPoints;
     }
 
-    public Status getStatus() {
-        return status;
+    public ResponseStatus getStatus() {
+        return responseStatus;
     }
 
     @Override
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
     }
 }

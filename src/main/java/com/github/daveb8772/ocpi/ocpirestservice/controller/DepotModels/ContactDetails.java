@@ -2,18 +2,18 @@ package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
 public class ContactDetails {
 
-    private String id; // Unique identifier for the contact information
+    private String contactId; // Unique identifier for the contact information
     private String phone; // Phone number
     private String email; // Email address
     private String website; // Website URL
     private String languages; // List of supported languages (ISO 639-1 codes)
 
-    public String getId() {
-        return id;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public String getPhone() {

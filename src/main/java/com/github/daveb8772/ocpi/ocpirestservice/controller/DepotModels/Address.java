@@ -1,26 +1,29 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
 
+import jakarta.persistence.*;
+
+@Embeddable
 public class Address {
 
-    private String id;
-    private String formattedAddress; // Full address as it would be displayed on a map
-    private String[] addressLines; // Array of individual address lines
-    private String addressType; // Type of address (e.g., residential, commercial)
-    private String locality; // City or town name
-    private String postalCode; // Postal code or ZIP code
-    private String countryCode; // ISO 3166-1 alpha-2 country code
 
-    // Add latitude and longitude fields
+    @Column(name = "formatted_address")
+    private String formattedAddress;
+
+    @Column(name = "locality")
+    private String locality;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "country_code")
+    private String countryCode;
+
+    @Column(name = "latitude")
     private String latitude;
+
+    @Column(name = "longitude")
     private String longitude;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getFormattedAddress() {
         return formattedAddress;
@@ -30,21 +33,6 @@ public class Address {
         this.formattedAddress = formattedAddress;
     }
 
-    public String[] getAddressLines() {
-        return addressLines;
-    }
-
-    public void setAddressLines(String[] addressLines) {
-        this.addressLines = addressLines;
-    }
-
-    public String getAddressType() {
-        return addressType;
-    }
-
-    public void setAddressType(String addressType) {
-        this.addressType = addressType;
-    }
 
     public String getLocality() {
         return locality;

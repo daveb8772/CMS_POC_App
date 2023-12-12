@@ -1,5 +1,6 @@
 package com.github.daveb8772.ocpi.ocpirestservice.service;
 
+import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.CommandRequest;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,12 @@ public class OCPIEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getChargingSession(sessionId));
     }
 
-    public Mono<UserInfoResponse> getUserInfo() {
-        return Mono.fromCallable(() -> dataAccessService.getUserInfo());
-    }
-
     public Mono<AuthorizationResponse> authorizeUser() {
         return Mono.fromCallable(() -> dataAccessService.authorizeUser());
+    }
+
+    public Mono<CommandResponse> handleCommand(String command, CommandRequest request) {
+        return Mono.fromCallable(() -> dataAccessService.commandRequest(command, request));
     }
 
     public Mono<List<ChargingPointDataResponse>> getChargingPoints() {
