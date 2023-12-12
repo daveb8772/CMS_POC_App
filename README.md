@@ -107,6 +107,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Additional Information
 
-- For more information about OCPI, visit the [official OCPI documentation](https://ocpiemobility.org/documentation/).
+- For more information about OCPI, visit the [official OCPI documentation]([https://ocpiemobility.org/documentation/](https://github.com/ocpi/ocpi/blob/master/README.md)https://github.com/ocpi/ocpi/blob/master/README.md).
 
 ```
