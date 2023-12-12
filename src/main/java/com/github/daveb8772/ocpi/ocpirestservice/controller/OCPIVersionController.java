@@ -1,6 +1,6 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.SupportedVersionsResponse;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.SupportedVersionsResponse;
 import com.github.daveb8772.ocpi.ocpirestservice.service.OCPIEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

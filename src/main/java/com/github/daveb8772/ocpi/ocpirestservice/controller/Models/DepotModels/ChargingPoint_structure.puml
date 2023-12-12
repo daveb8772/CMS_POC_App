@@ -1,0 +1,458 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.ChargingPoint",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1245635613 { 
+   	label=github
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1638032187 { 
+   	label=daveb8772
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   Accessibility1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Accessibility</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessibilityId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   additionalInformation: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   description: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isAccessible: boolean [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Address1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Address</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   countryCode: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   formattedAddress: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   latitude: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   locality: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   longitude: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   postalCode: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+AuthorizationController2033214021[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AuthorizationController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   authorizationResponseHandler: DataAccessResponseHandler&lt;AuthorizationResponse&gt; [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ authorizeUser(): Mono&lt;ResponseEntity&lt;AuthorizationResponse&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+AuthorizationResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AuthorizationResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   authorization: Authorization [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ChargingPoint1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ChargingPoint</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   availabilityStatus: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   chargingPointId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   chargingProfiles: List&lt;ChargingProfile&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   commandRequests: List&lt;CommandRequest&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorCapabilities: ConnectorCapabilities [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorPower: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorStatus: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorType: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   currentUtilization: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dispensers: Set&lt;Dispenser&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   lastUpdate: ZonedDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   location: LocationInfo [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maxChargingPower: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   rfId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   status: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffIds: List&lt;String&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addChargingProfile(chargingProfile: ChargingProfile)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ChargingPointDataResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ChargingPointDataResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   chargingPoints: List&lt;ChargingPoint&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ChargingProfile928566641[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ChargingProfile</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   chargingMode: ChargingModeValue [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   chargingPower: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorType: ConnectorType [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ChargingSessionDataResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ChargingSessionDataResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   chargingSessions: List&lt;ChargingSession&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CommandRequest1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CommandRequest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   chargingPoint: ChargingPoint [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   commandParameter: String [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   commandType: CommandType [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: Long [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timestamp: LocalDateTime [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CommandResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CommandResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   result: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConnectorCapabilities1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ConnectorCapabilities</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   additionalFeatures: Set&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   bidirectionalCharging: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   chargeMode: ChargingModeValue [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   communicationProtocol: CommunicationProtocolValue [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dynamicPowerSharing: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maximumPower: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugType: ConnectorType [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ContactDetails1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ContactDetails</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   contactId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   email: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languages: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   phone: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   website: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DataAccessService1943984374[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DataAccessService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mockAuthorizationResponse: AuthorizationResponse [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mockChargingPointData: List&lt;ChargingPointDataResponse&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mockChargingSessionData: List&lt;ChargingSessionDataResponse&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mockLocationInfo: LocationInfo [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mockTariffData: List&lt;TariffDataResponse&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ authorizeUser(): AuthorizationResponse</TD></TR>
+<TR><TD ALIGN="LEFT" >+ commandRequest(command: String, request: CommandRequest): CommandResponse</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getChargingPoint(cpId: String): ChargingPointDataResponse</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getChargingSession(sessionId: String): ChargingSessionDataResponse</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTariff(tariffId: String): TariffDataResponse</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Dispenser1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Dispenser</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   chargingMode: ChargingModeValue [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   chargingPoint: ChargingPoint [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectorType: ConnectorType [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   currentChargingSessionId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dispenserId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isOccupied: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   power: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   status: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocationInfo1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocationInfo</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessibilityInformation: Accessibility [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   contactInformation: ContactDetails [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   details: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   locationAddress: Address [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   locationId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   openingHours: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pointsOfInterest: List&lt;PointOfInterest&gt; [0..*]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+OCPIEndpointService1943984374[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)OCPIEndpointService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   dataAccessService: DataAccessService [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ authorizeUser(): Mono&lt;AuthorizationResponse&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getChargingPoint(cpId: String): Mono&lt;ChargingPointDataResponse&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getChargingSession(sessionId: String): Mono&lt;ChargingSessionDataResponse&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTariff(tariffId: String): Mono&lt;TariffDataResponse&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleCommand(command: String, request: CommandRequest): Mono&lt;CommandResponse&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PointOfInterest1272597325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PointOfInterest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   description: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   poi_address: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   poi_id: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   type: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SupportedVersionsResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SupportedVersionsResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   supportedVersions: List&lt;String&gt; [0..*]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TariffDataResponse423245340[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TariffDataResponse</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffs: List&lt;Tariff&gt; [0..*]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AuthorizationController2033214021 -> AuthorizationResponse423245340[label="authorizationResponseHandler
+[1]"];
+ChargingPoint1272597325 -> ChargingProfile928566641[label="chargingProfiles
+[0..*]"];
+ChargingPoint1272597325 -> CommandRequest1272597325[label="commandRequests
+[0..*]"];
+ChargingPoint1272597325 -> ConnectorCapabilities1272597325[label="connectorCapabilities
+[0..1]"];
+ChargingPoint1272597325 -> Dispenser1272597325[label="dispensers
+[0..*]"];
+ChargingPoint1272597325 -> LocationInfo1272597325[label="location
+[0..1]"];
+ChargingPointDataResponse423245340 -> AuthorizationResponse423245340[arrowhead=none];
+ChargingPointDataResponse423245340 -> ChargingPoint1272597325[label="chargingPoints
+[0..*]"];
+ChargingPointDataResponse423245340 -> ChargingSessionDataResponse423245340[arrowhead=none];
+ChargingPointDataResponse423245340 -> CommandResponse423245340[arrowhead=none];
+ChargingPointDataResponse423245340 -> SupportedVersionsResponse423245340[arrowhead=none];
+ChargingPointDataResponse423245340 -> TariffDataResponse423245340[arrowhead=none];
+CommandRequest1272597325 -> ChargingPoint1272597325[label="chargingPoint
+[0..1]"];
+DataAccessService1943984374 -> AuthorizationResponse423245340[label="mockAuthorizationResponse
+[0..1]"];
+DataAccessService1943984374 -> ChargingPointDataResponse423245340[label="mockChargingPointData
+[0..*]"];
+DataAccessService1943984374 -> ChargingSessionDataResponse423245340[label="mockChargingSessionData
+[0..*]"];
+DataAccessService1943984374 -> TariffDataResponse423245340[label="mockTariffData
+[0..*]"];
+Dispenser1272597325 -> ChargingPoint1272597325[label="chargingPoint
+[0..1]"];
+LocationInfo1272597325 -> Accessibility1272597325[label="accessibilityInformation
+[0..1]"];
+LocationInfo1272597325 -> Address1272597325[label="locationAddress
+[0..1]"];
+LocationInfo1272597325 -> ContactDetails1272597325[label="contactInformation
+[0..1]"];
+LocationInfo1272597325 -> PointOfInterest1272597325[label="pointsOfInterest
+[0..*]"];
+OCPIEndpointService1943984374 -> DataAccessService1943984374[label="dataAccessService
+[1]"];
+    
+}
+@enduml

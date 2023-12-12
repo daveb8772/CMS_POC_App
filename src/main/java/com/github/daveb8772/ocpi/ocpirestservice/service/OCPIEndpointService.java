@@ -1,7 +1,8 @@
 package com.github.daveb8772.ocpi.ocpirestservice.service;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.CommandRequest;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.CommandRequest;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.LocationInfo;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

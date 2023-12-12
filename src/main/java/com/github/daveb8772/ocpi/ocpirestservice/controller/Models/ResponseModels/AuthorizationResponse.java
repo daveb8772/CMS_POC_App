@@ -1,6 +1,6 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.Authorization;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.Authorization;
 
 public class AuthorizationResponse implements StatusAwareResponse {
 

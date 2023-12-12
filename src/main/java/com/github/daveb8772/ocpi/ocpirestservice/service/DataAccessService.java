@@ -1,8 +1,9 @@
 package com.github.daveb8772.ocpi.ocpirestservice.service;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.Tariff;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.CommandRequest;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.Tariff;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.CommandRequest;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.LocationInfo;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.utility.MockDataGenerator;
 import org.springframework.stereotype.Service;

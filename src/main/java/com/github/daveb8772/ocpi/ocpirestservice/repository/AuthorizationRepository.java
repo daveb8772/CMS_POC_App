@@ -1,6 +1,6 @@
 package com.github.daveb8772.ocpi.ocpirestservice.repository;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.Authorization;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.Authorization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,7 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels;
 
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.ChargingSession;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-
 
 import java.time.LocalDateTime;
 

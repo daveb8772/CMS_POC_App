@@ -1,9 +1,11 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.Tariff;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.TariffChange;
 import com.github.daveb8772.ocpi.ocpirestservice.utility.MockDataGenerator;
 import jakarta.persistence.*;
 

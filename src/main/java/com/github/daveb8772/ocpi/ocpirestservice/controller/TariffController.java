@@ -1,7 +1,6 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DataAccessResponseHandler;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.TariffDataResponse;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.TariffDataResponse;
 import com.github.daveb8772.ocpi.ocpirestservice.service.OCPIEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

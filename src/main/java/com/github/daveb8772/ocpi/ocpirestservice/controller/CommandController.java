@@ -1,7 +1,7 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.CommandRequest;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.CommandResponse;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.CommandRequest;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.CommandResponse;
 import com.github.daveb8772.ocpi.ocpirestservice.service.OCPIEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

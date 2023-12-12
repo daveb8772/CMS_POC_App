@@ -1,7 +1,7 @@
 package com.github.daveb8772.ocpi.ocpirestservice.controller;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.ResponseStatus;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.StatusAwareResponse;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.ResponseStatus;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.StatusAwareResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

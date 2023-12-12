@@ -1,4 +1,4 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels;
 
 public class CommandResponse implements StatusAwareResponse {
 

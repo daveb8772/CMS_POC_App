@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 // Ensure to import your correct Location class
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.LocationInfo; // Replace with your actual Location class import
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.LocationInfo; // Replace with your actual Location class import
 import reactor.core.publisher.Mono;
 
 @RestController

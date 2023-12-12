@@ -1,6 +1,6 @@
-package com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.ChargingPoint;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.ChargingPoint;
 
 import java.util.List;
 

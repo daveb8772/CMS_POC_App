@@ -1,7 +1,7 @@
 
-package com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels;
+package com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.ChargingProfile;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.ChargingProfile;
 import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
