@@ -3,7 +3,7 @@ OCPI REST Service Implementation
 
 Below is a comprehensive README with details on the implemented endpoints in your OCPI application project:
 
-```markdown
+
 # OCPI App
 
 OCPI App is an implementation of the Open Charge Point Interface (OCPI) protocol, providing a framework for communication between Charge Point Operators (CPOs) and Mobility Service Providers (MSPs).
