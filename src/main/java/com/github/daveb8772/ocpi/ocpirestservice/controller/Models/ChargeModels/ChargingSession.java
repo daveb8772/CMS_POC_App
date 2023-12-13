@@ -55,6 +55,8 @@ public class ChargingSession {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
     private List<TariffChange> tariffChanges;
 
+
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
     public List<MeterRecord> meterRecords;
 
@@ -194,6 +196,9 @@ public class ChargingSession {
         meterRecords.add(meterRecord);
     }
 
+    public List<MeterRecord> getMeterRecords() {
+        return meterRecords;
+    }
     public double getDeltaMeterValueBetweenTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp) {
         double startValue = 0.0;
         double endValue = 0.0;

@@ -1,11 +1,9 @@
 package com.github.daveb8772.ocpi.ocpirestservice.utility;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ChargeModels.*;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.DepotModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.*;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
+
 import org.springframework.http.HttpStatus;
 import com.github.javafaker.Faker;
 import java.time.LocalDateTime;

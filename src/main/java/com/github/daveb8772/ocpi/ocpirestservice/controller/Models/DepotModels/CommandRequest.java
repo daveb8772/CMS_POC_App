@@ -63,9 +63,6 @@ public class CommandRequest {
         CANCEL_RESERVATION("CancelReservation"),
         RESERVE_NOW("ReserveNow");
 
-
-
-
         private final String value;
 
         CommandType(String value) {

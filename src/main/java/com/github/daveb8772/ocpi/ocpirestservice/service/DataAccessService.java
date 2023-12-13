@@ -1,16 +1,17 @@
 package com.github.daveb8772.ocpi.ocpirestservice.service;
 
-import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.Tariff;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.CommandRequest;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.LocationInfo;
+
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.DepotModels.*;
+import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ResponseModels.*;
-import com.github.daveb8772.ocpi.ocpirestservice.controller.ResponseModels.*;
 import com.github.daveb8772.ocpi.ocpirestservice.utility.MockDataGenerator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DataAccessService {
@@ -29,16 +30,39 @@ public class DataAccessService {
         mockLocationInfo = MockDataGenerator.generateLocationInfo();
 
     }
-
+    @Transactional(readOnly = true)
     public List<ChargingSessionDataResponse> getChargingSessions() {
-        return mockChargingSessionData;
+        List<ChargingSessionDataResponse> sessions = mockChargingSessionData;
+        // Initialize any lazy collections within each ChargingSession in ChargingSessionDataResponse
+        sessions.forEach(dataResponse -> dataResponse.getChargingSessions().forEach(this::initializeChargingSession));
+        return sessions;
     }
 
+    @Transactional(readOnly = true)
     public ChargingSessionDataResponse getChargingSession(String sessionId) {
         return mockChargingSessionData.stream()
-                .filter(chargingSessionDataResponse -> chargingSessionDataResponse.getChargingSessions().stream()
-                        .anyMatch(session -> Objects.equals(session.getSessionId(), sessionId)))
+                .filter(dataResponse -> dataResponse.getChargingSessions().stream()
+                        .anyMatch(session -> {
+                            if (Objects.equals(session.getSessionId(), sessionId)) {
+                                initializeChargingSession(session); // Initialize lazy-loaded collections
+                                return true;
+                            }
+                            return false;
+                        }))
                 .findFirst().orElse(null);
+    }
+
+    private void initializeChargingSession(ChargingSession session) {
+        if (session.getErrors() != null) {
+            session.getErrors().size(); // Initialize errors collection
+        }
+        if (session.getTariffChanges() != null) {
+            session.getTariffChanges().size(); // Initialize tariffChanges collection
+        }
+        if (session.getMeterRecords() != null) {
+            session.getMeterRecords().size(); // Initialize meterRecords collection
+        }
+        // Repeat for any other lazy-loaded collections
     }
 
 
@@ -47,15 +71,42 @@ public class DataAccessService {
         return mockAuthorizationResponse;
     }
 
+
+
+    @Transactional(readOnly = true)
     public List<ChargingPointDataResponse> getChargingPoints() {
-        return mockChargingPointData;
+        // Initialize each ChargingPoint within the ChargingPointDataResponse
+        return mockChargingPointData.stream()
+                .peek(dataResponse -> dataResponse.getChargingPoints().forEach(this::initializeChargingPoint))
+                .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public ChargingPointDataResponse getChargingPoint(String cpId) {
         return mockChargingPointData.stream()
-                .filter(chargingPointDataResponse -> chargingPointDataResponse.getChargingPoints().stream()
-                        .anyMatch(point -> Objects.equals(point.getChargingPointId(), cpId)))
-                .findFirst().orElse(null);
+                .filter(dataResponse -> dataResponse.getChargingPoints().stream()
+                        .anyMatch(point -> {
+                            if (cpId.equals(point.getChargingPointId())) {
+                                initializeChargingPoint(point); // Initialize lazy-loaded collections
+                                return true;
+                            }
+                            return false;
+                        }))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void initializeChargingPoint(ChargingPoint chargingPoint) {
+        if (chargingPoint.getDispensers() != null) {
+            chargingPoint.getDispensers().size(); // Initialize dispensers collection
+        }
+        if (chargingPoint.getChargingProfiles() != null) {
+            chargingPoint.getChargingProfiles().size(); // Initialize chargingProfiles collection
+        }
+        if (chargingPoint.getCommandRequests() != null) {
+            chargingPoint.getCommandRequests().size(); // Initialize commandRequests collection
+        }
+        // Repeat for any other lazy-loaded collections
     }
 
 
