@@ -5,7 +5,7 @@ import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.Co
 
 public class ConnectorDTO {
 
-    private String connectorId;
+    private Long connectorId;
     private String connectorType; // Assuming you convert Enum to String for the DTO
     private String chargingMode; // Assuming you convert Enum to String for the DTO
     private String status;
@@ -13,7 +13,7 @@ public class ConnectorDTO {
     private boolean isOccupied;
     private String currentChargingSessionId;
 
-    private String chargingPointId;
+    private Long chargingPointId;
 
     public static ConnectorDTO fromEntity(Connector entity) {
         ConnectorDTO dto = new ConnectorDTO();
@@ -33,11 +33,11 @@ public class ConnectorDTO {
     }
 
     // Constructors, getters, and setters
-    public String getconnectorId() {
+    public Long getconnectorId() {
         return connectorId;
     }
 
-    public void setconnectorId(String connectorId) {
+    public void setconnectorId(Long connectorId) {
         this.connectorId = connectorId;
     }
 
@@ -89,11 +89,11 @@ public class ConnectorDTO {
         this.currentChargingSessionId = currentChargingSessionId;
     }
 
-    public String getChargingPointId() {
+    public Long getChargingPointId() {
         return chargingPointId;
     }
 
-    public void setChargingPointId(String chargingPointId) {
+    public void setChargingPointId(Long chargingPointId) {
         this.chargingPointId = chargingPointId;
     }
 

@@ -11,18 +11,12 @@ import java.util.*;
 public class ChargingPoint {
 
     @Id
-    @Column(name = "charging_point_id")
-    private String chargingPointId;
-
-    @Column(name = "rf_id")
-    private String rfId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long chargingPointId;
 
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_info_id")
-    private LocationInfo location;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingPoint")
     private Set<Connector> connectors;
@@ -48,8 +42,6 @@ public class ChargingPoint {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChargingProfile> chargingProfiles;
 
-
-
     // JPA does not support Map field types directly.
     //private Map<String, Tariff> tariffs; // Map of tariff IDs to corresponding `Tariff` objects
     // So extracted the Tariff info and left the ID - Tariff IDs are stored as strings
@@ -63,7 +55,7 @@ public class ChargingPoint {
     private double maxChargingPower;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "connector_capabilities_id", referencedColumnName = "connector_id")
+    @JoinColumn(name = "connector_capabilities_id")
     private ConnectorCapabilities connectorCapabilities;
 
     @OneToMany(mappedBy = "chargingPoint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -74,20 +66,12 @@ public class ChargingPoint {
     public ChargingPoint() {
     }
 
-    public String getChargingPointId() {
+    public Long getChargingPointId() {
         return chargingPointId;
     }
 
-    public void setChargingPointId(String chargingPointId) {
+    public void setChargingPointId(Long chargingPointId) {
         this.chargingPointId = chargingPointId;
-    }
-
-    public String getRfId() {
-        return rfId;
-    }
-
-    public void setRfId(String rfId) {
-        this.rfId = rfId;
     }
 
     public String getStatus() {
@@ -98,13 +82,6 @@ public class ChargingPoint {
         this.status = status;
     }
 
-    public LocationInfo getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationInfo location) {
-        this.location = location;
-    }
 
     public Set<Connector> getConnectors() {
         return connectors;

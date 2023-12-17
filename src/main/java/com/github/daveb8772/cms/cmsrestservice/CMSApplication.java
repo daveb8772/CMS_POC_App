@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.github.daveb8772.ocpi.ocpirestservice.repository")
+@EnableJpaRepositories("com.github.daveb8772.cms.cmsrestservice.repository")
 public class CMSApplication {
 
 	public static void main(String[] args) {

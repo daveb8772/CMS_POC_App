@@ -8,8 +8,8 @@ import java.util.Set;
 public class ConnectorCapabilities {
 
     @Id
-    @Column(name = "connector_id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "bidirectional_charging")
     private boolean bidirectionalCharging;
@@ -32,9 +32,7 @@ public class ConnectorCapabilities {
     @Column(name = "communication_protocol")
     private CommunicationProtocolValue communicationProtocol;
 
-    @Lob
-    @Column(name = "additional_features", columnDefinition = "TEXT")
-    private Set<String> additionalFeatures;
+
 
     public enum ChargingModeValue {
         AC,
@@ -61,11 +59,11 @@ public class ConnectorCapabilities {
     public ConnectorCapabilities() {
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -117,11 +115,4 @@ public class ConnectorCapabilities {
         this.communicationProtocol = communicationProtocol;
     }
 
-    public Set<String> getAdditionalFeatures() {
-        return additionalFeatures;
-    }
-
-    public void setAdditionalFeatures(Set<String> additionalFeatures) {
-        this.additionalFeatures = additionalFeatures;
-    }
 }

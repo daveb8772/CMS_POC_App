@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 public class Connector {
 
     @Id
-    @Column(name = "connector_id")
-    private String connectorId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long connectorId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "connector_type")
@@ -44,11 +44,11 @@ public class Connector {
     public Connector() {
     }
 
-    public String getId() {
+    public Long getId() {
         return connectorId;
     }
 
-    public void setId(String connectorId) {
+    public void setId(Long connectorId) {
         this.connectorId = connectorId;
     }
 

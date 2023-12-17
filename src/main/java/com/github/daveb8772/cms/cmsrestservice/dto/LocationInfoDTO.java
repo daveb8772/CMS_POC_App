@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class LocationInfoDTO {
 
 
-    private String locationId;
+    private Long locationId;
     private AddressDTO locationAddress;
     private String name;
     private String details;
@@ -35,11 +35,11 @@ public class LocationInfoDTO {
         return dto;
     }
 
-    public String getLocationId() {
+    public Long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(String locationId) {
+    public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
 

@@ -8,7 +8,7 @@ public class Tariff {
 
     @Id
     @Column(name = "tariff_id") // Define the column name for the ID
-    private String tariffId; // Unique identifier for the tariff
+    private Long tariffId; // Unique identifier for the tariff
 
     @Column(name = "tariff_name") // Define the column name for the tariff name
     private String tariffName; // Name of the tariff
@@ -19,18 +19,18 @@ public class Tariff {
     public Tariff() {}
 
     // Constructor that initializes all fields
-    public Tariff(String tariffId, String tariffName, double price) {
+    public Tariff(Long tariffId, String tariffName, double price) {
         this.tariffId = tariffId;
         this.tariffName = tariffName;
         this.price = price;
     }
 
 
-    public String getTariffId() {
+    public Long getTariffId() {
         return tariffId;
     }
 
-    public void setTariffId(String tariffId) {
+    public void setTariffId(Long tariffId) {
         this.tariffId = tariffId;
     }
 

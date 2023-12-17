@@ -14,9 +14,5 @@ public class CMSController {
     @Autowired
     private CMSEndpointService CMSEndpointService;
 
-
-
-
-    // Other endpoints and mappings...
 }
 

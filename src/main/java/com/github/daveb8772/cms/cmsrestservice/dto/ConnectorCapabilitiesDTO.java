@@ -7,14 +7,14 @@ import java.util.Set;
 
 public class ConnectorCapabilitiesDTO {
 
-    private String id;
+    private Long id;
     private boolean bidirectionalCharging;
     private boolean dynamicPowerSharing;
     private double maximumPower;
     private String plugType;
     private String chargeMode;
     private String communicationProtocol;
-    private Set<String> additionalFeatures;
+
 
     public static ConnectorCapabilitiesDTO fromEntity(ConnectorCapabilities entity) {
         ConnectorCapabilitiesDTO dto = new ConnectorCapabilitiesDTO();
@@ -25,16 +25,16 @@ public class ConnectorCapabilitiesDTO {
         dto.setPlugType(entity.getPlugType().name());
         dto.setChargeMode(entity.getChargeMode().name());
         dto.setCommunicationProtocol(entity.getCommunicationProtocol().name());
-        dto.setAdditionalFeatures(entity.getAdditionalFeatures());
+
 
         return dto;
     }
     // Constructors, getters, and setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -85,14 +85,5 @@ public class ConnectorCapabilitiesDTO {
     public void setCommunicationProtocol(String communicationProtocol) {
         this.communicationProtocol = communicationProtocol;
     }
-
-    public Set<String> getAdditionalFeatures() {
-        return additionalFeatures;
-    }
-
-    public void setAdditionalFeatures(Set<String> additionalFeatures) {
-        this.additionalFeatures = additionalFeatures;
-    }
-
 
 }

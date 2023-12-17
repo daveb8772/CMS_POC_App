@@ -97,12 +97,6 @@ public class DataAccessService {
     }
 
 
-    private void initializeChargingPoint(ChargingPointDTO chargingPointDTO) {
-        // Initialize any necessary fields in ChargingPointDTO
-        // You'll need to adjust this method to work with ChargingPointDTO
-    }
-
-
     @Transactional(readOnly = true)
     public ChargingPointDataResponse getChargingPoint(String cpId) {
         return chargingPointRepository.findById(cpId)

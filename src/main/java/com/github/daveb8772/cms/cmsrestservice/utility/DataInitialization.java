@@ -1,9 +1,7 @@
 package com.github.daveb8772.cms.cmsrestservice.utility;
 
-import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.ChargingPoint;
-import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.CommandRequest;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
 import com.github.daveb8772.cms.cmsrestservice.repository.*;
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,22 +36,33 @@ public class DataInitialization {
         this.locationInfoRepository = locationInfoRepository;
     }
 
-    @PostConstruct
+    @Bean
     CommandLineRunner initDatabase() {
 
         return args -> {
-            // Generate mock data using MockDataGenerator and save it using the repositories
-            chargingSessionRepository.saveAll(MockDataGenerator.generateChargingSessions(10));
+            // First, generate and save tariffs
+            List<Tariff> generatedTariffs = MockDataGenerator.generateTariffs(5);
+            tariffRepository.saveAll(generatedTariffs);
+
+            // Now pass these tariffs to generate charging sessions
+            List<ChargingSession> generatedSessions = MockDataGenerator.generateChargingSessions(10, generatedTariffs);
+            chargingSessionRepository.saveAll(generatedSessions);
             authorizationRepository.save(MockDataGenerator.generateAuthorization(true));
-            tariffRepository.saveAll(MockDataGenerator.generateTariffs(5));
-            locationInfoRepository.save(MockDataGenerator.generateLocationInfo());
-               // Generate and save ChargingPoint entities with commands
-                 List<ChargingPoint> chargingPoints = MockDataGenerator.generateChargingPoints(5);
-                chargingPoints.forEach(chargingPoint -> {
+
+
+            // Generate and save ChargingPoint entities with commands
+            List<ChargingPoint> chargingPoints = MockDataGenerator.generateChargingPoints(5);
+            chargingPoints.forEach(chargingPoint -> {
                 List<CommandRequest> commandRequests = MockDataGenerator.generateCommandRequests(3, chargingPoint);
-                chargingPoint.setCommandRequests(commandRequests);});
+                chargingPoint.setCommandRequests(commandRequests);
+            });
             chargingPointRepository.saveAll(chargingPoints);
-            };
+
+            // Save LocationInfo with the associated ChargingPoints
+            LocationInfo locationInfo = MockDataGenerator.generateLocationInfo(chargingPoints);
+            locationInfoRepository.save(locationInfo);
+
+        };
 
     }
 

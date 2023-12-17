@@ -4,7 +4,7 @@ package com.github.daveb8772.cms.cmsrestservice.dto;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.PointOfInterest;
 
 public class PointOfInterestDTO {
-    private String poi_id; 
+    private Long poi_id;
     private String type; 
     private String name; 
     private String description; 
@@ -21,11 +21,11 @@ public class PointOfInterestDTO {
     }
     // Getters and Setters
 
-    public String getPoi_id() {
+    public Long getPoi_id() {
         return poi_id;
     }
 
-    public void setPoi_id(String poi_id) {
+    public void setPoi_id(Long poi_id) {
         this.poi_id = poi_id;
     }
 

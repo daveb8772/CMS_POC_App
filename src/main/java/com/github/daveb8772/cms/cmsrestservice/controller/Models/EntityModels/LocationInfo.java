@@ -11,8 +11,8 @@ import java.util.Set;
 public class LocationInfo {
 
     @Id
-    @Column(name = "location_id")
-    private String locationId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long locationId;
 
     @Embedded
     private Address locationAddress;
@@ -35,15 +35,15 @@ public class LocationInfo {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poi_id")
     private List<PointOfInterest> pointsOfInterest;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChargingPoint> chargingPoints; // Use Set for unique collection of charging points
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_info_id") // This is the column in the ChargingPoint table that will reference LocationInfo's primary key
+    private List<ChargingPoint> chargingPoints;
 
-
-    public String getLocation_id() {
+    public Long getLocation_id() {
         return locationId;
     }
 
-    public void setLocation_id(String location_id) {
+    public void setLocation_id(Long location_id) {
         this.locationId = location_id;
     }
 

@@ -11,10 +11,8 @@ import java.util.stream.Collectors;
 
 public class ChargingPointDTO {
 
-    private String chargingPointId;
-    private String rfId;
+    private Long chargingPointId;
     private String status;
-    private LocationInfoDTO location;
     private Set<ConnectorDTO> connector;
     private String connectorType;
     private String connectorStatus;
@@ -33,7 +31,6 @@ public class ChargingPointDTO {
     public static ChargingPointDTO fromEntity(ChargingPoint chargingPoint) {
         ChargingPointDTO dto = new ChargingPointDTO();
         dto.setChargingPointId(chargingPoint.getChargingPointId());
-        dto.setRfId(chargingPoint.getRfId());
         dto.setStatus(chargingPoint.getStatus());
         dto.setConnectorType(chargingPoint.getConnectorType());
         dto.setConnectorStatus(chargingPoint.getConnectorStatus());
@@ -43,7 +40,6 @@ public class ChargingPointDTO {
         dto.setLastUpdate(chargingPoint.getLastUpdate());
         dto.setMaxChargingPower(chargingPoint.getMaxChargingPower());
         dto.setTariffIds(new ArrayList<>(chargingPoint.getTariffIds()));
-        dto.setLocation(LocationInfoDTO.fromEntity(chargingPoint.getLocation()));
         dto.setConnector(chargingPoint.getConnectors().stream()
                 .map(ConnectorDTO::fromEntity)
                 .collect(Collectors.toSet()));
@@ -59,21 +55,14 @@ public class ChargingPointDTO {
         return dto;
     }
 
-    public String getChargingPointId() {
+    public Long getChargingPointId() {
         return chargingPointId;
     }
 
-    public void setChargingPointId(String chargingPointId) {
+    public void setChargingPointId(Long chargingPointId) {
         this.chargingPointId = chargingPointId;
     }
 
-    public String getRfId() {
-        return rfId;
-    }
-
-    public void setRfId(String rfId) {
-        this.rfId = rfId;
-    }
 
     public String getStatus() {
         return status;
@@ -81,14 +70,6 @@ public class ChargingPointDTO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocationInfoDTO getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationInfoDTO location) {
-        this.location = location;
     }
 
     public Set<ConnectorDTO> getConnector() {

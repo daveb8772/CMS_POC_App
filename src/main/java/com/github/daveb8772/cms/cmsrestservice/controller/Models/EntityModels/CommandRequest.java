@@ -26,8 +26,10 @@ public class CommandRequest {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp; // Timestamp for the command request
 
-    @Column(name = "charging_point_id", nullable = false)
-    private String chargingPointId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "charging_point_id") // This should match the column name that holds the foreign key
+    private ChargingPoint chargingPoint;
+
     // Constructors, getters, and setters
 
 
@@ -39,12 +41,12 @@ public class CommandRequest {
         this.id = id;
     }
 
-    public String getChargingPointId() {
-        return chargingPointId;
+    public ChargingPoint getChargingPoint() {
+        return chargingPoint;
     }
 
-    public void setChargingPointId(String chargingPointId) {
-        this.chargingPointId = chargingPointId;
+    public void setChargingPoint(ChargingPoint chargingPoint) {
+        this.chargingPoint = chargingPoint;
     }
 
     public CommandType getCommandType() {

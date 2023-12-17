@@ -4,7 +4,7 @@ import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.Ta
 
 public class TariffDTO {
 
-    private String tariffId;
+    private Long tariffId;
     private String tariffName;
     private double price;
 
@@ -12,7 +12,7 @@ public class TariffDTO {
 
     public TariffDTO() {}
 
-    public TariffDTO(String tariffId, String tariffName, double price) {
+    public TariffDTO(Long tariffId, String tariffName, double price) {
         this.tariffId = tariffId;
         this.tariffName = tariffName;
         this.price = price;
@@ -20,11 +20,11 @@ public class TariffDTO {
 
     // Getters and Setters
 
-    public String getTariffId() {
+    public Long getTariffId() {
         return tariffId;
     }
 
-    public void setTariffId(String tariffId) {
+    public void setTariffId(Long tariffId) {
         this.tariffId = tariffId;
     }
 

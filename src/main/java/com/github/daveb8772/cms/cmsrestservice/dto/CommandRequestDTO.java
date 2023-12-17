@@ -1,6 +1,7 @@
 package com.github.daveb8772.cms.cmsrestservice.dto;
 
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.CommandRequest;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.ChargingPoint;
 import java.time.LocalDateTime;
 
 public class CommandRequestDTO {
@@ -8,7 +9,7 @@ public class CommandRequestDTO {
     private String commandType;
     private String commandParameter;
     private LocalDateTime timestamp;
-    private String chargingPointId; // Assuming you want to include the ID of the associated ChargingPoint
+    private ChargingPoint chargingPoint; // Assuming you want to include the ID of the associated ChargingPoint
 
 
     public static CommandRequestDTO fromEntity(CommandRequest commandRequest) {
@@ -17,8 +18,8 @@ public class CommandRequestDTO {
         dto.setCommandType(commandRequest.getCommandType().toString());
         dto.setCommandParameter(commandRequest.getCommandParameter());
         dto.setTimestamp(commandRequest.getTimestamp());
-        if (commandRequest.getChargingPointId() != null) {
-            dto.setChargingPointId(commandRequest.getChargingPointId());
+        if (commandRequest.getChargingPoint() != null) {
+            dto.setChargingPoint(commandRequest.getChargingPoint());
         }
         return dto;
     }
@@ -56,12 +57,12 @@ public class CommandRequestDTO {
         this.timestamp = timestamp;
     }
 
-    public String getChargingPointId() {
-        return chargingPointId;
+    public ChargingPoint getChargingPoint() {
+        return chargingPoint;
     }
 
-    public void setChargingPointId(String chargingPointId) {
-        this.chargingPointId = chargingPointId;
+    public void setChargingPoint(ChargingPoint chargingPoint) {
+        this.chargingPoint = chargingPoint;
     }
 
 }
