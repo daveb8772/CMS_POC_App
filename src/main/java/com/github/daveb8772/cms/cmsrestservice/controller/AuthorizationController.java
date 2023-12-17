@@ -1,18 +1,18 @@
 package com.github.daveb8772.cms.cmsrestservice.controller;
 
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.UserCredentials;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.AuthorizationResponse;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.ResponseStatus;
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/ocpi") // Base mapping for OCPI endpoints
+@RequestMapping("/cms") // Base mapping for cms endpoints
 public class AuthorizationController {
 
     @Autowired
@@ -21,15 +21,27 @@ public class AuthorizationController {
     @Autowired
     private DataAccessResponseHandler<AuthorizationResponse> authorizationResponseHandler;
 
-    @GetMapping("/authorizeUser")
-    public Mono<ResponseEntity<AuthorizationResponse>> authorizeUser() {
-        return CMSEndpointService.authorizeUser()
+    @PostMapping("/user/auth")
+    public Mono<ResponseEntity<?>> authenticateUser(@RequestBody UserCredentials credentials) {
+        return CMSEndpointService.authorizeUser(credentials)
                 .flatMap(authorizationResponse -> {
-                    if (authorizationResponse == null || !authorizationResponse.getAuthorization().getIsAuthorized()) {
-                        return Mono.just(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
-                    } else {
+                    if (authorizationResponse != null && authorizationResponse.getAuthorization().getIsAuthorized()) {
+                        // User is authorized
+                        ResponseStatus responseStatus = new ResponseStatus(HttpStatus.OK.value(), "Authentication successful.");
                         return authorizationResponseHandler.handleResponse(Mono.just(authorizationResponse), HttpStatus.OK);
+                    } else {
+                        // Authentication failed
+                        ResponseStatus responseStatus = new ResponseStatus(HttpStatus.UNAUTHORIZED.value(), "Authentication failed. Invalid credentials.");
+                        return Mono.just(new ResponseEntity<>(responseStatus, HttpStatus.UNAUTHORIZED));
                     }
+                })
+                .onErrorResume(error -> {
+                    // Handle other errors
+                    ResponseStatus responseStatus = new ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error.");
+                    return Mono.just(new ResponseEntity<>(responseStatus, HttpStatus.INTERNAL_SERVER_ERROR));
                 });
     }
+
+
+
 }

@@ -1,17 +1,16 @@
 package com.github.daveb8772.cms.cmsrestservice.utility;
 
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
-import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.*;
 
-import org.springframework.http.HttpStatus;
 import com.github.javafaker.Faker;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 public class MockDataGenerator {
@@ -166,7 +165,9 @@ public class MockDataGenerator {
 
         Address address = generateAddress();
         locationInfo.setAddress(address);
-        locationInfo.setName(faker.lorem().toString());//faker.company().name());
+        //locationInfo.setName(faker.number().toString());//faker.company().name());
+        String name = faker.company().name().replaceAll("\\s+.*", "") + "-" + faker.number().numberBetween(1, 100);
+        locationInfo.setName(name);
         locationInfo.setDetails(faker.lorem().paragraph());
         locationInfo.setOpeningHours("24/7"); // or however you format opening hours
 
@@ -272,7 +273,18 @@ public class MockDataGenerator {
                 .collect(Collectors.toList());
     }
 
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    public static List<UserCredentials> generateUsers(int count) {
+        List<UserCredentials> users = new ArrayList<>();
+        IntStream.range(0, count).forEach(i -> {
+            UserCredentials user = new UserCredentials();
+            user.setName("user" + i);
+            user.setPassword(passwordEncoder.encode("password" + i));
+            users.add(user);
+        });
+        return users;
+    }
 
     public static Authorization generateAuthorization(boolean authorized) {
         Faker faker = new Faker();

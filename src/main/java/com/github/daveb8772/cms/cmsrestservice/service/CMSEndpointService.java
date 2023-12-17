@@ -1,6 +1,7 @@
 package com.github.daveb8772.cms.cmsrestservice.service;
 
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.CommandRequest;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.UserCredentials;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.LocationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,8 @@ import java.util.List;
 @Service
 public class CMSEndpointService {
 
-    @Autowired private DataAccessService dataAccessService;
+    @Autowired
+    private DataAccessService dataAccessService;
 
     public Mono<List<ChargingSessionDataResponse>> getChargingSessions() {
         return Mono.fromCallable(() -> dataAccessService.getChargingSessions());
@@ -22,8 +24,8 @@ public class CMSEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getChargingSession(sessionId));
     }
 
-    public Mono<AuthorizationResponse> authorizeUser() {
-        return Mono.fromCallable(() -> dataAccessService.authorizeUser());
+    public Mono<AuthorizationResponse> authorizeUser(UserCredentials userCredentials) {
+        return Mono.fromCallable(() -> dataAccessService.authorizeUser(userCredentials));
     }
 
     public Mono<CommandResponse> handleCommand(String command, CommandRequest request) {
@@ -39,8 +41,16 @@ public class CMSEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getChargingPoint(String.valueOf(parsedCpId)));
     }
 
-    public Mono<LocationInfoResponse> getLocationInfo() {
+    public Mono<List<LocationInfoResponse>> getAllLocationInfo() {
         return Mono.fromCallable(() -> dataAccessService.getLocationInfo());
+    }
+
+    public Mono<LocationInfoResponse> getLocationInfo(String name) {
+        return Mono.fromCallable(() -> dataAccessService.getLocationInfo(name));
+    }
+
+    public Mono<List<ChargingPointDataResponse>> getChargingPointsByLocationName(String name) {
+        return Mono.fromCallable(() -> dataAccessService.getChargingPointsByLocationName(name));
     }
 
 

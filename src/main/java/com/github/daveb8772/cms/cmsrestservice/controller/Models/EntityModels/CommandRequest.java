@@ -17,7 +17,7 @@ public class CommandRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "command_type", nullable = false)
-    private CommandType commandType; // Enum representing the type of OCPI command
+    private CommandType commandType; // Enum representing the type of cms command
 
     @NotBlank
     @Column(name = "command_parameter", nullable = false)

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/ocpi/commands")
+@RequestMapping("/cms/commands")
 public class CommandController {
 
     private final CMSEndpointService CMSEndpointService;

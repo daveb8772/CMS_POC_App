@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ocpi")
+@RequestMapping("/cms")
 public class TariffController {
 
     @Autowired

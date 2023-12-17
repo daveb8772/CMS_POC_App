@@ -10,7 +10,26 @@ public class Authorization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "is_authorized")
+    private Boolean isAuthorized;
 
+    @Column(name = "access_token")
+    private String accessToken;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
+    @Column(name = "expires_at")
+    private ZonedDateTime expiresAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_credentials_id")
+    private UserCredentials userCredentials;
+
+    // Constructors, getters, and setters
+    public Long getId() {
+        return this.id;
+    }
     public Boolean getIsAuthorized() {
         return isAuthorized;
     }
@@ -27,18 +46,9 @@ public class Authorization {
         this.accessToken = accessToken;
     }
 
-    @Column(name = "is_authorized")
-    private Boolean isAuthorized;
-
-    @Column(name = "access_token")
-    private String accessToken;
-
     public void setExpiresAt(ZonedDateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
-
-    @Column(name = "expires_at")
-    private ZonedDateTime expiresAt;
 
     public String getRefreshToken() {
         return refreshToken;
@@ -48,16 +58,15 @@ public class Authorization {
         this.refreshToken = refreshToken;
     }
 
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
-    public Long getId() {
-        return this.id;
-    }
-
     public ZonedDateTime getExpiresAt() {
         return this.expiresAt;
     }
 
-    // Constructors, getters, and setters
+    public UserCredentials getUserCredentials() {
+        return userCredentials;
+    }
+
+    public void setUserCredentials(UserCredentials userCredentials) {
+        this.userCredentials = userCredentials;
+    }
 }

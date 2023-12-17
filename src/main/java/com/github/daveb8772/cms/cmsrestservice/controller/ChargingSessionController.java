@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ocpi") // Base mapping for OCPI endpoints
+@RequestMapping("/cms") // Base mapping for CMS endpoints
 public class ChargingSessionController {
 
     @Autowired

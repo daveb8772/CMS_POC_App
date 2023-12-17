@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Configuration
 @Profile("dev")
@@ -21,12 +22,15 @@ public class DataInitialization {
     private final TariffRepository tariffRepository;
     private final LocationInfoRepository locationInfoRepository;
 
+    private final UserRepository userRepository;
+
     public DataInitialization(ChargingSessionRepository chargingSessionRepository,
                               ChargingPointRepository chargingPointRepository,
                               CommandRequestRepository commandRequestRepository,
                               AuthorizationRepository authorizationRepository,
                               TariffRepository tariffRepository,
-                              LocationInfoRepository locationInfoRepository) {
+                              LocationInfoRepository locationInfoRepository,
+                                UserRepository userRepository) {
         // Save references to repositories...
         this.chargingSessionRepository = chargingSessionRepository;
         this.authorizationRepository = authorizationRepository;
@@ -34,6 +38,7 @@ public class DataInitialization {
         this.chargingPointRepository = chargingPointRepository;
         this.commandRequestRepository = commandRequestRepository;
         this.locationInfoRepository = locationInfoRepository;
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -51,16 +56,20 @@ public class DataInitialization {
 
 
             // Generate and save ChargingPoint entities with commands
-            List<ChargingPoint> chargingPoints = MockDataGenerator.generateChargingPoints(5);
-            chargingPoints.forEach(chargingPoint -> {
-                List<CommandRequest> commandRequests = MockDataGenerator.generateCommandRequests(3, chargingPoint);
-                chargingPoint.setCommandRequests(commandRequests);
-            });
-            chargingPointRepository.saveAll(chargingPoints);
-
+            // Loop to create 3 locations
+            // Generate and save 5 ChargingPoint entities with commands for each location
             // Save LocationInfo with the associated ChargingPoints
-            LocationInfo locationInfo = MockDataGenerator.generateLocationInfo(chargingPoints);
-            locationInfoRepository.save(locationInfo);
+            IntStream.range(0, 3).mapToObj(i -> MockDataGenerator.generateChargingPoints(5)).forEach(chargingPoints -> {
+                chargingPoints.forEach(chargingPoint -> {
+                    List<CommandRequest> commandRequests = MockDataGenerator.generateCommandRequests(3, chargingPoint);
+                    chargingPoint.setCommandRequests(commandRequests);
+                });
+                chargingPointRepository.saveAll(chargingPoints);
+                LocationInfo locationInfo = MockDataGenerator.generateLocationInfo(chargingPoints);
+                locationInfoRepository.save(locationInfo);
+            });
+            List<UserCredentials> users = MockDataGenerator.generateUsers(5);
+            userRepository.saveAll(users);
 
         };
 

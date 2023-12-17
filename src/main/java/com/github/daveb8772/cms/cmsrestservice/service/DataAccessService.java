@@ -5,7 +5,6 @@ import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.cms.cmsrestservice.dto.*;
 import com.github.daveb8772.cms.cmsrestservice.repository.*;
-import com.github.daveb8772.cms.cmsrestservice.utility.MockDataGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +22,20 @@ public class DataAccessService {
     private final TariffRepository tariffRepository;
     private final LocationInfoRepository locationInfoRepository;
 
+    private final UserRepository userRepository;
+
     public DataAccessService(ChargingSessionRepository chargingSessionRepository,
                              ChargingPointRepository chargingPointRepository,
                              AuthorizationRepository authorizationRepository,
                              TariffRepository tariffRepository,
-                             LocationInfoRepository locationInfoRepository) {
+                             LocationInfoRepository locationInfoRepository,
+                             UserRepository userRepository) {
         this.chargingSessionRepository = chargingSessionRepository;
         this.chargingPointRepository = chargingPointRepository;
         this.authorizationRepository = authorizationRepository;
         this.tariffRepository = tariffRepository;
         this.locationInfoRepository = locationInfoRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
@@ -68,18 +71,37 @@ public class DataAccessService {
 
 
 
-    public AuthorizationResponse authorizeUser() {
-        // Fetch the real Authorization entity using the repository
-        // For the sake of this example, let's say we fetch the first one
-        Authorization authorization = authorizationRepository.findAll().stream().findFirst().orElse(null);
+    public AuthorizationResponse authorizeUser(UserCredentials userCredentials) {
+        // Assuming UserCredentials contains username and password
+        String inputUsername = userCredentials.getName();
+        String inputPassword = userCredentials.getPassword();
 
-        // Convert the Authorization entity to AuthorizationDTO
-        AuthorizationDTO authorizationDTO = authorization != null ? AuthorizationDTO.fromEntity(authorization) : null;
+        // Fetch the user details from the repository based on username
+        UserCredentials user = userRepository.findByName(inputUsername).orElse(null);;
 
-        // Create an AuthorizationResponse with the DTO
-        AuthorizationResponse response = new AuthorizationResponse(authorizationDTO);
-        response.setStatus(new ResponseStatus(200, "OK")); // Set an appropriate status
-        return response;
+        if (user != null && passwordMatches(inputPassword, user.getPassword())) {
+            //  Authorization is linked to User entity
+            Authorization authorization = userCredentials.getAuthorization();
+
+            // Convert the Authorization entity to AuthorizationDTO
+            AuthorizationDTO authorizationDTO = authorization != null ? AuthorizationDTO.fromEntity(authorization) : null;
+
+            // Create an AuthorizationResponse with the DTO
+            AuthorizationResponse response = new AuthorizationResponse(authorizationDTO);
+            response.setStatus(new ResponseStatus(200, "OK")); // Success status
+            return response;
+        } else {
+            AuthorizationResponse response = new AuthorizationResponse(null);
+            response.setStatus(new ResponseStatus(401, "Unauthorized")); // Success status
+            // Return a response indicating authentication failure
+            return  response;
+        }
+    }
+
+    private boolean passwordMatches(String inputPassword, String storedPassword) {
+        // Implement your password checking logic here (e.g., hashing and comparison)
+        // For simplicity, assuming plain text comparison
+        return inputPassword.equals(storedPassword);
     }
 
     @Transactional(readOnly = true)
@@ -153,16 +175,51 @@ public class DataAccessService {
     }
 
 
-    public LocationInfoResponse getLocationInfo() {
-        // Assuming you have a LocationInfoRepository to fetch location information
-        LocationInfo locationInfo = locationInfoRepository.findById("desired-id").orElse(null);
+
+
+    public List<LocationInfoResponse> getLocationInfo() {
+
+        // Fetch all locations
+        List<LocationInfo> allLocations = locationInfoRepository.findAll();
+
+        // Convert each LocationInfo entity to LocationInfoDTO and then to LocationInfoResponse
+        List<LocationInfoResponse> responses = allLocations.stream()
+                .map(LocationInfoDTO::fromEntity)
+                .map(dto -> new LocationInfoResponse(dto, new ResponseStatus(200, "OK")))
+                .collect(Collectors.toList());
+        return responses;
+    }
+
+    public LocationInfoResponse getLocationInfo(String name) {
+
+        LocationInfo locationInfo = locationInfoRepository.findByName(name).orElse(null);
         LocationInfoDTO locationInfoDTO = locationInfo != null ? LocationInfoDTO.fromEntity(locationInfo) : null;
 
-        // Create a LocationInfoResponse with the DTO
         LocationInfoResponse response = new LocationInfoResponse(locationInfoDTO);
-        response.setResponseStatus(new ResponseStatus(200, "OK")); // Set an appropriate status
+        response.setResponseStatus(new ResponseStatus(200, "OK"));
         return response;
     }
+
+    @Transactional(readOnly = true)
+    public List<ChargingPointDataResponse> getChargingPointsByLocationName(String name) {
+        LocationInfo locationInfo = locationInfoRepository.findByName(name).orElse(null);
+        if (locationInfo == null) {
+            return Collections.emptyList();
+        }
+
+        List<ChargingPoint> chargingPoints = locationInfo.getChargingPoints();
+        return chargingPoints.stream()
+                .map(ChargingPointDTO::fromEntity) // Convert each ChargingPoint to ChargingPointDTO
+                .map(chargingPointDTO -> {
+                    ChargingPointDataResponse response = new ChargingPointDataResponse();
+                    response.setChargingPoints(Collections.singletonList(chargingPointDTO));
+                    response.setStatus(new ResponseStatus(200, "OK"));
+                    return response;
+                })
+                .collect(Collectors.toList());
+
+    }
+
 
     public CommandResponse commandRequest(String command, CommandRequest request) {
         CommandResponse commandResponse = new CommandResponse();

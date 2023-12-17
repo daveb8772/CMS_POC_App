@@ -70,7 +70,7 @@ config=StructureConfiguration;
     "showPackageLevels": 2,
     "showDetailedClassStructure": true
   },
-  "rootClass": "com.github.daveb8772.ocpi.ocpirestservice.controller.Models.ChargeModels.ChargingSession",
+  "rootClass": "com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.ChargingSession",
   "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
 }
 diagram meta data end '/
@@ -95,62 +95,7 @@ subgraph cluster_1245635613 {
 	fillcolor="#d8d8d8"
 	style=filled
    
-   AuthorizationController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)AuthorizationController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   authorizationResponseHandler: DataAccessResponseHandler&lt;AuthorizationResponse&gt; [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ authorizeUser(): Mono&lt;ResponseEntity&lt;AuthorizationResponse&gt;&gt;</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-AuthorizationResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)AuthorizationResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   authorization: Authorization [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-ChargingPointController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ChargingPointController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ getChargingPoint(cpId: String): Mono&lt;ResponseEntity&lt;ChargingPointDataResponse&gt;&gt;</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-ChargingPointDataResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ChargingPointDataResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   chargingPoints: List&lt;ChargingPoint&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-ChargingSession928566641[
+   ChargingSession1462292524[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)ChargingSession</TD></TR>
 <HR/>
@@ -173,7 +118,6 @@ ChargingSession928566641[
 <TR><TD ALIGN="LEFT" >+ addTariffChange(tariffChange: TariffChange)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ calculateTotalChargedAmount(): double</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getDeltaMeterValueBetweenTimestamps(startTimestamp: LocalDateTime, endTimestamp: LocalDateTime): double</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getEnergyDelivered(timeStamp: LocalDateTime): double</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getLastMeterValueAtTimestamp(targetTimestamp: LocalDateTime): double</TD></TR>
 <TR><TD ALIGN="LEFT" >- getNextTariffChangeTimestamp(currentChange: TariffChange): LocalDateTime</TD></TR>
 </TABLE>>
@@ -183,93 +127,7 @@ ChargingSession928566641[
 	fillcolor="#FFFFFF"
 ];
 
-ChargingSessionController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ChargingSessionController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-ChargingSessionDataResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ChargingSessionDataResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   chargingSessions: List&lt;ChargingSession&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-CommandController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)CommandController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [0..1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ handleCommand(command: String, request: CommandRequest): Mono&lt;ResponseEntity&lt;CommandResponse&gt;&gt;</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-CommandResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)CommandResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   result: String [0..1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-DataAccessService1943984374[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)DataAccessService</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   mockAuthorizationResponse: AuthorizationResponse [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   mockChargingPointData: List&lt;ChargingPointDataResponse&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   mockChargingSessionData: List&lt;ChargingSessionDataResponse&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   mockLocationInfo: LocationInfo [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   mockTariffData: List&lt;TariffDataResponse&gt; [0..*]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ authorizeUser(): AuthorizationResponse</TD></TR>
-<TR><TD ALIGN="LEFT" >+ commandRequest(command: String, request: CommandRequest): CommandResponse</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getChargingPoint(cpId: String): ChargingPointDataResponse</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getChargingSession(sessionId: String): ChargingSessionDataResponse</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getTariff(tariffId: String): TariffDataResponse</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-LocationController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)LocationController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-MeterRecord928566641[
+MeterRecord1462292524[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)MeterRecord</TD></TR>
 <HR/>
@@ -284,49 +142,7 @@ MeterRecord928566641[
 	fillcolor="#FFFFFF"
 ];
 
-OCPIController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)OCPIController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-OCPIEndpointService1943984374[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)OCPIEndpointService</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   dataAccessService: DataAccessService [1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ authorizeUser(): Mono&lt;AuthorizationResponse&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getChargingPoint(cpId: String): Mono&lt;ChargingPointDataResponse&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getChargingSession(sessionId: String): Mono&lt;ChargingSessionDataResponse&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getTariff(tariffId: String): Mono&lt;TariffDataResponse&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ handleCommand(command: String, request: CommandRequest): Mono&lt;CommandResponse&gt;</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-OCPIVersionController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)OCPIVersionController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-SessionError928566641[
+SessionError1462292524[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)SessionError</TD></TR>
 <HR/>
@@ -341,24 +157,12 @@ SessionError928566641[
 	fillcolor="#FFFFFF"
 ];
 
-SupportedVersionsResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)SupportedVersionsResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   supportedVersions: List&lt;String&gt; [0..*]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-Tariff1272597325[
+Tariff1462292524[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Tariff</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   price: double [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   tariffId: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffId: Long [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   tariffName: String [0..1]</TD></TR>
 </TABLE>>
 	style=filled
@@ -367,7 +171,7 @@ Tariff1272597325[
 	fillcolor="#FFFFFF"
 ];
 
-TariffChange1272597325[
+TariffChange1462292524[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)TariffChange</TD></TR>
 <HR/>
@@ -382,90 +186,28 @@ TariffChange1272597325[
 	shape=plaintext
 	fillcolor="#FFFFFF"
 ];
-
-TariffController2033214021[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)TariffController</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   ocpiEndpointService: OCPIEndpointService [1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ getTariff(tariffId: String): Mono&lt;ResponseEntity&lt;TariffDataResponse&gt;&gt;</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-TariffDataResponse423245340[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)TariffDataResponse</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   tariffs: List&lt;Tariff&gt; [0..*]</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
 } 
 } 
 
 'edges    
-AuthorizationController2033214021 -> AuthorizationResponse423245340[label="authorizationResponseHandler
-[1]"];
-AuthorizationController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-ChargingPointController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-ChargingSession928566641 -> MeterRecord928566641[label="meterRecords
+ChargingSession1462292524 -> MeterRecord1462292524[label="meterRecords
 [0..*]"];
-ChargingSession928566641 -> SessionError928566641[label="errors
+ChargingSession1462292524 -> SessionError1462292524[label="errors
 [0..*]"];
-ChargingSession928566641 -> Tariff1272597325[label="currentTariff
+ChargingSession1462292524 -> Tariff1462292524[label="currentTariff
 [0..1]"];
-ChargingSession928566641 -> TariffChange1272597325[label="tariffChanges
+ChargingSession1462292524 -> TariffChange1462292524[label="tariffChanges
 [0..*]"];
-ChargingSessionController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-ChargingSessionDataResponse423245340 -> AuthorizationResponse423245340[arrowhead=none];
-ChargingSessionDataResponse423245340 -> ChargingPointDataResponse423245340[arrowhead=none];
-ChargingSessionDataResponse423245340 -> ChargingSession928566641[label="chargingSessions
-[0..*]"];
-ChargingSessionDataResponse423245340 -> CommandResponse423245340[arrowhead=none];
-ChargingSessionDataResponse423245340 -> SupportedVersionsResponse423245340[arrowhead=none];
-ChargingSessionDataResponse423245340 -> TariffDataResponse423245340[arrowhead=none];
-CommandController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
+MeterRecord1462292524 -> ChargingSession1462292524[label="chargingSession
 [0..1]"];
-DataAccessService1943984374 -> AuthorizationResponse423245340[label="mockAuthorizationResponse
+SessionError1462292524 -> ChargingSession1462292524[label="chargingSession
 [0..1]"];
-DataAccessService1943984374 -> ChargingPointDataResponse423245340[label="mockChargingPointData
-[0..*]"];
-DataAccessService1943984374 -> ChargingSessionDataResponse423245340[label="mockChargingSessionData
-[0..*]"];
-DataAccessService1943984374 -> TariffDataResponse423245340[label="mockTariffData
-[0..*]"];
-LocationController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-MeterRecord928566641 -> ChargingSession928566641[label="chargingSession
+TariffChange1462292524 -> ChargingSession1462292524[label="chargingSession
 [0..1]"];
-OCPIController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-OCPIEndpointService1943984374 -> DataAccessService1943984374[label="dataAccessService
-[1]"];
-OCPIVersionController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
-SessionError928566641 -> ChargingSession928566641[label="chargingSession
+TariffChange1462292524 -> Tariff1462292524[label="newTariff
 [0..1]"];
-TariffChange1272597325 -> ChargingSession928566641[label="chargingSession
+TariffChange1462292524 -> Tariff1462292524[label="oldTariff
 [0..1]"];
-TariffChange1272597325 -> Tariff1272597325[label="newTariff
-[0..1]"];
-TariffChange1272597325 -> Tariff1272597325[label="oldTariff
-[0..1]"];
-TariffController2033214021 -> OCPIEndpointService1943984374[label="ocpiEndpointService
-[1]"];
     
 }
 @enduml

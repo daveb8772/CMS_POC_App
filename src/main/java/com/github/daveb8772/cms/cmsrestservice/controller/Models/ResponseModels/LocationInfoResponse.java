@@ -11,6 +11,12 @@ public class LocationInfoResponse {
         this.locationInfo = locationInfo;
     }
 
+    public LocationInfoResponse(LocationInfoDTO locationInfo, ResponseStatus responseStatus) {
+        this.locationInfo = locationInfo;
+        this.responseStatus = responseStatus;
+    }
+
+
     public LocationInfoDTO getLocationInfo() {
         return locationInfo;
     }
