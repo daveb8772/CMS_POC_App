@@ -78,6 +78,8 @@ public class MockDataGenerator {
         // Return an empty list or create mock MeterRecord objects
         return new ArrayList<>();
     }
+
+
     public static LocationInfo generateLocationInfo() {
         LocationInfo locationInfo = new LocationInfo();
         locationInfo.setLocation_id(UUID.randomUUID().toString());
@@ -113,6 +115,9 @@ public class MockDataGenerator {
                 })
                 .collect(Collectors.toList());
         locationInfo.setPointsOfInterest(pointsOfInterest);
+        // Generate a set of ChargingPoints and associate them with this LocationInfo
+        List<ChargingPoint> chargingPoints = generateChargingPoints(5);
+        locationInfo.setChargingPoints(chargingPoints);
 
         return locationInfo;
     }
@@ -166,6 +171,7 @@ public class MockDataGenerator {
                 .mapToObj(i -> generateChargingPoint())
                 .collect(Collectors.toList());
     }
+
 
 
     private static List<ChargingProfile> generateChargingProfiles() {
@@ -239,4 +245,6 @@ public class MockDataGenerator {
 
         return authorization;
     }
+
+
 }

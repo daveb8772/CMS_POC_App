@@ -4,6 +4,7 @@ package com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "location_info")
@@ -33,6 +34,10 @@ public class LocationInfo {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poi_id")
     private List<PointOfInterest> pointsOfInterest;
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ChargingPoint> chargingPoints; // Use Set for unique collection of charging points
+
 
     public String getLocation_id() {
         return locationId;
@@ -96,6 +101,14 @@ public class LocationInfo {
 
     public void setPointsOfInterest(List<PointOfInterest> pointsOfInterest) {
         this.pointsOfInterest = pointsOfInterest;
+    }
+
+    public List<ChargingPoint> getChargingPoints() {
+        return chargingPoints;
+    }
+
+    public void setChargingPoints(List<ChargingPoint> chargingPoints) {
+        this.chargingPoints = chargingPoints;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.github.daveb8772.cms.cmsrestservice.controller;
 
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.LocationInfoResponse;
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class LocationController {
 
 
     @GetMapping("/getLocationInfo")
-    public Mono<ResponseEntity<LocationInfo>> getLocationInfo() {
+    public Mono<ResponseEntity<LocationInfoResponse>> getLocationInfo() {
         return CMSEndpointService.getLocationInfo()
                 .map(locationInfo -> ResponseEntity.ok(locationInfo))
                 .defaultIfEmpty(ResponseEntity.notFound().build());

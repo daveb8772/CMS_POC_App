@@ -3,14 +3,17 @@ package com.github.daveb8772.cms.cmsrestservice.utility;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.ChargingPoint;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.CommandRequest;
 import com.github.daveb8772.cms.cmsrestservice.repository.*;
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Configuration
+@Profile("dev")
 public class DataInitialization {
 
     private final ChargingSessionRepository chargingSessionRepository;
@@ -26,6 +29,7 @@ public class DataInitialization {
                               AuthorizationRepository authorizationRepository,
                               TariffRepository tariffRepository,
                               LocationInfoRepository locationInfoRepository) {
+        // Save references to repositories...
         this.chargingSessionRepository = chargingSessionRepository;
         this.authorizationRepository = authorizationRepository;
         this.tariffRepository = tariffRepository;
@@ -34,8 +38,7 @@ public class DataInitialization {
         this.locationInfoRepository = locationInfoRepository;
     }
 
-    @Bean
-    @Transactional
+    @PostConstruct
     CommandLineRunner initDatabase() {
 
         return args -> {

@@ -4,6 +4,7 @@ package com.github.daveb8772.cms.cmsrestservice.service;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.cms.cmsrestservice.dto.*;
+import com.github.daveb8772.cms.cmsrestservice.repository.*;
 import com.github.daveb8772.cms.cmsrestservice.utility.MockDataGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,24 +17,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class DataAccessService {
-    private final List<ChargingSession> mockChargingSessionData;
-    private final List<ChargingPoint> mockChargingPointData;
-    private final Authorization mockAuthorizationResponse;
-    private final List<Tariff> mockTariffData;
+    private final ChargingSessionRepository chargingSessionRepository;
+    private final ChargingPointRepository chargingPointRepository;
+    private final AuthorizationRepository authorizationRepository;
+    private final TariffRepository tariffRepository;
+    private final LocationInfoRepository locationInfoRepository;
 
-    private final LocationInfo mockLocationInfo;
-
-    public DataAccessService() {
-        mockChargingSessionData = MockDataGenerator.generateChargingSessions(10);
-        mockChargingPointData = MockDataGenerator.generateChargingPoints(5);
-        mockAuthorizationResponse = MockDataGenerator.generateAuthorization(true);
-        mockTariffData = MockDataGenerator.generateTariffs(5);
-        mockLocationInfo = MockDataGenerator.generateLocationInfo();
-
+    public DataAccessService(ChargingSessionRepository chargingSessionRepository,
+                             ChargingPointRepository chargingPointRepository,
+                             AuthorizationRepository authorizationRepository,
+                             TariffRepository tariffRepository,
+                             LocationInfoRepository locationInfoRepository) {
+        this.chargingSessionRepository = chargingSessionRepository;
+        this.chargingPointRepository = chargingPointRepository;
+        this.authorizationRepository = authorizationRepository;
+        this.tariffRepository = tariffRepository;
+        this.locationInfoRepository = locationInfoRepository;
     }
+
     @Transactional(readOnly = true)
     public List<ChargingSessionDataResponse> getChargingSessions() {
-        return mockChargingSessionData.stream()
+        List<ChargingSession> sessions = chargingSessionRepository.findAll();
+        return sessions.stream()
                 .map(ChargingSessionDTO::fromEntity) // Convert each ChargingSession to ChargingSessionDTO
                 .peek(this::initializeChargingSession) // Assuming initializeChargingSession accepts ChargingSessionDTO
                 .map(chargingSessionDTO -> new ChargingSessionDataResponse(Collections.singletonList(chargingSessionDTO)))
@@ -42,7 +47,8 @@ public class DataAccessService {
 
     @Transactional(readOnly = true)
     public ChargingSessionDataResponse getChargingSession(String sessionId) {
-        return mockChargingSessionData.stream()
+        List<ChargingSession> sessions = chargingSessionRepository.findAll();
+        return sessions.stream()
                 .filter(session -> Objects.equals(session.getSessionId(), sessionId))
                 .map(ChargingSessionDTO::fromEntity) // Convert to ChargingSessionDTO
                 .peek(this::initializeChargingSession) // Initialize ChargingSessionDTO
@@ -57,13 +63,18 @@ public class DataAccessService {
 
 
     private void initializeChargingSession(ChargingSessionDTO chargingSessionDTO) {
+        //Nothing for now
     }
 
 
 
     public AuthorizationResponse authorizeUser() {
-        // Convert the mock Authorization entity to AuthorizationDTO
-        AuthorizationDTO authorizationDTO = AuthorizationDTO.fromEntity(mockAuthorizationResponse);
+        // Fetch the real Authorization entity using the repository
+        // For the sake of this example, let's say we fetch the first one
+        Authorization authorization = authorizationRepository.findAll().stream().findFirst().orElse(null);
+
+        // Convert the Authorization entity to AuthorizationDTO
+        AuthorizationDTO authorizationDTO = authorization != null ? AuthorizationDTO.fromEntity(authorization) : null;
 
         // Create an AuthorizationResponse with the DTO
         AuthorizationResponse response = new AuthorizationResponse(authorizationDTO);
@@ -71,12 +82,11 @@ public class DataAccessService {
         return response;
     }
 
-
     @Transactional(readOnly = true)
     public List<ChargingPointDataResponse> getChargingPoints() {
-        return mockChargingPointData.stream()
+        List<ChargingPoint> chargingPoints = chargingPointRepository.findAll(); // Fetch data from the database
+        return chargingPoints.stream()
                 .map(ChargingPointDTO::fromEntity) // Convert each ChargingPoint to ChargingPointDTO
-                .peek(this::initializeChargingPoint) // Assuming initializeChargingPoint accepts ChargingPointDTO
                 .map(chargingPointDTO -> {
                     ChargingPointDataResponse response = new ChargingPointDataResponse();
                     response.setChargingPoints(Collections.singletonList(chargingPointDTO));
@@ -95,11 +105,8 @@ public class DataAccessService {
 
     @Transactional(readOnly = true)
     public ChargingPointDataResponse getChargingPoint(String cpId) {
-        return mockChargingPointData.stream()
-                .filter(point -> cpId.equals(point.getChargingPointId())) // Filter the ChargingPoint with the given ID
+        return chargingPointRepository.findById(cpId)
                 .map(ChargingPointDTO::fromEntity) // Convert to ChargingPointDTO
-                .peek(this::initializeChargingPoint) // Initialize the ChargingPointDTO (assuming the method accepts DTOs)
-                .findFirst() // Find the first (and presumably only) matching point
                 .map(chargingPointDTO -> {
                     ChargingPointDataResponse response = new ChargingPointDataResponse();
                     response.setChargingPoints(Collections.singletonList(chargingPointDTO));
@@ -126,8 +133,10 @@ public class DataAccessService {
     }
 
 
+    @Transactional(readOnly = true)
     public List<TariffDataResponse> getTariffs() {
-        return mockTariffData.stream()
+        List<Tariff> tariffs = tariffRepository.findAll(); // Fetch data from the database
+        return tariffs.stream()
                 .map(TariffDTO::fromEntity) // Convert each Tariff to TariffDTO
                 .map(tariffDTO -> {
                     TariffDataResponse response = new TariffDataResponse();
@@ -137,12 +146,10 @@ public class DataAccessService {
                 .collect(Collectors.toList());
     }
 
-
+    @Transactional(readOnly = true)
     public TariffDataResponse getTariff(String tariffId) {
-        return mockTariffData.stream()
-                .filter(tariff -> tariff.getTariffId().equals(tariffId)) // Filter the Tariff with the given ID
+        return tariffRepository.findById(tariffId)
                 .map(TariffDTO::fromEntity) // Convert to TariffDTO
-                .findFirst() // Find the first (and presumably only) matching tariff
                 .map(tariffDTO -> {
                     TariffDataResponse response = new TariffDataResponse();
                     response.setTariffs(Collections.singletonList(tariffDTO)); // Wrap in TariffDataResponse
@@ -152,11 +159,17 @@ public class DataAccessService {
     }
 
 
-    public LocationInfo getLocationInfo() {
-        // Fetch and return the LocationInfo
-        // This is a placeholder - you need to implement the logic to retrieve the actual location info
-        return mockLocationInfo;
+    public LocationInfoResponse getLocationInfo() {
+        // Assuming you have a LocationInfoRepository to fetch location information
+        LocationInfo locationInfo = locationInfoRepository.findById("desired-id").orElse(null);
+        LocationInfoDTO locationInfoDTO = locationInfo != null ? LocationInfoDTO.fromEntity(locationInfo) : null;
+
+        // Create a LocationInfoResponse with the DTO
+        LocationInfoResponse response = new LocationInfoResponse(locationInfoDTO);
+        response.setResponseStatus(new ResponseStatus(200, "OK")); // Set an appropriate status
+        return response;
     }
+
     public CommandResponse commandRequest(String command, CommandRequest request) {
         CommandResponse commandResponse = new CommandResponse();
         ResponseStatus responseStatus = new ResponseStatus();

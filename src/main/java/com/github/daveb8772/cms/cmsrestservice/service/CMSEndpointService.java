@@ -39,7 +39,7 @@ public class CMSEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getChargingPoint(String.valueOf(parsedCpId)));
     }
 
-    public Mono<LocationInfo> getLocationInfo() {
+    public Mono<LocationInfoResponse> getLocationInfo() {
         return Mono.fromCallable(() -> dataAccessService.getLocationInfo());
     }
 
