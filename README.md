@@ -1,16 +1,10 @@
-# OCPI_App
-OCPI REST Service Implementation
 
-Below is a comprehensive README with details on the implemented endpoints in your OCPI application project:
-
-
-# OCPI App
-
-OCPI App is an implementation of the Open Charge Point Interface (OCPI) protocol, providing a framework for communication between Charge Point Operators (CPOs) and Mobility Service Providers (MSPs).
+# CMS App
+A proof of concept (POC) for a Charging Management System (CMS) implementing the Open Charge Point Interface (CMS) protocol.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -21,71 +15,71 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installation
 
 1. Clone the repository:
-   ```
-   git clone https://github.com/daveb8772/OCPI_App.git
+   ```bash
+   git clone https://github.com/daveb8772/CMS_App.git
    ```
 2. Navigate to the project directory and install dependencies:
-   ```
+   ```bash
    mvn install
    ```
-3. Set up the PostgreSQL database as per the application's configuration.
+3. Set up the PostgreSQL database according to the application's configuration.
 4. Run the application:
-   ```
+   ```bash
    mvn spring-boot:run
    ```
 
 ## Usage
 
-The application supports the following OCPI endpoints:
+The application supports various CMS endpoints:
 
 ### Charging Sessions
 
 - **Get Charging Sessions**: Retrieves a list of charging session data.
-  ```
-  curl -X GET http://localhost:8080/ocpi/getChargingSessions
+  ```bash
+  curl -X GET http://localhost:8080/cms/sessions
   ```
 
 ### User Authorization
 
 - **Authorize User**: Authorizes a user and retrieves an authorization token.
-  ```
-  curl -u user:<password> http://localhost:8080/ocpi/authorizeUser
+  ```bash
+  curl -u user:<password> http://localhost:8080/cms/auth
   ```
 
 ### Charging Points
 
 - **Get Charging Points**: Retrieves information about charging points.
-  ```
-  curl -X GET http://localhost:8080/ocpi/getChargingPoints
+  ```bash
+  curl -X GET http://localhost:8080/cms/cps
   ```
 - **Get Charging Point**: Retrieves information for a specific charging point by ID.
-  ```
-  curl -X GET http://localhost:8080/ocpi/getChargingPoint/{cpId}
+  ```bash
+  curl -X GET http://localhost:8080/cms/cps/{cpId}
   ```
 
 ### Tariffs
 
 - **Get Tariffs**: Retrieves a list of tariffs.
-  ```
-  curl -X GET http://localhost:8080/ocpi/getTariffs
+  ```bash
+  curl -X GET http://localhost:8080/cms/tariffs
   ```
 - **Get Tariff**: Retrieves information for a specific tariff by ID.
-  ```
-  curl -X GET http://localhost:8080/ocpi/getTariff/{tariffId}
+  ```bash
+  curl -X GET http://localhost:8080/cms/tariffs/{tariffId}
   ```
 
 ### Commands
 
-- **Send Command**: Sends a command to the charging point and retrieves the response.
-  ```
-  curl -X POST http://localhost:8080/ocpi/commands/{command} -d '{ "commandParameter": "<value>" }'
+- **Send Command**: Sends a command to a charging point.
+  ```bash
+  curl -X POST http://localhost:8080/cms/commands/{command} -d '{ "parameter": "<value>" }'
   ```
 
 _(Replace `<password>`, `{cpId}`, `{tariffId}`, `{command}`, and `<value>` with actual values.)_
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](link-to-your-contributing-file) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](link-to-contributing-file) for details on our code of conduct, and the process for submitting pull requests.
 
 ## Versioning
 
@@ -93,20 +87,10 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-- **Dave Bowman - *Initial work* - [daveb8772](https://github.com/daveb8772)
+- **Dave Bowman** - *Initial work* - [daveb8772](https://github.com/daveb8772)
 
-See also the list of [contributors](https://github.com/daveb8772/OCPI_App/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/daveb8772/CMS_App/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
-
-- Open Charge Point Interface (OCPI) specifications: [OCPI](https://github.com/ocpi)
-
-## Additional Information
-
-- For more information about OCPI, visit the [official OCPI documentation]([https://ocpiemobility.org/documentation/](https://github.com/ocpi/ocpi/blob/master/README.md)https://github.com/ocpi/ocpi/blob/master/README.md).
-
-```
