@@ -23,7 +23,7 @@ public class AuthorizationController {
 
 
 
-    @GetMapping("/user/auth")
+    @PostMapping("/user/auth")
     public Mono<ResponseEntity<?>> authenticateUser(@RequestBody UserCredentials credentials) {
         return CMSEndpointService.authorizeUser(credentials)
                 .flatMap(authorizationResponse -> {
