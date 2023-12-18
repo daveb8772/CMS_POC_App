@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.github.daveb8772.cms.cmsrestservice.utility.MockDataGenerator.passwordEncoder;
+
 @Service
 public class DataAccessService {
     private final ChargingSessionRepository chargingSessionRepository;
@@ -81,27 +83,31 @@ public class DataAccessService {
 
         if (user != null && passwordMatches(inputPassword, user.getPassword())) {
             //  Authorization is linked to User entity
-            Authorization authorization = userCredentials.getAuthorization();
+            Authorization authorization = user.getAuthorization();
 
             // Convert the Authorization entity to AuthorizationDTO
-            AuthorizationDTO authorizationDTO = authorization != null ? AuthorizationDTO.fromEntity(authorization) : null;
 
-            // Create an AuthorizationResponse with the DTO
-            AuthorizationResponse response = new AuthorizationResponse(authorizationDTO);
-            response.setStatus(new ResponseStatus(200, "OK")); // Success status
-            return response;
-        } else {
-            AuthorizationResponse response = new AuthorizationResponse(null);
-            response.setStatus(new ResponseStatus(401, "Unauthorized")); // Success status
-            // Return a response indicating authentication failure
-            return  response;
+            if (authorization != null && authorization.getIsAuthorized()) {
+                AuthorizationDTO authorizationDTO = AuthorizationDTO.fromEntity(authorization);
+                // Create an AuthorizationResponse with the DTO
+                AuthorizationResponse response = new AuthorizationResponse(authorizationDTO);
+                response.setStatus(new ResponseStatus(200, "OK")); // Success status
+                return response;
+            }
         }
+
+        AuthorizationResponse response = new AuthorizationResponse(null);
+        response.setStatus(new ResponseStatus(401, "Unauthorized")); // Success status
+        // Return a response indicating authentication failure
+        return  response;
+
     }
 
     private boolean passwordMatches(String inputPassword, String storedPassword) {
         // Implement your password checking logic here (e.g., hashing and comparison)
         // For simplicity, assuming plain text comparison
-        return inputPassword.equals(storedPassword);
+
+        return passwordEncoder.matches(inputPassword,storedPassword);
     }
 
     @Transactional(readOnly = true)

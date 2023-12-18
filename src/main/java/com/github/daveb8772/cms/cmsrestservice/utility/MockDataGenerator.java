@@ -273,7 +273,7 @@ public class MockDataGenerator {
                 .collect(Collectors.toList());
     }
 
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    public static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static List<UserCredentials> generateUsers(int count) {
         List<UserCredentials> users = new ArrayList<>();
@@ -286,13 +286,14 @@ public class MockDataGenerator {
         return users;
     }
 
-    public static Authorization generateAuthorization(boolean authorized) {
+    public static Authorization generateAuthorization(boolean authorized, UserCredentials user) {
         Faker faker = new Faker();
         Authorization authorization = new Authorization();
         authorization.setIsAuthorized(authorized);
         authorization.setAccessToken(faker.internet().password()); // Assuming this is an accessToken
         authorization.setExpiresAt(ZonedDateTime.now().plusDays(30)); // Token expiry of 30 days
         authorization.setRefreshToken(faker.lorem().characters()); // Assuming this as a refreshToken
+        authorization.setUserCredentials(user); // Link the authorization to the user
 
         return authorization;
     }

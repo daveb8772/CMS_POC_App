@@ -21,7 +21,9 @@ public class AuthorizationController {
     @Autowired
     private DataAccessResponseHandler<AuthorizationResponse> authorizationResponseHandler;
 
-    @PostMapping("/user/auth")
+
+
+    @GetMapping("/user/auth")
     public Mono<ResponseEntity<?>> authenticateUser(@RequestBody UserCredentials credentials) {
         return CMSEndpointService.authorizeUser(credentials)
                 .flatMap(authorizationResponse -> {

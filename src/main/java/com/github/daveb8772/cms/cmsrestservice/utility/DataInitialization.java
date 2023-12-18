@@ -52,7 +52,7 @@ public class DataInitialization {
             // Now pass these tariffs to generate charging sessions
             List<ChargingSession> generatedSessions = MockDataGenerator.generateChargingSessions(10, generatedTariffs);
             chargingSessionRepository.saveAll(generatedSessions);
-            authorizationRepository.save(MockDataGenerator.generateAuthorization(true));
+
 
 
             // Generate and save ChargingPoint entities with commands
@@ -68,7 +68,18 @@ public class DataInitialization {
                 LocationInfo locationInfo = MockDataGenerator.generateLocationInfo(chargingPoints);
                 locationInfoRepository.save(locationInfo);
             });
+
+            // Generate 5 UserCredentials entities
             List<UserCredentials> users = MockDataGenerator.generateUsers(5);
+
+            // For each UserCredentials, generate an Authorization
+            users.forEach(user -> {
+                Authorization authorization = MockDataGenerator.generateAuthorization(true, user);
+                user.setAuthorization(authorization); // Link Authorization to UserCredentials
+                authorization.setUserCredentials(user); // Link UserCredentials to Authorization
+            });
+
+            // Now save the UserCredentials entities along with their linked Authorization
             userRepository.saveAll(users);
 
         };

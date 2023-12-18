@@ -10,7 +10,9 @@ public class ResponseStatus {
 
     // Default constructor
     public ResponseStatus() {
-        // Default values can be set here if needed
+        // Default values can be set here
+        this.statusCode = HttpStatus.OK.value();
+        this.description = "Success";
     }
 
 
