@@ -1,6 +1,9 @@
 
 # CMS App
-A proof of concept (POC) for a Charging Management System (CMS) implementing the Open Charge Point Interface (CMS) protocol.
+A proof of concept webserver for a Charging Management System (CMS) 
+* The CMS webserver is already populated with fake data to be used by other services
+* Supports User login, Depots (Locations), Charging Points, Connectors, Charging Sessions, Tariffs.
+* All data is persisted in a CMS_Data postgres database
 
 ## Getting Started
 
