@@ -23,6 +23,26 @@ These instructions will help you get a copy of the project up and running on you
    mvn install
    ```
 3. Set up the PostgreSQL database according to the application's configuration.
+    * Access PostgreSQL with your default superuser (usually your OS username):
+    ```bash
+      psql postgres
+    ```
+    * If the postgres user does not exist, you need to create it:
+    ```bash
+      CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD password;
+    ```
+    * List all roles in PostgreSQL and make sure new user is created
+    ```bash
+      \du
+    ```
+   * login with the new user
+    ```bash
+    psql -U postgres
+    ```
+   * Create the database
+    ```bash
+    CREATE DATABASE "CMS_Data";
+    ```
 4. Run the application:
    ```bash
    mvn spring-boot:run
@@ -31,51 +51,65 @@ These instructions will help you get a copy of the project up and running on you
 ## Usage
 
 The application supports various CMS endpoints:
-
-### Charging Sessions
-
-- **Get Charging Sessions**: Retrieves a list of charging session data.
   ```bash
-  curl -X GET http://localhost:8080/cms/sessions
+  curl -u user:password -X GET http://localhost:8080/cms/listEndpoints
   ```
+
 
 ### User Authorization
 
 - **Authorize User**: Authorizes a user and retrieves an authorization token.
   ```bash
-  curl -u user:<password> http://localhost:8080/cms/auth
+    curl -u user:password -X POST -H "Content-Type: application/json"  -d '{
+    "name": "user1",
+    "password": "password1"
+    }' http://localhost:8080/cms/user/auth
   ```
+
+### Charging Sessions
+- **Get Charging Sessions**: Retrieves information about charging Sessions.
+    ```bash
+    curl -u user:password -X GET http://localhost:8080/cms/getChargingSessions
+    ```
+
+
+### Locations
+
+- **Location as a grouping of charging points**: Retrieves Locations
+  ```bash
+    curl -u user:password -X GET http://localhost:8080/cms/getAllLocationInfo
+    ```
+- **Or for each Location:
+  ```bash
+    curl -u user:password -X GET http://localhost:8080/cms/getLocationInfo/{name}
+    ```
 
 ### Charging Points
 
 - **Get Charging Points**: Retrieves information about charging points.
-  ```bash
-  curl -X GET http://localhost:8080/cms/cps
-  ```
+    ```bash
+    curl -u user:password -X GET http://localhost:8080/cms/getChargingPoints
+    ```
 - **Get Charging Point**: Retrieves information for a specific charging point by ID.
+
   ```bash
-  curl -X GET http://localhost:8080/cms/cps/{cpId}
+  curl -u user:password -X GET http://localhost:8080/cms/getChargingPoint/{cpId}
   ```
+
+
 
 ### Tariffs
 
 - **Get Tariffs**: Retrieves a list of tariffs.
   ```bash
-  curl -X GET http://localhost:8080/cms/tariffs
+  curl -u user:password -X GET http://localhost:8080/cms/tariffs
   ```
 - **Get Tariff**: Retrieves information for a specific tariff by ID.
   ```bash
-  curl -X GET http://localhost:8080/cms/tariffs/{tariffId}
+  curl -u user:password -X GET http://localhost:8080/cms/tariffs/{tariffId}
   ```
-
-### Commands
-
-- **Send Command**: Sends a command to a charging point.
-  ```bash
-  curl -X POST http://localhost:8080/cms/commands/{command} -d '{ "parameter": "<value>" }'
-  ```
-
-_(Replace `<password>`, `{cpId}`, `{tariffId}`, `{command}`, and `<value>` with actual values.)_
+  
+_(Replace `<password>`, `{cpId}`, `{tariffId}`, `{name}`, and `<value>` with actual values.)_
 
 ## Contributing
 
