@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 @Table(name = "connectors")
 public class Connector {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long connectorId;
@@ -30,13 +32,6 @@ public class Connector {
     @Column(name = "current_charging_session_id")
     private String currentChargingSessionId;
 
-    public ChargingPoint getChargingPoint() {
-        return chargingPoint;
-    }
-
-    public void setChargingPoint(ChargingPoint chargingPoint) {
-        this.chargingPoint = chargingPoint;
-    }
 
     @ManyToOne
     @JoinColumn(name = "charging_point_id") // Adjust the column name as per your schema
@@ -44,12 +39,16 @@ public class Connector {
     public Connector() {
     }
 
-    public Long getId() {
+
+    public Long getConnectorId() {
         return connectorId;
     }
+    public ChargingPoint getChargingPoint() {
+        return chargingPoint;
+    }
 
-    public void setId(Long connectorId) {
-        this.connectorId = connectorId;
+    public void setChargingPoint(ChargingPoint chargingPoint) {
+        this.chargingPoint = chargingPoint;
     }
 
     public ConnectorCapabilities.ConnectorType getConnectorType() {

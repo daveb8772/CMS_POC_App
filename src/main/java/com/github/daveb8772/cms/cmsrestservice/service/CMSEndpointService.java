@@ -20,7 +20,7 @@ public class CMSEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getChargingSessions());
     }
 
-    public Mono<ChargingSessionDataResponse> getChargingSession(String sessionId) {
+    public Mono<ChargingSessionDataResponse> getChargingSessionById(String sessionId) {
         return Mono.fromCallable(() -> dataAccessService.getChargingSession(sessionId));
     }
 

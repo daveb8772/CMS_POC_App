@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -37,6 +38,14 @@ public class ChargingSessionController {
                 .flatMap(list -> list.isEmpty()
                         ? Mono.just(new ResponseEntity<>(HttpStatus.NO_CONTENT))
                         : Mono.just(ResponseEntity.ok(list)));
+    }
+
+    @GetMapping("/getChargingSession/{id}")
+    public Mono<ResponseEntity<ChargingSessionDataResponse>> getChargingSession(@PathVariable String id) {
+        return CMSEndpointService.getChargingSessionById(id)
+                .flatMap(chargingSession -> chargingSession != null
+                        ? Mono.just(ResponseEntity.ok(chargingSession))
+                        : Mono.just(new ResponseEntity<>(HttpStatus.NOT_FOUND)));
     }
 
 }

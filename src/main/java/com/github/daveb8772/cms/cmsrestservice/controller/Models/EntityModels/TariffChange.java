@@ -27,6 +27,9 @@ public class TariffChange {
     @JoinColumn(name = "new_tariff_id")
     private Tariff newTariff;
 
+
+
+
     // Constructors, getters, and setters
 
 

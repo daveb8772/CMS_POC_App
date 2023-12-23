@@ -17,7 +17,7 @@ public class ConnectorDTO {
 
     public static ConnectorDTO fromEntity(Connector entity) {
         ConnectorDTO dto = new ConnectorDTO();
-        dto.setconnectorId(entity.getId());
+        dto.setconnectorId(entity.getConnectorId());
         dto.setConnectorType(entity.getConnectorType().name());
         dto.setChargingMode(entity.getChargingMode().name());
         dto.setStatus(entity.getStatus());

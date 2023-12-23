@@ -32,7 +32,7 @@ public class LocationInfo {
     @Embedded
     private Accessibility accessibilityInformation;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poi_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "locationInfo")
     private List<PointOfInterest> pointsOfInterest;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class PointOfInterest {
 
     @Id
-    @Column(name = "poi_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long poi_id; // Unique identifier for the point of interest
 
     @Column(name = "type")
@@ -22,13 +22,26 @@ public class PointOfInterest {
     @Column(name = "poi_address")
     private String poi_address;
 
+
+    @ManyToOne
+    @JoinColumn(name = "location_info_id") // This column in PointOfInterest table will reference LocationInfo's primary key
+    private LocationInfo locationInfo;
+
+    public LocationInfo getLocationInfo() {
+        return locationInfo;
+    }
+
+    public void setLocationInfo(LocationInfo locationInfo) {
+        this.locationInfo = locationInfo;
+    }
+
+
+
+
     public Long getPoi_id() {
         return poi_id;
     }
 
-    public void setPoi_id(Long poi_id) {
-        this.poi_id = poi_id;
-    }
 
     public String getType() {
         return type;

@@ -23,7 +23,6 @@ public class ChargingSessionDTO {
     private double currentPower;
     private double energyDelivered;
     private List<SessionErrorDTO> errors;
-    private TariffDTO currentTariff;
     private List<MeterRecordDTO> meterRecords;
 
     public static ChargingSessionDTO fromEntity(ChargingSession entity) {
@@ -46,9 +45,6 @@ public class ChargingSessionDTO {
                     .collect(Collectors.toList()));
         }
 
-        if (entity.getCurrentTariff() != null) {
-            dto.setCurrentTariff(TariffDTO.fromEntity(entity.getCurrentTariff()));
-        }
 
         if (entity.getMeterRecords() != null) {
             dto.setMeterRecords(entity.getMeterRecords().stream()
@@ -149,13 +145,6 @@ public class ChargingSessionDTO {
         this.errors = errors;
     }
 
-    public TariffDTO getCurrentTariff() {
-        return currentTariff;
-    }
-
-    public void setCurrentTariff(TariffDTO currentTariff) {
-        this.currentTariff = currentTariff;
-    }
 
     public List<MeterRecordDTO> getMeterRecords() {
         return meterRecords;

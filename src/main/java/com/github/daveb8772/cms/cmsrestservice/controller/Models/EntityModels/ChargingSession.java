@@ -46,9 +46,6 @@ public class ChargingSession {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
     private List<SessionError> errors;
 
-    @ManyToOne
-    @JoinColumn(name = "current_tariff_id")
-    private Tariff currentTariff;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingSession")
     private List<TariffChange> tariffChanges;
@@ -60,10 +57,10 @@ public class ChargingSession {
 
 
     public ChargingSession(String cpId, String sessionId, String status, String connectorId, LocalDateTime startDate, LocalDateTime endDate) {
-        this.cpId = cpId;
         this.sessionId = sessionId;
-        this.status = status;
+        this.cpId = cpId;
         this.connectorId = connectorId;
+        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
 
@@ -72,7 +69,6 @@ public class ChargingSession {
         this.currentPower = MockDataGenerator.generateCurrentPower();
         this.energyDelivered = MockDataGenerator.generateEnergyDelivered();
         this.errors = MockDataGenerator.generateErrors(); // Empty list or add some mock errors
-        this.currentTariff = MockDataGenerator.generateTariff(); // Create a mock Tariff object
         this.tariffChanges = MockDataGenerator.generateTariffChanges(); // Empty list or add some mock TariffChange objects
         this.meterRecords = MockDataGenerator.generateMeterRecords(); // Empty list or add some mock MeterRecord objects
     }
@@ -168,13 +164,6 @@ public class ChargingSession {
         this.errors = errors;
     }
 
-    public Tariff getCurrentTariff() {
-        return currentTariff;
-    }
-
-    public void setCurrentTariff(Tariff currentTariff) {
-        this.currentTariff = currentTariff;
-    }
 
     public List<TariffChange> getTariffChanges() {
         return tariffChanges;

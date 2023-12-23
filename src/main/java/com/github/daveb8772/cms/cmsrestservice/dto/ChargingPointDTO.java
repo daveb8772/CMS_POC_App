@@ -2,6 +2,7 @@ package com.github.daveb8772.cms.cmsrestservice.dto;
 
 
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.ChargingPoint;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.Tariff;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ChargingPointDTO {
     private String availabilityStatus;
     private double currentUtilization;
     private ZonedDateTime lastUpdate;
-    private List<String> tariffIds;
+    private List<Tariff> tariffs;
     private double maxChargingPower;
     private ConnectorCapabilitiesDTO connectorCapabilities;
     private List<ChargingProfileDTO> chargingProfiles;
@@ -39,7 +40,7 @@ public class ChargingPointDTO {
         dto.setCurrentUtilization(chargingPoint.getCurrentUtilization());
         dto.setLastUpdate(chargingPoint.getLastUpdate());
         dto.setMaxChargingPower(chargingPoint.getMaxChargingPower());
-        dto.setTariffIds(new ArrayList<>(chargingPoint.getTariffIds()));
+        dto.setTariffs(new ArrayList<>(chargingPoint.getTariffs()));
         dto.setConnector(chargingPoint.getConnectors().stream()
                 .map(ConnectorDTO::fromEntity)
                 .collect(Collectors.toSet()));
@@ -53,6 +54,10 @@ public class ChargingPointDTO {
         // Additional fields and conversion logic as needed
 
         return dto;
+    }
+
+    private void setTariffs(ArrayList<Tariff> tariffs) {
+        this.tariffs = tariffs;
     }
 
     public Long getChargingPointId() {
@@ -128,13 +133,10 @@ public class ChargingPointDTO {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<String> getTariffIds() {
-        return tariffIds;
+    public List<Tariff> getTariffs() {
+        return tariffs;
     }
 
-    public void setTariffIds(List<String> tariffIds) {
-        this.tariffIds = tariffIds;
-    }
 
     public double getMaxChargingPower() {
         return maxChargingPower;

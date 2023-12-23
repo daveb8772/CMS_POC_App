@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Tariff {
 
     @Id
-    @Column(name = "tariff_id") // Define the column name for the ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tariffId; // Unique identifier for the tariff
 
     @Column(name = "tariff_name") // Define the column name for the tariff name
@@ -16,11 +16,12 @@ public class Tariff {
     @Column(name = "price") // Define the column name for the price
     private double price; // Price per kWh for the tariff
 
+
     public Tariff() {}
 
     // Constructor that initializes all fields
-    public Tariff(Long tariffId, String tariffName, double price) {
-        this.tariffId = tariffId;
+    public Tariff( String tariffName, double price) {
+
         this.tariffName = tariffName;
         this.price = price;
     }
@@ -30,9 +31,7 @@ public class Tariff {
         return tariffId;
     }
 
-    public void setTariffId(Long tariffId) {
-        this.tariffId = tariffId;
-    }
+
 
     public String getTariffName() {
         return tariffName;

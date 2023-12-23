@@ -15,18 +15,13 @@ import java.util.stream.IntStream;
 
 public class MockDataGenerator {
     public static Faker faker = new Faker(new Locale("en-US")); // specify the locale
+    private static int sessionIdCounter = 1; // Static counter for session IDs
 
 
 
-    private static List<String> generateTariffIds(int count) {
-        return IntStream.range(0, count)
-                .mapToObj(i -> faker.idNumber().valid())
-                .collect(Collectors.toList());
-    }
 
     public static Tariff generateTariff() {
-        Tariff tempTariff = new Tariff(ThreadLocalRandom.current().nextLong(),
-                "Tariff" + UUID.randomUUID(),
+        Tariff tempTariff = new Tariff("Tariff" + UUID.randomUUID(),
                 faker.number().randomDouble(2, 1, 100));
         return tempTariff;
     }
@@ -39,32 +34,41 @@ public class MockDataGenerator {
         return tariffs;
     }
 
-    public static List<ChargingSession> generateChargingSessions(int count, List<Tariff> tariffs) {
+    public static List<ChargingSession> generateChargingSessions(int count, List<Tariff> tariffs, List<ChargingPoint> chargingPoints) {
         if (tariffs == null || tariffs.isEmpty()) {
             throw new IllegalArgumentException("The list of tariffs cannot be null or empty.");
         }
 
         return IntStream.range(0, count)
-                .mapToObj(i -> generateChargingSession(tariffs))
+                .mapToObj(i -> generateChargingSession(tariffs,chargingPoints))
                 .collect(Collectors.toList());
     }
 
-    private static ChargingSession generateChargingSession(List<Tariff> tariffs) {
+    private static ChargingSession generateChargingSession(List<Tariff> tariffs, List<ChargingPoint> chargingPoints) {
+        // Select a random charging point and connector
+        ChargingPoint selectedPoint = chargingPoints.get(faker.random().nextInt(chargingPoints.size()));
+        Connector selectedConnector = selectedPoint.getConnectors().get(faker.random().nextInt(selectedPoint.getConnectors().size()));
+
+        String sessionId = "Session-" + sessionIdCounter++;
+
         ChargingSession session = new ChargingSession(
-                faker.random().toString(),
-                faker.random().toString(),
+                sessionId,
+                selectedPoint.getChargingPointId().toString(),
+                selectedConnector.getConnectorId().toString(),
                 faker.options().option("In progress", "Completed", "Error"),
-                faker.idNumber().valid(),
                 LocalDateTime.now().minusHours(faker.number().numberBetween(1, 24)),
                 LocalDateTime.now()
         );
 
-        // Randomly select a Tariff from the provided list
-        Tariff randomTariff = tariffs.get(faker.random().nextInt(tariffs.size()));
-        session.setCurrentTariff(randomTariff);
-
-        // Initialize other fields with mock data from MockDataGenerator
-        // ...
+        // Assuming each session will have a random number of tariff changes
+        int numberOfChanges = faker.number().numberBetween(1, tariffs.size());
+        for (int i = 0; i < numberOfChanges; i++) {
+            Tariff oldTariff = tariffs.get(faker.random().nextInt(tariffs.size()));
+            Tariff newTariff = tariffs.get(faker.random().nextInt(tariffs.size()));
+            LocalDateTime changeTimestamp = session.getStartDate().plusHours(faker.number().numberBetween(0, 24));
+            TariffChange tariffChange = new TariffChange(changeTimestamp, oldTariff, newTariff);
+            session.addTariffChange(tariffChange);
+        }
 
         return session;
     }
@@ -73,8 +77,6 @@ public class MockDataGenerator {
         ChargingPoint chargingPoint = new ChargingPoint();
         chargingPoint.setChargingPointId(ThreadLocalRandom.current().nextLong());
         chargingPoint.setStatus(faker.options().option("Available", "Occupied", "OutOfService"));
-
-
         chargingPoint.setConnectorType(faker.options().option("Type1", "Type2", "CCS", "CHAdeMO"));
         chargingPoint.setConnectorStatus(faker.options().option("Connected", "Available", "Faulted"));
         chargingPoint.setConnectorPower(faker.number().randomDouble(2, 7, 22)); // Random value between 7 and 22 kW
@@ -82,15 +84,8 @@ public class MockDataGenerator {
         chargingPoint.setCurrentUtilization(faker.number().randomDouble(2, 0, 1)); // Random value between 0 and 1
         chargingPoint.setLastUpdate(ZonedDateTime.now().minusMinutes(faker.number().numberBetween(0, 60)));
         chargingPoint.setChargingProfiles(generateChargingProfiles());
-        List<String> tariffIds = generateTariffIds(3); // Generate 3 tariff IDs for each charging point
-        chargingPoint.setTariffIds(generateTariffIds(3)); // Set the list of tariff IDs
-
         chargingPoint.setMaxChargingPower(faker.number().randomDouble(2, 10, 50)); // Random value between 10 and 50 kW
         chargingPoint.setConnectorCapabilities(generateConnectorCapabilities());
-
-        Set<Connector> connectors = generateDispensers(chargingPoint);
-        chargingPoint.setConnectors(connectors);
-
         return chargingPoint;
     }
 
@@ -192,11 +187,9 @@ public class MockDataGenerator {
         return IntStream.range(0, count)
                 .mapToObj(i -> {
                     PointOfInterest poi = new PointOfInterest();
-                    poi.setPoi_id(ThreadLocalRandom.current().nextLong());
                     poi.setName(faker.lorem().toString());//faker.company().name()); // Generate a random company name
                     poi.setType(faker.lorem().word()); // Generate a random word for the type
                     poi.setDescription(faker.lorem().sentence()); // Generate a random sentence for the description
-
                     poi.setPoi_address(faker.lorem().toString());
 
                     return poi;
@@ -204,11 +197,10 @@ public class MockDataGenerator {
                 .collect(Collectors.toList());
     }
 
-    private static Set<Connector> generateDispensers(ChargingPoint chargingPoint) {
-        return IntStream.range(0, faker.number().numberBetween(1, 4))
+    public static List<Connector> generateConnectors(int connectorCount, ChargingPoint chargingPoint) {
+        return IntStream.range(0, faker.number().numberBetween(1, connectorCount))
                 .mapToObj(i -> {
                     Connector connector = new Connector();
-                    connector.setId(ThreadLocalRandom.current().nextLong());
                     ConnectorCapabilities connectorCapabilities = generateConnectorCapabilities();
                     connector.setConnectorType(connectorCapabilities.getPlugType());
                     connector.setChargingMode(connectorCapabilities.getChargeMode());
@@ -219,7 +211,7 @@ public class MockDataGenerator {
                     connector.setChargingPoint(chargingPoint); // Link back to the charging point
                     return connector;
                 })
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
 

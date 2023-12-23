@@ -19,7 +19,16 @@ public class ChargingPoint {
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "chargingPoint")
-    private Set<Connector> connectors;
+    private List<Connector> connectors;
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "charging_point_tariff",
+            joinColumns = @JoinColumn(name = "charging_point_id"),
+            inverseJoinColumns = @JoinColumn(name = "tariff_id")
+    )
+    private List<Tariff> tariffs;
 
     @Column(name = "connector_type")
     private String connectorType;
@@ -42,14 +51,6 @@ public class ChargingPoint {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChargingProfile> chargingProfiles;
 
-    // JPA does not support Map field types directly.
-    //private Map<String, Tariff> tariffs; // Map of tariff IDs to corresponding `Tariff` objects
-    // So extracted the Tariff info and left the ID - Tariff IDs are stored as strings
-    @ElementCollection
-    @CollectionTable(name = "charging_point_tariffs",
-            joinColumns = @JoinColumn(name = "charging_point_id"))
-    @Column(name = "tariff_id")
-    private List<String> tariffIds;
 
     @Column(name = "max_charging_power")
     private double maxChargingPower;
@@ -83,12 +84,20 @@ public class ChargingPoint {
     }
 
 
-    public Set<Connector> getConnectors() {
+    public List<Connector> getConnectors() {
         return connectors;
     }
 
-    public void setConnectors(Set<Connector> connectors) {
+    public void setConnectors(List<Connector> connectors) {
         this.connectors = connectors;
+    }
+
+    public List<Tariff> getTariffs() {
+        return tariffs;
+    }
+
+    public void setTariffs(List<Tariff> tariffs) {
+        this.tariffs = tariffs;
     }
 
     public List<ChargingProfile> getChargingProfiles() {
@@ -98,13 +107,7 @@ public class ChargingPoint {
     public void setChargingProfiles(List<ChargingProfile> chargingProfiles) {
         this.chargingProfiles = chargingProfiles;
     }
-    public List<String> getTariffIds() {
-        return tariffIds;
-    }
 
-    public void setTariffIds(List<String> tariffIds) {
-        this.tariffIds = tariffIds;
-    }
 
     public void addChargingProfile(ChargingProfile chargingProfile) {
         if (this.chargingProfiles == null) {
