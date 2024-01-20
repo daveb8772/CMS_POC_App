@@ -55,7 +55,7 @@ These instructions will help you get a copy of the project up and running on you
 
 The application supports various CMS endpoints:
   ```bash
-  curl -u user:password -X GET http://localhost:8080/cms/listEndpoints
+  curl -u user:password -X GET http://localhost:8081/cms/listEndpoints
   ```
 
 
@@ -66,13 +66,13 @@ The application supports various CMS endpoints:
     curl -u user:password -X POST -H "Content-Type: application/json"  -d '{
     "name": "user1",
     "password": "password1"
-    }' http://localhost:8080/cms/user/auth
+    }' http://localhost:8081/cms/user/auth
   ```
 
 ### Charging Sessions
 - **Get Charging Sessions**: Retrieves information about charging Sessions.
     ```bash
-    curl -u user:password -X GET http://localhost:8080/cms/getChargingSessions
+    curl -u user:password -X GET http://localhost:8081/cms/getChargingSessions
     ```
 
 
@@ -80,23 +80,23 @@ The application supports various CMS endpoints:
 
 - **Location as a grouping of charging points**: Retrieves Locations
   ```bash
-    curl -u user:password -X GET http://localhost:8080/cms/getAllLocationInfo
+    curl -u user:password -X GET http://localhost:8081/cms/getAllLocationInfo
     ```
 - **Or for each Location:
   ```bash
-    curl -u user:password -X GET http://localhost:8080/cms/getLocationInfo/{name}
+    curl -u user:password -X GET http://localhost:8081/cms/getLocationInfo/{name}
     ```
 
 ### Charging Points
 
 - **Get Charging Points**: Retrieves information about charging points.
     ```bash
-    curl -u user:password -X GET http://localhost:8080/cms/getChargingPoints
+    curl -u user:password -X GET http://localhost:8081/cms/getChargingPoints
     ```
 - **Get Charging Point**: Retrieves information for a specific charging point by ID.
 
   ```bash
-  curl -u user:password -X GET http://localhost:8080/cms/getChargingPoint/{cpId}
+  curl -u user:password -X GET http://localhost:8081/cms/getChargingPoint/{cpId}
   ```
 
 
@@ -105,14 +105,53 @@ The application supports various CMS endpoints:
 
 - **Get Tariffs**: Retrieves a list of tariffs.
   ```bash
-  curl -u user:password -X GET http://localhost:8080/cms/tariffs
+  curl -u user:password -X GET http://localhost:8081/cms/tariffs
   ```
 - **Get Tariff**: Retrieves information for a specific tariff by ID.
   ```bash
-  curl -u user:password -X GET http://localhost:8080/cms/tariffs/{tariffId}
+  curl -u user:password -X GET http://localhost:8081/cms/tariffs/{tariffId}
   ```
   
 _(Replace `<password>`, `{cpId}`, `{tariffId}`, `{name}`, and `<value>` with actual values.)_
+
+
+## Monitoring via Prometheus and Grafana
+Install both and run Prometheus at: http://localhost:9090/ Grafana at http://localhost:3000/ while scraping from the App at http://localhost:8081/
+
+For installing in osx
+  ```bash
+brew install prometheus
+brew install grafana
+
+  ```
+for editing config: 
+  ```
+nano /opt/homebrew/etc/prometheus.yml
+  ```
+And add:
+  ```
+ global:
+ scrape_interval:     15s
+ evaluation_interval: 15s
+
+ scrape_configs:
+  - job_name: 'prometheus'
+   static_configs:
+     - targets: ['localhost:9090']
+
+   - job_name: 'spring-boot'  # A new job for scraping your Spring Boot app
+    metrics_path: '/actuator/prometheus'  # Default actuator Prometheus endpoint
+     scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8081']
+    basic_auth:
+      username: user
+      password: password
+  ```
+check that it is running using:
+  ```
+brew services list
+  ```
 
 ## Contributing
 
