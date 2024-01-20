@@ -77,6 +77,7 @@ public class CommandRequest {
     public enum CommandType {
         START_SESSION("StartSession"),
         STOP_SESSION("StopSession"),
+        RESET("Reset"),
         UNLOCK_CONNECTOR("UnlockConnector"),
         CANCEL_RESERVATION("CancelReservation"),
         RESERVE_NOW("ReserveNow");
@@ -89,6 +90,16 @@ public class CommandRequest {
 
         public String getValue() {
             return value;
+        }
+
+        // Method to get CommandType from string value
+        public static CommandType fromValue(String value) {
+            for (CommandType type : CommandType.values()) {
+                if (type.getValue().equalsIgnoreCase(value)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("No CommandType with value " + value);
         }
     }
 }

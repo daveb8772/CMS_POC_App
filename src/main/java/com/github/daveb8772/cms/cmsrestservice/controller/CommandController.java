@@ -2,12 +2,16 @@ package com.github.daveb8772.cms.cmsrestservice.controller;
 
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.CommandRequest;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.CommandResponse;
+import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.TariffDataResponse;
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cms/commands")
@@ -19,6 +23,16 @@ public class CommandController {
     public CommandController(CMSEndpointService CMSEndpointService) {
         this.CMSEndpointService = CMSEndpointService;
     }
+
+    @GetMapping("/getCommands")
+    public Mono<ResponseEntity<List<CommandResponse>>> getCommands() {
+        return CMSEndpointService.getCommands()
+                .flatMap(commands -> commands.isEmpty()
+                        ? Mono.just(ResponseEntity.notFound().build())
+                        : Mono.just(ResponseEntity.ok(commands)));
+    }
+
+
 
     @PostMapping("/{command}")
     public Mono<ResponseEntity<CommandResponse>> handleCommand(

@@ -5,13 +5,13 @@ import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.*;
 import com.github.daveb8772.cms.cmsrestservice.dto.*;
 import com.github.daveb8772.cms.cmsrestservice.repository.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import reactor.core.publisher.Mono;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.daveb8772.cms.cmsrestservice.utility.MockDataGenerator.passwordEncoder;
@@ -230,51 +230,74 @@ public class DataAccessService {
     public CommandResponse commandRequest(String command, CommandRequest request) {
         CommandResponse commandResponse = new CommandResponse();
         ResponseStatus responseStatus = new ResponseStatus();
-
-        switch (request.getCommandType()) {
-            case START_SESSION -> {
-                // Handle start session command
-                responseStatus.setCode(200);
-                responseStatus.setMessage("Session started successfully");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("SessionId: " + UUID.randomUUID().toString());
+        try {
+            CommandRequest.CommandType commandType = CommandRequest.CommandType.fromValue(command);
+            switch (commandType) {
+                case START_SESSION -> {
+                    // Handle start session command
+                    responseStatus.setCode(200);
+                    responseStatus.setMessage("Session started successfully");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("SessionId: " + UUID.randomUUID().toString());
+                }
+                case STOP_SESSION -> {
+                    // Handle stop session command
+                    responseStatus.setCode(200);
+                    responseStatus.setMessage("Session stopped successfully");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("SessionId: " + request.getCommandParameter() + " stopped");
+                }
+                case UNLOCK_CONNECTOR -> {
+                    // Handle unlock connector command
+                    responseStatus.setCode(200);
+                    responseStatus.setMessage("Connector unlocked successfully");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("ConnectorId: " + request.getCommandParameter() + " unlocked");
+                }
+                case CANCEL_RESERVATION -> {
+                    // Handle cancel reservation command
+                    responseStatus.setCode(200);
+                    responseStatus.setMessage("Reservation cancelled successfully");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("ReservationId: " + request.getCommandParameter() + " cancelled");
+                }
+                case RESERVE_NOW -> {
+                    // Handle reserve now command
+                    responseStatus.setCode(200);
+                    responseStatus.setMessage("Reservation made successfully");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("ReservationId: " + UUID.randomUUID().toString());
+                }
+                default -> {
+                    responseStatus.setCode(400);
+                    responseStatus.setMessage("Unsupported command");
+                    commandResponse.setStatus(responseStatus);
+                    commandResponse.setResult("Command not supported");
+                }
             }
-            case STOP_SESSION -> {
-                // Handle stop session command
-                responseStatus.setCode(200);
-                responseStatus.setMessage("Session stopped successfully");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("SessionId: " + request.getCommandParameter() + " stopped");
-            }
-            case UNLOCK_CONNECTOR -> {
-                // Handle unlock connector command
-                responseStatus.setCode(200);
-                responseStatus.setMessage("Connector unlocked successfully");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("ConnectorId: " + request.getCommandParameter() + " unlocked");
-            }
-            case CANCEL_RESERVATION -> {
-                // Handle cancel reservation command
-                responseStatus.setCode(200);
-                responseStatus.setMessage("Reservation cancelled successfully");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("ReservationId: " + request.getCommandParameter() + " cancelled");
-            }
-            case RESERVE_NOW -> {
-                // Handle reserve now command
-                responseStatus.setCode(200);
-                responseStatus.setMessage("Reservation made successfully");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("ReservationId: " + UUID.randomUUID().toString());
-            }
-            default -> {
-                responseStatus.setCode(400);
-                responseStatus.setMessage("Unsupported command");
-                commandResponse.setStatus(responseStatus);
-                commandResponse.setResult("Command not supported");
-            }
+        }
+        catch (IllegalArgumentException e) {
+            // Handle the case where the command is not supported
+            responseStatus.setCode(400);
+            responseStatus.setMessage("Unsupported command: " + command);
+            commandResponse.setStatus(responseStatus);
+            commandResponse.setResult("Command not supported");
         }
 
         return commandResponse;
     }
+
+    public List<CommandResponse> getCommands() {
+        return Arrays.stream(CommandRequest.CommandType.values())
+                .map(commandType -> {
+                    CommandResponse commandResponse = new CommandResponse();
+                    commandResponse.setResult(commandType.getValue());
+                    commandResponse.setStatus(new ResponseStatus(200, "Available"));
+                    return commandResponse;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
 }

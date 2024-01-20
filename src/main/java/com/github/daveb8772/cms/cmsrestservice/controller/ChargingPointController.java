@@ -4,6 +4,7 @@ import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ public class ChargingPointController {
 
 
 
-    @GetMapping("/getChargingPoints")
+    @GetMapping(value="/getChargingPoints", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<ChargingPointDataResponse>>> getChargingPoints() {
         return CMSEndpointService.getChargingPoints()
                 .flatMapMany(Flux::fromIterable)

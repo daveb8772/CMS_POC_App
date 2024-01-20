@@ -71,4 +71,8 @@ public class CMSEndpointService {
         return Mono.fromCallable(() -> dataAccessService.getTariff(tariffId));
     }
 
+    public Mono<List<CommandResponse>> getCommands() {
+        return Mono.fromCallable(() ->  dataAccessService.getCommands());
+    }
+
 }
