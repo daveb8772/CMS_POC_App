@@ -9,10 +9,17 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'master'
+                git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
             }
         }
-
+        stage('Run Docker Compose') {
+            steps {
+                script {
+                    // Run Docker Compose to set up the environment
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean package'
@@ -30,6 +37,21 @@ pipeline {
             }
         }
 
-        // Additional stages like 'Deploy' can be added here
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Take down the Docker Compose setup
+                    sh 'docker-compose down'
+                }
+            }
+        }
     }
+
+    post {
+        always {
+            // Clean up regardless of success or failure
+            sh 'docker-compose down'
+        }
+    }
+
 }
