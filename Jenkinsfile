@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Run Docker Compose to set up the environment
-                    sh 'docker-compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
