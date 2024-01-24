@@ -4,9 +4,17 @@ pipeline {
     tools {
         maven 'Maven' // or the name of the Maven version you've configured in Jenkins
         jdk 'JDK17'    // or the name of the JDK version you've configured
+
     }
 
     stages {
+        stage ('environment')
+        {
+            steps{
+                sh 'env'
+                sh 'echo $PATH'
+            }
+        }
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
@@ -41,7 +49,7 @@ pipeline {
             steps {
                 script {
                     // Take down the Docker Compose setup
-                    sh 'docker-compose down'
+                    sh 'docker compose down'
                 }
             }
         }
@@ -50,7 +58,7 @@ pipeline {
     post {
         always {
             // Clean up regardless of success or failure
-            sh 'docker-compose down'
+            sh 'docker compose down'
         }
     }
 
