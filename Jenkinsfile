@@ -54,6 +54,12 @@ pipeline {
                 git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
             }
         }
+        stage('List Target Directory') {
+            steps {
+                sh 'ls -l target/'
+            }
+        }
+
         stage('Run Docker Compose') {
             steps {
                 script {
