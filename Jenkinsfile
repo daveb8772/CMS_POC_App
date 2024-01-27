@@ -16,7 +16,7 @@ pipeline {
                     sh 'env'
                     sh 'echo $PATH'
                     // Reading the Docker path from the environment variable
-                    def dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
+                    dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
 
                     // Check if Docker path is set
                     if (dockerPath) {
