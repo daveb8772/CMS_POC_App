@@ -1,9 +1,9 @@
 pipeline {
     agent any
-    environment {
+    //environment {
         //DOCKER_PATH = '~/.docker/bin'
         //DOCKER = 'docker'
-    }
+    //}
     tools {
         maven 'Maven' // or the name of the Maven version you've configured in Jenkins
         jdk 'JDK17'    // or the name of the JDK version you've configured
