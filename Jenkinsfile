@@ -1,9 +1,10 @@
 pipeline {
     agent any
-    //environment {
+    environment {
         //DOCKER_PATH = '~/.docker/bin'
         //DOCKER = 'docker'
-    //}
+        dockerPath = ''
+    }
     tools {
         maven 'Maven' // or the name of the Maven version you've configured in Jenkins
         jdk 'JDK17'    // or the name of the JDK version you've configured
@@ -74,7 +75,13 @@ pipeline {
     post {
         always {
             // Clean up regardless of success or failure
-            sh "${dockerPath} compose down"
+                       script {
+                           if (dockerPath) {
+                               sh "${dockerPath} compose down"
+                           } else {
+                               echo "Docker path not set. Skipping docker compose down."
+                           }
+                       }
         }
     }
 
