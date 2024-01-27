@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_PATH = '~/.docker/bin'
+        DOCKER = 'docker'
     }
     tools {
         maven 'Maven' // or the name of the Maven version you've configured in Jenkins
@@ -26,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Run Docker Compose to set up the environment
-                    sh "${env.DOCKER_PATH} compose up -d"
+                    sh "${env.DOCKER_PATH} ${env.DOCKER} compose up -d"
                 }
             }
         }
