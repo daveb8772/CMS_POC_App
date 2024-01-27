@@ -13,18 +13,18 @@ pipeline {
          {
             steps{
                 script {
-                    sh 'env'
-                    sh 'echo $DOCKER_PATH'
                     // Reading the Docker path from the environment variable
                     dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
+                    sh 'env'
+                    sh 'echo $DOCKER_PATH'
+
 
                     // Check if Docker path is set
                     if (dockerPath) {
                         // Use the Docker path in your command
                         sh "${dockerPath} --version"
                     } else {
-                        error("Docker path is not set in the environment variables.")
-                        error("e.g. set docker path by adding to .bashrc: export DOCKER_PATH=/usr/bin/docker ")
+                        error("Docker path is not set in the environment variables.e.g. set docker path by adding to .bashrc: export DOCKER_PATH=/usr/bin/docker ")
                     }
                 }
             }
