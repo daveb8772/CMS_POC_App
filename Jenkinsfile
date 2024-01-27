@@ -4,56 +4,48 @@ pipeline {
         dockerPath = ''
     }
     tools {
-        maven 'Maven' // or the name of the Maven version you've configured in Jenkins
-        jdk 'JDK17'    // or the name of the JDK version you've configured
+        maven 'Maven' // Maven version configured in Jenkins
+        jdk 'JDK17'   // JDK version configured in Jenkins
     }
 
     stages {
-        stage ('environment')
-         {
-            steps{
+        stage ('Set Environment') {
+            steps {
                 script {
-                    // Reading the Docker path from the environment variable
                     dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
                     sh 'env'
                     sh 'echo $DOCKER_PATH'
 
-
-                    // Check if Docker path is set
                     if (dockerPath) {
-                        // Use the Docker path in your command
                         sh "${dockerPath} --version"
                     } else {
-                        error("Docker path is not set in the environment variables.e.g. set docker path by adding to .bashrc: export DOCKER_PATH=/usr/bin/docker ")
+                        error("Docker path is not set in the environment variables.")
                     }
                 }
             }
         }
-         stage('Add Docker Credential Path') {
+
+        stage('Add Docker Credential Path') {
             steps {
                 script {
-                    // Get the current PATH variable
-                    def currentPath = env.PATH
-
-                    // Define the path you want to add
-                    def customPath = '/usr/local/bin/docker-credential-osxkeychain'
-
-                    // Append the customPath to the current PATH variable with a colon as a separator
-                    def updatedPath = currentPath + ':' + customPath
-
-                    // Set the updated PATH variable
-                    env.PATH = updatedPath
-
-                    // Print the updated PATH variable for verification
+                    env.PATH = env.PATH + ':/usr/local/bin/docker-credential-osxkeychain'
                     echo "Updated PATH: ${env.PATH}"
                 }
             }
         }
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
             }
         }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
         stage('List Target Directory') {
             steps {
                 sh 'ls -l target/'
@@ -63,14 +55,8 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 script {
-                    // Run Docker Compose to set up the environment
                     sh "${dockerPath} compose up -d"
                 }
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
             }
         }
 
@@ -88,7 +74,6 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    // Take down the Docker Compose setup
                     sh "${dockerPath} compose down"
                 }
             }
@@ -97,15 +82,13 @@ pipeline {
 
     post {
         always {
-            // Clean up regardless of success or failure
-                       script {
-                           if (dockerPath) {
-                               sh "${dockerPath} compose down"
-                           } else {
-                               echo "Docker path not set. Skipping docker compose down."
-                           }
-                       }
+            script {
+                if (dockerPath) {
+                    sh "${dockerPath} compose down"
+                } else {
+                    echo "Docker path not set. Skipping docker compose down."
+                }
+            }
         }
     }
-
 }
