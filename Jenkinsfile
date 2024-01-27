@@ -29,6 +29,26 @@ pipeline {
                 }
             }
         }
+         stage('Add Docker Credential Path') {
+            steps {
+                script {
+                    // Get the current PATH variable
+                    def currentPath = env.PATH
+
+                    // Define the path you want to add
+                    def customPath = '/usr/local/bin/docker-credential-osxkeychain'
+
+                    // Append the customPath to the current PATH variable with a colon as a separator
+                    def updatedPath = currentPath + ':' + customPath
+
+                    // Set the updated PATH variable
+                    env.PATH = updatedPath
+
+                    // Print the updated PATH variable for verification
+                    echo "Updated PATH: ${env.PATH}"
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
