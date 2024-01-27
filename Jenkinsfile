@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_PATH = '~/.docker/bin'
-        DOCKER = 'docker'
+        //DOCKER_PATH = '~/.docker/bin'
+        //DOCKER = 'docker'
     }
     tools {
         maven 'Maven' // or the name of the Maven version you've configured in Jenkins
@@ -16,6 +16,17 @@ pipeline {
             steps{
                 sh 'env'
                 sh 'echo $PATH'
+                // Reading the Docker path from the environment variable
+                def dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
+
+                // Check if Docker path is set
+                if (dockerPath) {
+                    // Use the Docker path in your command
+                    sh "${dockerPath} --version"
+                } else {
+                    error("Docker path is not set in the environment variables.")
+                    error("e.g. set docker path by adding to .bashrc: export DOCKER_PATH=/usr/bin/docker ")
+                }
             }
         }
         stage('Checkout') {
@@ -27,7 +38,7 @@ pipeline {
             steps {
                 script {
                     // Run Docker Compose to set up the environment
-                    sh "${env.DOCKER_PATH} ${env.DOCKER} compose up -d"
+                    sh "${dockerPath} compose up -d"
                 }
             }
         }
@@ -52,7 +63,7 @@ pipeline {
             steps {
                 script {
                     // Take down the Docker Compose setup
-                    sh 'docker compose down'
+                    sh "${dockerPath} compose down"
                 }
             }
         }
@@ -61,7 +72,7 @@ pipeline {
     post {
         always {
             // Clean up regardless of success or failure
-            sh 'docker compose down'
+            sh "${dockerPath} compose down"
         }
     }
 
