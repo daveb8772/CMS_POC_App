@@ -14,7 +14,7 @@ pipeline {
             steps{
                 script {
                     sh 'env'
-                    sh 'echo $PATH'
+                    sh 'echo $DOCKER_PATH'
                     // Reading the Docker path from the environment variable
                     dockerPath = sh(script: 'echo $DOCKER_PATH', returnStdout: true).trim()
 
