@@ -15,5 +15,8 @@ spec:
       containers:
       - name: myapp
         image: myacr351f520047da48a7.azurecr.io/myapp:v1
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "prod"
         ports:
         - containerPort: 8081
