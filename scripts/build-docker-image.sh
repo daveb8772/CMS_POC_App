@@ -3,12 +3,50 @@
 # Define the path to the Dockerfile relative to the script location
 DOCKERFILE_PATH="../Dockerfile"
 
+# Function to check Azure login
+check_azure_login() {
+    # Check if already logged in to Azure
+    az account show > /dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+        echo "Logging in to Azure..."
+        az login
+        if [[ $? -ne 0 ]]; then
+            echo "Failed to log in to Azure."
+            exit 1
+        fi
+    else
+        echo "Already logged in to Azure."
+    fi
+}
+
+# Function to check ACR login
+check_acr_login() {
+    # Attempt to get ACR login server
+    local loginServer=$(az acr show --name myacr351f520047da48a7 --query loginServer -o tsv 2>/dev/null)
+
+    # Check if the login server was fetched successfully
+    if [[ -z "$loginServer" ]]; then
+        echo "Logging in to Azure Container Registry..."
+        az acr login --name myacr351f520047da48a7
+        if [[ $? -ne 0 ]]; then
+            echo "Failed to log in to Azure Container Registry."
+            exit 1
+        fi
+    else
+        echo "Already logged in to Azure Container Registry."
+    fi
+}
+
 # Check if Dockerfile exists at the specified path
 if [[ -f "$DOCKERFILE_PATH" ]]; then
     echo "Dockerfile found. Proceeding with the build process."
 
     # Navigate to the directory where the Dockerfile is located
     cd "$(dirname "$DOCKERFILE_PATH")" || exit
+
+    # Check Azure and ACR login
+    check_azure_login
+    check_acr_login
 
     # Build and push the Docker image
     docker build -t myacr351f520047da48a7.azurecr.io/myapp:v1 .
