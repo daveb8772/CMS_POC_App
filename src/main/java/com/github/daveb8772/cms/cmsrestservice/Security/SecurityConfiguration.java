@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
-
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+
+
+
 
 
 @Configuration
@@ -20,6 +22,7 @@ public class SecurityConfiguration {
         logger.info("Initializing Security Filter Chain");
         http
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/actuator/prometheus").permitAll() // Allow unauthenticated access to Prometheus endpoint
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults()) // Updated configuration style

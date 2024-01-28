@@ -11,12 +11,16 @@ spec:
     metadata:
       labels:
         app: myapp
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8081"
     spec:
       containers:
-      - name: myapp
-        image: myacr351f520047da48a7.azurecr.io/myapp:v1
-        env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: "prod"
-        ports:
-        - containerPort: 8081
+        - name: myapp
+          image: myacr351f520047da48a7.azurecr.io/myapp:v1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+          ports:
+            - containerPort: 8081
