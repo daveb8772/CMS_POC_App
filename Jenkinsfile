@@ -40,9 +40,6 @@ pipeline {
         }
 
         stage('Run Docker Compose') {
-            when {
-                expression { !params.SKIP_TESTS }
-            }
             steps {
                 script {
                     sh "${dockerPath} compose up -d"
