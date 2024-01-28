@@ -6,6 +6,7 @@ SERVICE_YAML_PATH="../k8s/service.yaml"
 POSTGRES_DEPLOYMENT_YAML_PATH="../k8s/postgres-deployment.yaml"
 POSTGRES_SERVICE_YAML_PATH="../k8s/postgres-service.yaml"
 POSTGRES_PVC_YAML_PATH="../k8s/postgres-pvc.yaml"
+METRICS_SERVER_YAML_PATH="../k8s/metrics-server-deployment.yaml"
 
 echo "Deploying PostgreSQL PersistentVolumeClaim..."
 kubectl apply -f "$POSTGRES_PVC_YAML_PATH"
@@ -17,6 +18,8 @@ kubectl apply -f "$POSTGRES_SERVICE_YAML_PATH"
 echo "Deploying Application resources..."
 kubectl apply -f "$DEPLOYMENT_YAML_PATH"
 kubectl apply -f "$SERVICE_YAML_PATH"
+echo "Deploying Metrics sever..."
+kubectl apply -f "$METRICS_SERVER_YAML_PATH"
 
 
 # Force redeployment by updating a timestamp annotation
