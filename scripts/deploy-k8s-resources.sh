@@ -18,6 +18,12 @@ echo "Deploying Application resources..."
 kubectl apply -f "$DEPLOYMENT_YAML_PATH"
 kubectl apply -f "$SERVICE_YAML_PATH"
 
+
+# Force redeployment by updating a timestamp annotation
+echo "Forcing redeployment of the application..."
+kubectl patch deployment myapp-deployment -p \
+  "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"redeployed-at\":\"$(date +'%s')\"}}}}}"
+
 echo "Listing Kubernetes nodes, pods, and services..."
 kubectl get nodes
 kubectl get pods
