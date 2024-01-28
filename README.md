@@ -44,7 +44,7 @@ These instructions will help you get a copy of the project up and running on you
     ```bash
     psql -U postgres
     ```
-   * Create the database
+    * Create the database
     ```bash
     CREATE DATABASE "CMS_Data";
     ```
@@ -53,13 +53,27 @@ These instructions will help you get a copy of the project up and running on you
    mvn spring-boot:run
    ```
 
-## Usage
+### Docker and Kubernetes Deployment
 
-The application supports various CMS endpoints:
+1. Build the Docker image using the provided script:
+   ```bash
+   ./scripts/build-docker-image.sh
+   ```
+2. Deploy the application and dependencies to Kubernetes:
+   ```bash
+   ./scripts/deploy-all-k8s-resources.sh
+   ```
+
+### Jenkins CI/CD
+
+- A `Jenkinsfile` is included for setting up CI/CD pipelines.
+
+## APP API Usage
+
+The application supports various CMS endpoints. For example:
   ```bash
   curl -u user:password -X GET http://localhost:8081/cms/listEndpoints
   ```
-
 
 ### User Authorization
 
@@ -113,7 +127,7 @@ The application supports various CMS endpoints:
   ```bash
   curl -u user:password -X GET http://localhost:8081/cms/tariffs/{tariffId}
   ```
-  
+
 _(Replace `<password>`, `{cpId}`, `{tariffId}`, `{name}`, and `<value>` with actual values.)_
 
 
@@ -126,7 +140,7 @@ brew install prometheus
 brew install grafana
 
   ```
-for editing config: 
+for editing config:
   ```
 nano /opt/homebrew/etc/prometheus.yml
   ```
@@ -154,14 +168,6 @@ check that it is running using:
   ```
 brew services list
   ```
-
-## Contributing
-
-Please read [CONTRIBUTING.md](link-to-contributing-file) for details on our code of conduct, and the process for submitting pull requests.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
