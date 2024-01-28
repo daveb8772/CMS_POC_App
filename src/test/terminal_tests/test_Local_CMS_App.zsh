@@ -25,15 +25,7 @@ endpoints=(
     "/error" 
     "/commands/getCommands"
 )
-# Array of commands
-commands=(
-    "StartSession"
-    "StopSession"
-    "Reset"
-    "UnlockConnector"
-    "CancelReservation"
-    "ReserveNow"
-)
+
 
 # Call each endpoint in the array
 for endpoint in "${endpoints[@]}"; do
