@@ -17,6 +17,43 @@
 		<java.version>17</java.version>
 		<spring-cloud-azure.version>5.7.0</spring-cloud-azure.version>
 	</properties>
+
+	<!-- existing content -->
+
+	<profiles>
+		<!-- Profile for building with tests -->
+		<profile>
+			<id>with-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>false</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Profile for building without tests -->
+		<profile>
+			<id>without-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

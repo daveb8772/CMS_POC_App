@@ -22,6 +22,8 @@ if [ -z "$APP_POD" ]; then
 else
     echo "Logs for Application Pod ($APP_POD):"
     kubectl logs "$APP_POD"
+    kubectl describe pod "$APP_POD"
+
 fi
 
 
