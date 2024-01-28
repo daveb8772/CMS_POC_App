@@ -95,7 +95,22 @@ subgraph cluster_1245635613 {
 	fillcolor="#d8d8d8"
 	style=filled
    
-   AuthorizationResponse10890254[
+   AuthorizationController730546193[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AuthorizationController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   CMSEndpointService: CMSEndpointService [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   authorizationResponseHandler: DataAccessResponseHandler&lt;AuthorizationResponse&gt; [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ authenticateUser(credentials: UserCredentials): Mono&lt;ResponseEntity&lt;?&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+AuthorizationResponse10890254[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)AuthorizationResponse</TD></TR>
 <HR/>
@@ -120,12 +135,12 @@ ChargingPoint1462292524[
 <TR><TD ALIGN="LEFT" >-   connectorPower: double [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   connectorStatus: String [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   connectorType: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   connectors: Set&lt;Connector&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   connectors: List&lt;Connector&gt; [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   currentUtilization: double [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   lastUpdate: ZonedDateTime [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   maxChargingPower: double [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   status: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   tariffIds: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffs: List&lt;Tariff&gt; [0..*]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ addChargingProfile(chargingProfile: ChargingProfile)</TD></TR>
 </TABLE>>
@@ -152,7 +167,7 @@ ChargingPointDTO2014407926[
 <TR><TD ALIGN="LEFT" >-   lastUpdate: ZonedDateTime [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   maxChargingPower: double [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   status: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   tariffIds: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffs: List&lt;Tariff&gt; [0..*]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ fromEntity(chargingPoint: ChargingPoint): ChargingPointDTO</TD></TR>
 </TABLE>>
@@ -242,6 +257,7 @@ CommandResponse10890254[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)CommandResponse</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   commandRequest: CommandRequest [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   responseStatus: ResponseStatus [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   result: String [0..1]</TD></TR>
 </TABLE>>
@@ -308,11 +324,42 @@ LocationInfo1462292524[
 	fillcolor="#FFFFFF"
 ];
 
+PointOfInterest1462292524[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PointOfInterest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   description: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   locationInfo: LocationInfo [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   poi_address: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   poi_id: Long [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   type: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
 SupportedVersionsResponse10890254[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)SupportedVersionsResponse</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   supportedVersions: List&lt;String&gt; [0..*]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Tariff1462292524[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Tariff</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   price: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffId: Long [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tariffName: String [0..1]</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -336,6 +383,8 @@ TariffDataResponse10890254[
 } 
 
 'edges    
+AuthorizationController730546193 -> AuthorizationResponse10890254[label="authorizationResponseHandler
+[1]"];
 ChargingPoint1462292524 -> ChargingProfile1462292524[label="chargingProfiles
 [0..*]"];
 ChargingPoint1462292524 -> CommandRequest1462292524[label="commandRequests
@@ -344,23 +393,31 @@ ChargingPoint1462292524 -> Connector1462292524[label="connectors
 [0..*]"];
 ChargingPoint1462292524 -> ConnectorCapabilities1462292524[label="connectorCapabilities
 [0..1]"];
+ChargingPoint1462292524 -> Tariff1462292524[label="tariffs
+[0..*]"];
 ChargingPointDTO2014407926 -> CommandRequestDTO2014407926[label="commandRequests
 [0..*]"];
-ChargingPointDataResponse10890254 -> AuthorizationResponse10890254[arrowhead=none];
 ChargingPointDataResponse10890254 -> ChargingPointDTO2014407926[label="chargingPoints
 [0..*]"];
-ChargingPointDataResponse10890254 -> ChargingSessionDataResponse10890254[arrowhead=none];
-ChargingPointDataResponse10890254 -> CommandResponse10890254[arrowhead=none];
-ChargingPointDataResponse10890254 -> SupportedVersionsResponse10890254[arrowhead=none];
-ChargingPointDataResponse10890254 -> TariffDataResponse10890254[arrowhead=none];
 CommandRequest1462292524 -> ChargingPoint1462292524[label="chargingPoint
 [0..1]"];
 CommandRequestDTO2014407926 -> ChargingPoint1462292524[label="chargingPoint
 [0..1]"];
+CommandResponse10890254 -> AuthorizationResponse10890254[arrowhead=none];
+CommandResponse10890254 -> ChargingPointDataResponse10890254[arrowhead=none];
+CommandResponse10890254 -> ChargingSessionDataResponse10890254[arrowhead=none];
+CommandResponse10890254 -> CommandRequest1462292524[label="commandRequest
+[0..1]"];
+CommandResponse10890254 -> SupportedVersionsResponse10890254[arrowhead=none];
+CommandResponse10890254 -> TariffDataResponse10890254[arrowhead=none];
 Connector1462292524 -> ChargingPoint1462292524[label="chargingPoint
 [0..1]"];
 LocationInfo1462292524 -> ChargingPoint1462292524[label="chargingPoints
 [0..*]"];
+LocationInfo1462292524 -> PointOfInterest1462292524[label="pointsOfInterest
+[0..*]"];
+PointOfInterest1462292524 -> LocationInfo1462292524[label="locationInfo
+[0..1]"];
     
 }
 @enduml

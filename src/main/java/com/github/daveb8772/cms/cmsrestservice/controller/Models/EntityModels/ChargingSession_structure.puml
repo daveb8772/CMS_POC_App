@@ -102,7 +102,6 @@ subgraph cluster_1245635613 {
 <TR><TD ALIGN="LEFT" >-   connectorId: String [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   cpId: String [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   currentPower: double [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   currentTariff: Tariff [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   endDate: LocalDateTime [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   energyDelivered: double [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   errors: List&lt;SessionError&gt; [0..*]</TD></TR>
@@ -194,8 +193,6 @@ ChargingSession1462292524 -> MeterRecord1462292524[label="meterRecords
 [0..*]"];
 ChargingSession1462292524 -> SessionError1462292524[label="errors
 [0..*]"];
-ChargingSession1462292524 -> Tariff1462292524[label="currentTariff
-[0..1]"];
 ChargingSession1462292524 -> TariffChange1462292524[label="tariffChanges
 [0..*]"];
 MeterRecord1462292524 -> ChargingSession1462292524[label="chargingSession
