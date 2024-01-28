@@ -1,6 +1,6 @@
 
 # CMS App
-A proof of concept webserver for a Charging Management System (CMS) 
+A proof of concept webserver for a Charging Management System (CMS)
 * The CMS webserver is already populated with fake data to be used by other services
 * Supports User login, Depots (Locations), Charging Points, Connectors, Charging Sessions, Tariffs.
 * All data is persisted in a CMS_Data postgres database
@@ -14,6 +14,8 @@ These instructions will help you get a copy of the project up and running on you
 - Java JDK 11 or later
 - Maven
 - PostgreSQL
+- Docker
+- Kubernetes (e.g., Minikube or Docker Desktop)
 
 ### Installation
 
@@ -28,17 +30,17 @@ These instructions will help you get a copy of the project up and running on you
 3. Set up the PostgreSQL database according to the application's configuration.
     * Access PostgreSQL with your default superuser (usually your OS username):
     ```bash
-      psql postgres
+    psql postgres
     ```
     * If the postgres user does not exist, you need to create it:
     ```bash
-      CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD password;
+    CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'password';
     ```
     * List all roles in PostgreSQL and make sure new user is created
     ```bash
-      \du
+    \du
     ```
-   * login with the new user
+    * Login with the new user
     ```bash
     psql -U postgres
     ```
