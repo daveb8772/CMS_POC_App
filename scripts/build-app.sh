@@ -20,13 +20,24 @@ build_app() {
     fi
 }
 
+
 # Check if a parameter is provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 [yes|no]"
+if [ -z "$1" ]; then
+    echo "Using default - Build without tests"
+    echo "To change behaviour call script with:"
     echo "yes - Build with tests"
     echo "no - Build without tests"
-    exit 1
+    build_app "no"  # Set default value to "no"
+else
+    case "$1" in
+        "yes"|"no")
+            build_app "$1"
+            ;;
+        *)
+            echo "Invalid argument. Usage: $0 [yes|no]"
+            echo "yes - Build with tests"
+            echo "no - Build without tests"
+            exit 1
+            ;;
+    esac
 fi
-
-# Build the application
-build_app "$1"

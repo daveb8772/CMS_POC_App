@@ -20,22 +20,16 @@ check_azure_login() {
 }
 
 # Function to check ACR login
+# Function to check ACR login
 check_acr_login() {
-    # Attempt to get ACR login server
-    local loginServer=$(az acr show --name myacr351f520047da48a7 --query loginServer -o tsv 2>/dev/null)
-
-    # Check if the login server was fetched successfully
-    if [[ -z "$loginServer" ]]; then
-        echo "Logging in to Azure Container Registry..."
-        az acr login --name myacr351f520047da48a7
-        if [[ $? -ne 0 ]]; then
-            echo "Failed to log in to Azure Container Registry."
-            exit 1
-        fi
-    else
-        echo "Already logged in to Azure Container Registry."
+    echo "Logging in to Azure Container Registry..."
+    az acr login --name myacr351f520047da48a7
+    if [[ $? -ne 0 ]]; then
+        echo "Failed to log in to Azure Container Registry."
+        exit 1
     fi
 }
+
 
 # Check if Dockerfile exists at the specified path
 if [[ -f "$DOCKERFILE_PATH" ]]; then
@@ -44,6 +38,7 @@ if [[ -f "$DOCKERFILE_PATH" ]]; then
     # Navigate to the directory where the Dockerfile is located
     cd "$(dirname "$DOCKERFILE_PATH")" || exit
 
+    echo "Check Azure and ACR login"
     # Check Azure and ACR login
     check_azure_login
     check_acr_login
