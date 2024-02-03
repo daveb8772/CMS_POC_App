@@ -1,0 +1,33 @@
+@startuml Detailed Kubernetes Deployment Interaction
+skinparam linetype ortho
+
+node "Kubernetes Cluster" {
+    node "Master Node" as Master {
+        [API Server] as API
+        [Scheduler]
+        [Controller Manager] as Controller
+        database "etcd"
+    }
+    node "Worker Node" as Worker {
+        [Kubelet]
+        [Container Runtime] as Runtime
+        [Kube Proxy] as Proxy
+        frame "Pods" {
+            component "myapp x3" as MyApp
+            component "postgres"
+            component "prometheus"
+        }
+    }
+}
+
+API ..> Scheduler : <<communicates>>
+API ..> Controller : <<communicates>>
+API ..> Kubelet : <<communicates>>
+Kubelet ..> Runtime : <<manages>>
+Kubelet ..> MyApp : <<deploys>>
+Kubelet ..> Proxy : <<configures>>
+
+note right of API : kubectl commands interact here
+note right of MyApp : Deployed via kubectl
+
+@enduml

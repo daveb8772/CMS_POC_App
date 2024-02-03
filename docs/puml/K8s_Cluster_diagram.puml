@@ -1,0 +1,23 @@
+@startuml Simplified Kubernetes Deployment
+skinparam linetype ortho
+
+node "Kubernetes Cluster" {
+    node "Master Node" as Master {
+        [API Server]
+        [Scheduler]
+        [Controller Manager]
+        database "etcd"
+    }
+    node "Worker Node" as Worker {
+        [Kubelet]
+        [Container Runtime]
+        [Kube Proxy]
+        frame "Pods" {
+            component "myapp x3" as MyApp
+            component "postgres"
+            component "prometheus"
+        }
+    }
+}
+
+@enduml
