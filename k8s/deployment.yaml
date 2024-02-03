@@ -24,3 +24,5 @@ spec:
               value: "prod"
           ports:
             - containerPort: 8081
+      imagePullSecrets:
+        - name: myacr-secret

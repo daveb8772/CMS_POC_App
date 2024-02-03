@@ -7,28 +7,42 @@ AKS_RESOURCE_GROUP="k8s-resource-group"
 # Set the namespace where Grafana will be installed
 NAMESPACE="grafana"
 
+# Confirm with the user before proceeding
+echo "This script will deploy Grafana to the AKS cluster '$AKS_CLUSTER_NAME' in namespace '$NAMESPACE'."
+read "proceed?Are you sure? (y/n): "
+if [[ ! $proceed =~ ^[Yy]$ ]]
+then
+    echo "Deployment cancelled."
+    exit 1
+fi
+
 # Get AKS credentials to set the correct context
 echo "Setting kubectl context to AKS cluster '$AKS_CLUSTER_NAME'..."
 az aks get-credentials --name $AKS_CLUSTER_NAME --resource-group $AKS_RESOURCE_GROUP --overwrite-existing
 
-# Check if we are now in the correct context
+# Dynamically validate the current context matches the intended AKS cluster
 CURRENT_CONTEXT=$(kubectl config current-context)
-EXPECTED_CONTEXT="aks_${AKS_RESOURCE_GROUP}_${AKS_CLUSTER_NAME}"
+EXPECTED_CONTEXT=$(az aks show --name $AKS_CLUSTER_NAME --resource-group $AKS_RESOURCE_GROUP --query 'id' -o tsv | awk -F'/' '{print $NF}')
+echo "Current context is : '$CURRENT_CONTEXT'"
+echo "Expected context is : '$EXPECTED_CONTEXT'"
 
-if [ "$CURRENT_CONTEXT" = "$EXPECTED_CONTEXT" ]; then
-    echo "Current context is '$CURRENT_CONTEXT'. Proceeding with deployment..."
+
+if [[ "$CURRENT_CONTEXT" == "$EXPECTED_CONTEXT" ]] || [[ "$CURRENT_CONTEXT" == "$AKS_CLUSTER_NAME" ]]; then
+    echo "Current context is correct: '$CURRENT_CONTEXT'. Proceeding with deployment..."
 else
-    echo "Error: Current context is '$CURRENT_CONTEXT' but expected context is '$EXPECTED_CONTEXT'. Aborting deployment."
+    echo "Error: Mismatch in current context. Found: '$CURRENT_CONTEXT', Expected: '$EXPECTED_CONTEXT' or '$AKS_CLUSTER_NAME'. Aborting deployment."
     exit 1
 fi
+
 
 # Deploy Grafana using Helm
 echo "Deploying Grafana to the AKS cluster '$AKS_CLUSTER_NAME'..."
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
-# Prompt for Grafana admin password to avoid hardcoding
-read "grafanaPassword?Enter Grafana admin password: "
+# Prompt for Grafana admin password
+echo "Please enter Grafana admin password:"
+read -s grafanaPassword
 
 # Install or upgrade Grafana
 helm upgrade --install grafana grafana/grafana \
