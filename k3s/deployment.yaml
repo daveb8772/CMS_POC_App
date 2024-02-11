@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+      #  K3s-specific or Prometheus annotations
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8081"
+    spec:
+      containers:
+        - name: myapp
+          image: k3s.io/registry/myapp:v1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+          ports:
+            - containerPort: 8081
