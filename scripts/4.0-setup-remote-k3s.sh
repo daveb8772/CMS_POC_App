@@ -36,9 +36,13 @@ ssh_exec "$CONFIGURE_REGISTRY_COMMAND"
 ADD_ALIAS_COMMAND='echo "127.0.0.1 myregistry.local" | sudo tee -a /etc/hosts > /dev/null && echo "alias docker-registry=\"docker login myregistry.local:5000\"" | tee -a $HOME/.zshrc > /dev/null'
 ssh_exec "$ADD_ALIAS_COMMAND"
 
-# Check if the Kubernetes Docker registry secret exists, if not, create it
-CREATE_SECRET_COMMAND='DOCKER_REGISTRY_PASSWORD=<Enter secure method to retrieve password> && kubectl get secret myregistrysecret > /dev/null 2>&1 || kubectl create secret docker-registry myregistrysecret --docker-server=myregistry.local --docker-username=super --docker-password="$DOCKER_REGISTRY_PASSWORD" --docker-email=daveb8772@gmail.com'
-ssh_exec "$CREATE_SECRET_COMMAND"
+# Retrieve Docker registry password securely and create Kubernetes Docker registry secret if it doesn't exist
+CREATE_DOCKER_REGISTRY_SECRET_COMMAND='DOCKER_REGISTRY_PASSWORD=<Enter secure method to retrieve password> && kubectl get secret myregistrysecret > /dev/null 2>&1 || kubectl create secret docker-registry myregistrysecret --docker-server=myregistry.local --docker-username=super --docker-password="$DOCKER_REGISTRY_PASSWORD" --docker-email=daveb8772@gmail.com'
+ssh_exec "$CREATE_DOCKER_REGISTRY_SECRET_COMMAND"
+
+# Retrieve DB password securely and create Kubernetes DB secret if it doesn't exist
+CREATE_DB_SECRET_COMMAND='DB_PASSWORD=<Enter secure method to retrieve password> && kubectl get secret myapp-db-secret > /dev/null 2>&1 || kubectl create secret generic myapp-db-secret --from-literal=db-password="$DB_PASSWORD"'
+ssh_exec "$CREATE_DB_SECRET_COMMAND"
 
 # Restart K3s to apply registry configuration
 RESTART_K3S_COMMAND='sudo systemctl daemon-reload && sudo systemctl restart k3s && echo "Setup completed. Please restart your shell or source .zshrc to use the new alias."'

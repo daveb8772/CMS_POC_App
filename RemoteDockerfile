@@ -4,8 +4,8 @@ FROM eclipse-temurin:17-jdk as build
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the JAR file into the container
-COPY target/cms_app-1.0.0.jar app.jar
+# Copy the jar file into the container
+COPY app.jar /app/app.jar
 
 # Command to run the application
 CMD ["java", "-jar", "app.jar"]

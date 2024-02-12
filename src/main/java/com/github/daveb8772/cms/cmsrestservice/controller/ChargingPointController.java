@@ -1,7 +1,10 @@
 package com.github.daveb8772.cms.cmsrestservice.controller;
 
+import com.github.daveb8772.cms.cmsrestservice.Security.SecurityConfiguration;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.ChargingPointDataResponse;
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,10 +26,11 @@ public class ChargingPointController {
     private CMSEndpointService CMSEndpointService;
 
 
-
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @GetMapping(value="/getChargingPoints", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<List<ChargingPointDataResponse>>> getChargingPoints() {
+        logger.info("/getChargingPoints called");
         return CMSEndpointService.getChargingPoints()
                 .flatMapMany(Flux::fromIterable)
                 .flatMap(chargingPoint -> new DataAccessResponseHandler<ChargingPointDataResponse>()
@@ -42,6 +46,7 @@ public class ChargingPointController {
 
     @GetMapping("/getChargingPoint/{cpId}")
     public Mono<ResponseEntity<ChargingPointDataResponse>> getChargingPoint(@PathVariable String cpId) {
+        logger.info("/getChargingPoint/{cpId} called");
         return CMSEndpointService.getChargingPoint(cpId)
                 .flatMap(chargingPoint -> {
                     if (chargingPoint == null) {

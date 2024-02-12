@@ -1,7 +1,10 @@
 package com.github.daveb8772.cms.cmsrestservice.utility;
 
+import com.github.daveb8772.cms.cmsrestservice.Security.SecurityConfiguration;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.EntityModels.*;
 import com.github.daveb8772.cms.cmsrestservice.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +17,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @Configuration
-@Profile("dev")
+@Profile("prod")
 public class DataInitialization {
+    private static final Logger logger = LoggerFactory.getLogger(DataInitialization.class);
 
     // Configurable properties
     @Value("${data.initialization.tariffCount}")
@@ -64,7 +68,7 @@ public class DataInitialization {
 
     @Bean
     CommandLineRunner initDatabase() {
-
+        logger.info("************** initDatabase **************");
         return args -> {
 
 
