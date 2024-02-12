@@ -8,7 +8,7 @@ REMOTE_PORT="2222"
 # Define local directories and files
 LOCAL_APP_DIR="/Users/pedroazevedo/Documents/Projects/CMS/CMS_App"
 LOCAL_JAR_FILE="$LOCAL_APP_DIR/target/cms_app-1.0.0.jar"
-LOCAL_K8S_DIR="$LOCAL_APP_DIR/k8s"
+LOCAL_K8S_DIR="$LOCAL_APP_DIR/k3s"
 LOCAL_REMOTE_DOCKERFILE="$LOCAL_APP_DIR/RemoteDockerfile"
 
 # Define remote directories

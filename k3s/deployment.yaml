@@ -19,9 +19,12 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: k3s.io/registry/myapp:v1
+          #image: k3s.io/registry/myapp:v1
+          image: localhost:5000/myapp:latest
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"
           ports:
             - containerPort: 8081
+      imagePullSecrets:
+        - name: myregistrysecret
