@@ -5,65 +5,41 @@ set -x
 REMOTE_USER="super"
 REMOTE_HOST="super"  # Use your server's hostname or IP address
 REMOTE_PORT="2222"
-# Define remote directories
-REMOTE_BASE_DIR="/home/super/Documents/Software/CMS"
-REMOTE_APP_DIR="$REMOTE_BASE_DIR/app"
-REMOTE_YAML_DIR="$REMOTE_BASE_DIR/yaml"
-KUBECONFIG_PATH="$REMOTE_YAML_DIR/k3s.yaml"  # Path to K3s kubeconfig on remote server
 
-# Define variables
-REGISTRY_PORT="5000"
-REGISTRY_HOST_ALIAS="myregistry.local"  # Alias for the registry
-REGISTRY_ADDRESS="$REGISTRY_HOST_ALIAS:$REGISTRY_PORT"
-REGISTRIES_CONFIG_PATH="/etc/rancher/k3s/registries.yaml"
-DOCKER_USERNAME="super"
-DOCKER_EMAIL="daveb8772@gmail.com"
-DOCKER_PASSWORD_ENV_VAR="DOCKER_REGISTRY_PASSWORD"  # Name of the environment variable storing the Docker registry password on the remote server
+# SSH command function to avoid repetition
+ssh_exec() {
+    ssh -t -p "$REMOTE_PORT" "$REMOTE_USER@$REMOTE_HOST" "$1"
+}
 
-# Commands to execute on the remote server
-REMOTE_COMMANDS=$(cat <<EOF
 # Load KUBECONFIG
-export KUBECONFIG=$KUBECONFIG_PATH
+KUBECONFIG_COMMAND='export KUBECONFIG=/home/super/Documents/Software/CMS/yaml/k3s.yaml'
+ssh_exec "$KUBECONFIG_COMMAND"
+
+# Fetch the primary IP of the K3s node and map myapp.local domain to K3s Node IP in /etc/hosts
+FETCH_AND_MAP_IP_COMMAND='K3S_NODE_IP=$(ip route get 1.2.3.4 | awk "{print \$7}") && echo "K3s Node IP is: $K3S_NODE_IP" && echo "$K3S_NODE_IP myapp.local" | sudo tee -a /etc/hosts > /dev/null'
+ssh_exec "$FETCH_AND_MAP_IP_COMMAND"
 
 # Ensure the registries.yaml configuration directory exists
-if [ ! -d "\$(dirname $REGISTRIES_CONFIG_PATH)" ]; then
-    echo "Creating configuration directory..."
-    sudo mkdir -p "\$(dirname $REGISTRIES_CONFIG_PATH)"
-else
-    echo "Configuration directory already exists."
-fi
+ENSURE_DIR_COMMAND='[ ! -d "$(dirname /etc/rancher/k3s/registries.yaml)" ] && sudo mkdir -p "$(dirname /etc/rancher/k3s/registries.yaml)" || echo "Configuration directory already exists."'
+ssh_exec "$ENSURE_DIR_COMMAND"
 
 # Configure K3s to use local Docker registry
-echo "Configuring K3s to use local Docker registry..."
-cat <<EOT | sudo tee $REGISTRIES_CONFIG_PATH > /dev/null
+CONFIGURE_REGISTRY_COMMAND='echo "Configuring K3s to use local Docker registry..." && cat <<EOT | sudo tee /etc/rancher/k3s/registries.yaml > /dev/null
 mirrors:
-  $REGISTRY_HOST_ALIAS:
+  myregistry.local:
     endpoint:
-      - "http://$REGISTRY_ADDRESS"
-EOT
+      - "http://myregistry.local:5000"
+EOT'
+ssh_exec "$CONFIGURE_REGISTRY_COMMAND"
 
-# Add registry alias to /etc/hosts to resolve to 127.0.0.1
-echo "Adding registry address alias to /etc/hosts..."
-echo "127.0.0.1 $REGISTRY_HOST_ALIAS" | sudo tee -a /etc/hosts > /dev/null
+# Add registry alias to /etc/hosts and .zshrc
+ADD_ALIAS_COMMAND='echo "127.0.0.1 myregistry.local" | sudo tee -a /etc/hosts > /dev/null && echo "alias docker-registry=\"docker login myregistry.local:5000\"" | tee -a $HOME/.zshrc > /dev/null'
+ssh_exec "$ADD_ALIAS_COMMAND"
 
-# Add registry alias to .zshrc for easy use
-echo "Adding registry alias to .zshrc..."
-echo "alias docker-registry='docker login $REGISTRY_ADDRESS'" | tee -a \$HOME/.zshrc > /dev/null
-
-# Check if the Kubernetes Docker registry secret exists, if not, create it using the password stored in the environment variable
-echo "Checking and creating Docker registry secret if necessary..."
-if ! kubectl get secret myregistrysecret > /dev/null 2>&1; then
-    kubectl create secret docker-registry myregistrysecret --docker-server=$REGISTRY_HOST_ALIAS --docker-username=$DOCKER_USERNAME --docker-password=\$$DOCKER_PASSWORD_ENV_VAR --docker-email=$DOCKER_EMAIL
-fi
+# Check if the Kubernetes Docker registry secret exists, if not, create it
+CREATE_SECRET_COMMAND='DOCKER_REGISTRY_PASSWORD=<Enter secure method to retrieve password> && kubectl get secret myregistrysecret > /dev/null 2>&1 || kubectl create secret docker-registry myregistrysecret --docker-server=myregistry.local --docker-username=super --docker-password="$DOCKER_REGISTRY_PASSWORD" --docker-email=daveb8772@gmail.com'
+ssh_exec "$CREATE_SECRET_COMMAND"
 
 # Restart K3s to apply registry configuration
-echo "Restarting K3s to apply configurations..."
-sudo systemctl daemon-reload
-sudo systemctl restart k3s
-
-echo "Setup completed. Please restart your shell or source .zshrc to use the new alias."
-EOF
-)
-
-# Execute the commands on the remote server
-ssh -t -p "$REMOTE_PORT" "$REMOTE_USER@$REMOTE_HOST" "$REMOTE_COMMANDS"
+RESTART_K3S_COMMAND='sudo systemctl daemon-reload && sudo systemctl restart k3s && echo "Setup completed. Please restart your shell or source .zshrc to use the new alias."'
+ssh_exec "$RESTART_K3S_COMMAND"

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Define remote server details
 REMOTE_USER="super"
@@ -8,7 +9,7 @@ REMOTE_PORT="2222"
 # Define local directories and files
 LOCAL_APP_DIR="/Users/pedroazevedo/Documents/Projects/CMS/CMS_App"
 LOCAL_JAR_FILE="$LOCAL_APP_DIR/target/cms_app-1.0.0.jar"
-LOCAL_K8S_DIR="$LOCAL_APP_DIR/k3s"
+LOCAL_K3S_DIR="$LOCAL_APP_DIR/k3s"
 LOCAL_REMOTE_DOCKERFILE="$LOCAL_APP_DIR/RemoteDockerfile"
 
 # Define remote directories
@@ -33,10 +34,10 @@ ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_APP_DIR && docker buil
 
 # Step 3: Transfer and apply Kubernetes configurations
 echo "Deploying Kubernetes configurations..."
-scp -P $REMOTE_PORT $LOCAL_K8S_DIR/*.yaml $REMOTE_USER@$REMOTE_HOST:$REMOTE_YAML_DIR
+scp -P $REMOTE_PORT $LOCAL_K3S_DIR/*.yaml $REMOTE_USER@$REMOTE_HOST:$REMOTE_YAML_DIR
 
 echo "Applying Kubernetes configurations..."
-for yaml_file in $(ls $LOCAL_K8S_DIR/*.yaml | xargs -n 1 basename); do
+for yaml_file in $(ls $LOCAL_K3S_DIR/*.yaml | grep -v "k3s.yaml" | xargs -n 1 basename); do
     ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "KUBECONFIG=$REMOTE_YAML_DIR/k3s.yaml kubectl apply -f $REMOTE_YAML_DIR/$yaml_file"
 done
 
