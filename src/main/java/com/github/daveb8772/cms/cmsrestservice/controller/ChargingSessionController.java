@@ -1,7 +1,10 @@
 package com.github.daveb8772.cms.cmsrestservice.controller;
 
+import com.github.daveb8772.cms.cmsrestservice.Security.SecurityConfiguration;
 import com.github.daveb8772.cms.cmsrestservice.controller.Models.ResponseModels.ChargingSessionDataResponse;
 import com.github.daveb8772.cms.cmsrestservice.service.CMSEndpointService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +28,11 @@ public class ChargingSessionController {
     @Autowired
     private CMSEndpointService CMSEndpointService;
 
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @GetMapping("/getChargingSessions")
     public Mono<ResponseEntity<List<ChargingSessionDataResponse>>> getChargingSessions() {
+        logger.info("/getChargingSessions called");
         return CMSEndpointService.getChargingSessions()
                 .flatMapMany(Flux::fromIterable)
                 .filter(chargingSession -> !chargingSession.isEmpty())
@@ -42,6 +47,7 @@ public class ChargingSessionController {
 
     @GetMapping("/getChargingSession/{id}")
     public Mono<ResponseEntity<ChargingSessionDataResponse>> getChargingSession(@PathVariable String id) {
+        logger.info("/getChargingSession/{id} called");
         return CMSEndpointService.getChargingSessionById(id)
                 .flatMap(chargingSession -> chargingSession != null
                         ? Mono.just(ResponseEntity.ok(chargingSession))
