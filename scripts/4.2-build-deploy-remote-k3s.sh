@@ -57,6 +57,12 @@ echo "Step 4: Applying Kubernetes configurations..."
 for yaml_file in $(ls $LOCAL_K3S_DIR/*.yaml | xargs -n 1 basename); do
     ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "KUBECONFIG=$REMOTE_YAML_DIR/k3s.yaml kubectl apply -f $REMOTE_YAML_DIR/$yaml_file"
 done
+# Automatically find the deployment name and restart it
+DEPLOYMENT_NAME=$(ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "grep -oP 'kind: Deployment\nmetadata:\n\s+name: \K(\S+)' $REMOTE_YAML_DIR/*.yaml | head -1")
+NAMESPACE="default"  # Adjust this as needed
+
+echo "Restarting deployment: $DEPLOYMENT_NAME"
+ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "KUBECONFIG=$REMOTE_YAML_DIR/k3s.yaml kubectl rollout restart deployment $DEPLOYMENT_NAME -n $NAMESPACE"
 
 NAMESPACE="default"  # Adjust this as needed
 
