@@ -3,7 +3,7 @@ set -x
 
 # Variables
 REMOTE_USER="super"
-REMOTE_SERVER="super"
+REMOTE_SERVER="192.168.2.173"
 REMOTE_PORT="2222"
 KUBECONFIG_PATH="/home/super/Documents/Software/CMS/yaml/k3s.yaml"
 
