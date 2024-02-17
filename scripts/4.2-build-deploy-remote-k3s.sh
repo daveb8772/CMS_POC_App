@@ -3,7 +3,8 @@ set -x
 
 # Define remote server details
 REMOTE_USER="super"
-REMOTE_HOST="super"  # Update this with the remote server's hostname or IP address
+#REMOTE_HOST="172.16.79.128"  # Use your server's hostname or IP address
+REMOTE_HOST="192.168.2.173"  # Use your server's hostname or IP address
 REMOTE_PORT="2222"
 
 # Define local directories and files
@@ -19,7 +20,7 @@ REMOTE_YAML_DIR="$REMOTE_BASE_DIR/yaml"
 # Image details with dynamic tagging
 IMAGE_NAME="myapp"
 IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Using current timestamp as a dynamic tag
-REMOTE_REGISTRY="localhost:5000"
+REMOTE_REGISTRY="myregistry.local:5000"
 FULL_IMAGE_NAME="$REMOTE_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
 
 # Choose the build script based on the target environment

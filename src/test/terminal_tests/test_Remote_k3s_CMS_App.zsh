@@ -6,7 +6,8 @@ PASSWORD="password"
 
 # Since you're using an Ingress, you don't need to fetch the service IP or port.
 # Just use the domain configured in your Ingress.
-BASE_URL="http://172.16.79.128/cms"
+#BASE_URL="http://172.16.79.128/cms"
+BASE_URL="http://192.168.2.173/cms"
 # Add the Host header to curl requests to ensure they are correctly routed by Ingress
 HOST_HEADER="Host: myapp.local"
 # Maximum ID values for each type of ID

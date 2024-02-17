@@ -8,9 +8,10 @@ DOCKER_FILE_PATH="$PROJECT_DIR/Dockerfile" # Path to your Dockerfile
 
 # Remote Docker registry setup
 REMOTE_USER="super"
-REMOTE_SERVER="super" # IP or hostname of your remote server
+#REMOTE_HOST="172.16.79.128"  # Use your server's hostname or IP address
+REMOTE_HOST="192.168.2.173"  # Use your server's hostname or IP address
 REMOTE_REGISTRY_PORT="5000"
-REMOTE_IMAGE="$REMOTE_USER@$REMOTE_SERVER:$REMOTE_REGISTRY_PORT/$IMAGE_NAME:$IMAGE_VERSION"
+REMOTE_IMAGE="$REMOTE_USER@$REMOTE_HOST:$REMOTE_REGISTRY_PORT/$IMAGE_NAME:$IMAGE_VERSION"
 
 # Remote Kubernetes deployment setup
 REMOTE_YAML_DIR="/home/super/Documents/Software/CMS/yaml" # Remote directory for YAML files
@@ -31,11 +32,11 @@ docker push $REMOTE_IMAGE
 
 # Step 4: Copy YAML files to the remote server
 echo "Copying YAML files to the remote server..."
-scp $PROJECT_DIR/k8s/*.yaml $REMOTE_USER@$REMOTE_SERVER:$REMOTE_YAML_DIR/
+scp $PROJECT_DIR/k8s/*.yaml $REMOTE_USER@$REMOTE_HOST:$REMOTE_YAML_DIR/
 
 # Step 5: SSH into the remote server and apply YAML configurations
 echo "Applying Kubernetes configurations on the remote server..."
-ssh $REMOTE_USER@$REMOTE_SERVER << EOF
+ssh $REMOTE_USER@$REMOTE_HOST << EOF
 kubectl apply -f $REMOTE_YAML_DIR/deployment.yaml
 kubectl apply -f $REMOTE_YAML_DIR/postgres-deployment.yaml
 kubectl apply -f $REMOTE_YAML_DIR/postgres-pvc.yaml
