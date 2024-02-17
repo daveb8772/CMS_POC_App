@@ -1,4 +1,5 @@
 #!/bin/bash
+# file: 4.2-build-deploy-remote-k3s.sh
 set -x
 
 # Define remote server details

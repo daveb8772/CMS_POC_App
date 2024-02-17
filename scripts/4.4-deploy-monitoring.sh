@@ -1,4 +1,6 @@
 #!/bin/zsh
+# file: 4.4-deploy-monitoring.sh
+
 set -x
 #Local helm directory
 LOCAL_INSTALL_HELM_PATH=""../k3s""

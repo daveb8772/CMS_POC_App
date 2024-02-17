@@ -1,18 +1,18 @@
-# ingress.yaml
+# prometheus-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: myapp-ingress
-  namespace: default
+  name: prometheus-ingress
+  namespace: monitoring
 spec:
   rules:
-    - host: myapp.local
+    - host: prometheus.myapp.local
       http:
         paths:
           - pathType: Prefix
             path: "/"
             backend:
               service:
-                name: myapp-service
+                name: prometheus-server
                 port:
                   number: 80

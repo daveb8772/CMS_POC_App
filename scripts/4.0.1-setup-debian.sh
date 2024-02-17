@@ -6,6 +6,7 @@
 # sudo usermod -aG docker super
 # copy .zshrc exports from other super servers
 # in local change /etc/hosts and add the remote IP and alias for super
+# Add: 192.168.2.173 prometheus.myapp.local
 # disable password login:
 # at local generate: ssh-keygen -t rsa
 # then: ssh-copy-id username@server_ip
