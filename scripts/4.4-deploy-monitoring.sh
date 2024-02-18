@@ -33,7 +33,9 @@ helm repo update
 # Fetch the latest version of Prometheus chart to the local helm directory
 echo "Fetching the latest Prometheus Helm chart..."
 helm fetch prometheus-community/prometheus --untar --untardir $LOCAL_INSTALL_HELM_PATH
-mv ../k3s/prometheus ../k3s/prometheus-setup
+#mv ../k3s/prometheus ../k3s/prometheus-setup
+rsync -av --progress ../k3s/prometheus/ ../k3s/prometheus-setup/
+rm -rf ../k3s/prometheus
 
 # Copy Prometheus setup files to the remote server
 echo "Copying Prometheus setup files to the remote server..."

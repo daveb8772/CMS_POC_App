@@ -14,6 +14,7 @@ LOCAL_K3S_DIR="$LOCAL_APP_DIR/k3s"
 LOCAL_REMOTE_DOCKERFILE="$LOCAL_APP_DIR/RemoteDockerfile"
 
 # Define remote directories
+REMOTE_K3S_DIR="/etc/rancher/k3s"
 REMOTE_BASE_DIR="/home/super/Documents/Software/CMS"
 REMOTE_APP_DIR="$REMOTE_BASE_DIR/app"
 REMOTE_YAML_DIR="$REMOTE_BASE_DIR/yaml"
@@ -23,6 +24,9 @@ IMAGE_NAME="myapp"
 IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Using current timestamp as a dynamic tag
 REMOTE_REGISTRY="myregistry.local:5000"
 FULL_IMAGE_NAME="$REMOTE_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+
+# Set the App namespace
+NAMESPACE="default"
 
 # Choose the build script based on the target environment
 BUILD_SCRIPT="$LOCAL_APP_DIR/scripts/1.1-build-app-k3s-without-tests.sh"
@@ -61,12 +65,9 @@ for yaml_file in $(ls $LOCAL_K3S_DIR/*.yaml | xargs -n 1 basename); do
 done
 # Automatically find the deployment name and restart it
 DEPLOYMENT_NAME=$(ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "grep -oP 'kind: Deployment\nmetadata:\n\s+name: \K(\S+)' $REMOTE_YAML_DIR/*.yaml | head -1")
-NAMESPACE="default"  # Adjust this as needed
 
-echo "Restarting deployment: $DEPLOYMENT_NAME"
+echo "Step 5: Restarting deployment: $DEPLOYMENT_NAME"
 ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "KUBECONFIG=$REMOTE_YAML_DIR/k3s.yaml kubectl rollout restart deployment $DEPLOYMENT_NAME -n $NAMESPACE"
-
-NAMESPACE="default"  # Adjust this as needed
 
 # Automatically fetch the specific deployment using the new image and restart it
 echo "Final Step: Fetching and restarting the deployment..."

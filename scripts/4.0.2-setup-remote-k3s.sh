@@ -6,6 +6,8 @@ REMOTE_USER="super"
 #REMOTE_HOST="172.16.79.128"  # Use your server's hostname or IP address
 REMOTE_HOST="192.168.2.173"  # Use your server's hostname or IP address
 REMOTE_PORT="2222"
+REMOTE_K3S_DIR="/etc/rancher/k3s"
+REMOTE_BASE_DIR="/home/super/Documents/Software/CMS"
 
 # SSH command function to avoid repetition
 ssh_exec() {
@@ -60,17 +62,18 @@ mirrors:
   myregistry.local:
     endpoint:
       - "http://myregistry.local:5000"
+      - "https://myregistry.local:5000"
 EOT'
 ssh_exec "$CONFIGURE_REGISTRY_COMMAND"
 
-echo "Add registry alias to /etc/hosts and .zshrc"
+#echo "Add registry alias to /etc/hosts and .zshrc"
 # Add registry alias to /etc/hosts and .zshrc
-ADD_ALIAS_COMMAND='echo "127.0.0.1 myregistry.local" | sudo tee -a /etc/hosts > /dev/null && echo "alias docker-registry=\"docker login myregistry.local:5000\"" | tee -a $HOME/.zshrc > /dev/null'
-ssh_exec "$ADD_ALIAS_COMMAND"
+#ADD_ALIAS_COMMAND='echo "127.0.0.1 myregistry.local" | sudo tee -a /etc/hosts > /dev/null && echo "alias docker-registry=\"docker login myregistry.local:5000\"" | tee -a $HOME/.zshrc > /dev/null'
+#ssh_exec "$ADD_ALIAS_COMMAND"
 
 echo "Retrieve Docker registry password securely and create Kubernetes Docker registry secret if it doesn't exist"
 # Retrieve Docker registry password securely and create Kubernetes Docker registry secret if it doesn't exist
-CREATE_DOCKER_REGISTRY_SECRET_COMMAND='source ~/.zshrc && kubectl get secret myregistrysecret > /dev/null 2>&1 || kubectl create secret docker-registry myregistrysecret --docker-server=myregistry.local --docker-username=super --docker-password="$DOCKER_REGISTRY_PASSWORD" --docker-email=daveb8772@gmail.com'
+CREATE_DOCKER_REGISTRY_SECRET_COMMAND='source ~/.zshrc && kubectl get secret myregistrysecret > /dev/null 2>&1 || kubectl create secret docker-registry myregistrysecret --docker-server=myregistry.local:5000 --docker-username=super --docker-password="$DOCKER_REGISTRY_PASSWORD" --docker-email=daveb8772@gmail.com'
 ssh_exec "$CREATE_DOCKER_REGISTRY_SECRET_COMMAND"
 
 echo "Retrieve DB password securely and create Kubernetes DB secret if it doesn't exist"
