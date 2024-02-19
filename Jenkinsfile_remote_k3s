@@ -32,10 +32,15 @@ pipeline {
         stage('Docker Build and Push') {
             steps {
                 script {
-                    def imageTag = "${DOCKER_IMAGE}:${env.BUILD_ID}"
-                    sh "docker build -t ${imageTag} ."
-                    sh "docker push ${imageTag}"
-                    env.DOCKER_IMAGE_FULL_NAME = imageTag // Storing the full image name for deployment
+                    try {
+                        def imageTag = "${DOCKER_IMAGE}:${env.BUILD_ID}"
+                        sh "docker build -t ${imageTag} ."
+                        sh "docker push ${imageTag}"
+                        env.DOCKER_IMAGE_FULL_NAME = imageTag // Storing the full image name for deployment
+                    } catch (Exception e) {
+                        echo "Error: Docker command failed. Ensure Docker is installed and accessible."
+                        throw e // Rethrow the exception to fail the build if Docker is not available
+                    }
                 }
             }
         }
