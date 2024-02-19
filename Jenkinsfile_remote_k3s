@@ -1,0 +1,63 @@
+// Jenkinsfile_remote_k3s
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = "myregistry.local:5000/myapp"
+        NAMESPACE = "default"
+        REMOTE_USER = "super"
+        REMOTE_HOST = "192.168.2.173"
+        REMOTE_PORT = "2222"
+        KUBECONFIG_PATH = "/home/super/Documents/Software/CMS/yaml/k3s.yaml"
+    }
+    parameters {
+        booleanParam(name: 'SKIP_TESTS', defaultValue: true, description: 'Skip running tests during build')
+    }
+    tools {
+        maven 'Maven'
+        jdk 'JDK17'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/daveb8772/CMS_POC_App.git', branch: 'main'
+            }
+        }
+        stage('Build and Test') {
+            steps {
+                script {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    def imageTag = "${DOCKER_IMAGE}:${env.BUILD_ID}"
+                    sh "docker build -t ${imageTag} ."
+                    sh "docker push ${imageTag}"
+                    env.DOCKER_IMAGE_FULL_NAME = imageTag // Storing the full image name for deployment
+                }
+            }
+        }
+        stage('Deploy to k3s') {
+            steps {
+                script {
+                    // Transfer Kubernetes configs
+                    sh "scp -P ${REMOTE_PORT} ./k3s/*.yaml ${REMOTE_USER}@${REMOTE_HOST}:${KUBECONFIG_PATH}"
+                    // Update image in deployment.yaml
+                    sh "ssh -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_HOST} 'sed -i \"s|image: .*|image: ${env.DOCKER_IMAGE_FULL_NAME}|g\" ${KUBECONFIG_PATH}/deployment.yaml'"
+                    // Apply Kubernetes configs
+                    sh "ssh -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_HOST} 'KUBECONFIG=${KUBECONFIG_PATH} kubectl apply -f ${KUBECONFIG_PATH}'"
+                    // Restart Deployment
+                    sh "ssh -p ${REMOTE_PORT} ${REMOTE_USER}@${REMOTE_HOST} 'KUBECONFIG=${KUBECONFIG_PATH} kubectl rollout restart deployment -n ${NAMESPACE} -l app=myapp'"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            // Add any cleanup actions here
+            echo 'Build completed'
+        }
+    }
+}
