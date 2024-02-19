@@ -1,0 +1,37 @@
+autoDiscovery:
+  clusterName: default
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name: cluster-autoscaler
+
+cloudProvider: external #k3s # Set your cloud provider, 'k3s' for k3s clusters
+
+# Specify your resource limits, if necessary
+resources:
+  limits:
+    cpu: 100m
+    memory: 300Mi
+  requests:
+    cpu: 100m
+    memory: 300Mi
+
+# Define the behavior of the autoscaler
+scaleDown:
+  enabled: true
+  delayAfterAdd: 10m
+  delayAfterDelete: 10s
+  delayAfterFailure: 3m
+  maxGracefulTerminationSec: 600
+  unneededTime: 10m
+
+# If using Azure, GCE, or AWS, specify additional configuration for your cloud provider
+# ...
+
+# For more complex setups, you can specify additional command line arguments
+extraArgs:
+  skip-nodes-with-local-storage: false
+  skip-nodes-with-system-pods: false

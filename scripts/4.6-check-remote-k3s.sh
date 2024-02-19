@@ -1,5 +1,5 @@
 #!/bin/zsh
-# file: 4.5-check-remote-k3s.sh
+# file: 4.6-check-remote-k3s.sh
 set -x
 
 # Variables
