@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: myapp  # Note the dash here indicating a list item
-          image: myregistry.local:5000/myapp:20240218165514
+          image: myregistry.local:5000/myapp:20240219112719
           imagePullPolicy: Always
           resources:
             requests:

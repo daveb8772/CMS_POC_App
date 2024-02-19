@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.daveb8772.ocpi</groupId>
 	<artifactId>cms-rest-service</artifactId>
-	<version>1.0.20240218.1655</version>
+	<version>1.0.20240219.1127</version>
 	<name>cms-rest-service</name>
 	<description>CMS project in Spring Boot</description>
 	<properties>

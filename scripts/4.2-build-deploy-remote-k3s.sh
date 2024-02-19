@@ -54,7 +54,7 @@ EOF
 
 # Step 4: Transfer and Apply Kubernetes Configurations
 echo "Step 4: Deploying Kubernetes configurations..."
-scp -P $REMOTE_PORT $LOCAL_K3S_DIR/deployment.yaml $LOCAL_K3S_DIR/ingress.yaml $LOCAL_K3S_DIR/k3s.yaml $LOCAL_K3S_DIR/postgres-deployment.yaml $LOCAL_K3S_DIR/postgres-pvc.yaml $LOCAL_K3S_DIR/postgres-service.yaml $LOCAL_K3S_DIR/prometheus-ingress.yaml $REMOTE_USER@$REMOTE_HOST:$REMOTE_YAML_DIR
+scp -P $REMOTE_PORT $LOCAL_K3S_DIR/deployment.yaml $LOCAL_K3S_DIR/ingress.yaml $LOCAL_K3S_DIR/k3s.yaml $LOCAL_K3S_DIR/postgres-deployment.yaml $LOCAL_K3S_DIR/postgres-pvc.yaml $LOCAL_K3S_DIR/postgres-service.yaml $LOCAL_K3S_DIR/prometheus-ingress.yaml $LOCAL_K3S_DIR/hpa.yaml $REMOTE_USER@$REMOTE_HOST:$REMOTE_YAML_DIR
 
 # Step 4b: Update deployment.yaml with Latest Image
 echo "Step 4b: Updating deployment.yaml to use the latest image"

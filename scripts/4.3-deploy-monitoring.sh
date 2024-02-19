@@ -1,5 +1,5 @@
 #!/bin/zsh
-# file: 4.4-deploy-monitoring.sh
+# file: 4.3-deploy-monitoring.sh
 
 set -x
 #Local helm directory

@@ -1,5 +1,5 @@
 #!/bin/zsh
-# file: 4.5-deploy-metrics-server.sh
+# file: 4.4-deploy-metrics-server.sh
 
 set -x
 
