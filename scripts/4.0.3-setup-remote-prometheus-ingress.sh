@@ -5,6 +5,7 @@ set -xe
 # Variables for remote server connection
 REMOTE_USER="super"
 REMOTE_HOST="192.168.2.173"
+#REMOTE_HOST="172.16.79.128"  # Use your server's hostname or IP address
 REMOTE_PORT="2222"
 KUBECONFIG_PATH="/home/super/Documents/Software/CMS/yaml/k3s.yaml"
 LOCAL_INGRESS_PATH="../k3s/prometheus-ingress.yaml"

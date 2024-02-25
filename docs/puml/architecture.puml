@@ -1,0 +1,45 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+LAYOUT_LEFT_RIGHT()
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+
+Person(client, "Client", "Uses CMS Application via REST API")
+
+Boundary(depotBoundary, "Depot", "Aggregation of Chargers at a location.") {
+    System_Ext(charger, "Charger", "Sends OCPP data to Producer Service via WebSocket.")
+    System_Ext(ev, "Electric Vehicle", "Initiates charging sessions using the Charger.")
+}
+System_Boundary(cms,,'CMS'){
+Container(cmsApp, "CMS Application", "Spring Boot", "API Layer: Presents charging session and charger data. Provides REST API for data access.")
+
+Container(consumerService, "Consumer Service", "Spring Boot", "Core Layer: Consumes Kafka events, processes them, and stores relevant data in MySQL.")
+Container(producerService, "Producer Service", "Spring Boot", "Core Layer: Receives OCPP data, creates business events, and publishes to Kafka. Exposes REST API for additional data interactions.")
+Container(cmsApp, "CMS Application", "Spring Boot", "API Layer: Presents charging session and charger data. Provides REST API for data access.")
+ContainerDb(h2Db, "H2 Database", "SQL", "Persistence Layer: Temporary storage for Kafka data (if required).")
+ContainerDb(mysqlDb, "MySQL Database", "SQL", "Persistence Layer: Stores charging session and charger data.")
+
+Boundary(kafkaCluster, "Kafka Cluster") {
+    Container(kafka, "Kafka", "Message Broker", "Manages event messaging between services.")
+}
+}
+
+Rel_U(cmsApp, client, "Exposes data via REST API")
+Rel_Down(client, cmsApp, "Interacts with")
+Rel(cmsApp, mysqlDb, "Reads/Writes data to", "JDBC")
+Rel(consumerService, kafka, "Consumes events from")
+Rel(producerService, kafka, "Publishes events to")
+Rel(consumerService, mysqlDb, "Stores data in", "JDBC")
+
+Rel_Down(producerService, h2Db, "Uses for temporary storage", "JDBC")
+Rel(ev, charger, "Starts charging session")
+Rel(charger, producerService, "Sends OCPP data via WebSocket")
+Rel(depotBoundary, producerService, "Sends operational data")
+
+
+
+SHOW_LEGEND()
+@enduml

@@ -1,4 +1,5 @@
 #!/bin/bash
+# setup instructions to a VM with debian
 # copy to remote debian and run
 # run: su
 # run: sudo visudo
